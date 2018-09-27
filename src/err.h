@@ -2,6 +2,7 @@
 #define ERR_H
 
 #include <stdlib.h>
+#include <stdio.h>
 
 // global error stack.
 

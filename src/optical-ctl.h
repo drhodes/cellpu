@@ -1,6 +1,7 @@
 #ifndef OPTICAL_CTL_H
 #define OPTICAL_CTL_H
 
+#include "err.h"
 #include "dir.h"
 #include <stdbool.h>
 
@@ -27,18 +28,11 @@ typedef union OpticalPort {
 OpticalPort opticalPortInput();
 OpticalPort opticalPortOutput();
 
-
 typedef struct OpticalCtl {
     OpticalPort portN, portE, portS, portW;
 } OpticalCtl;
 
-bool opticalCtlConfig(OpticalCtl *oc, Dir src, Dir tgt) {
-    if (src == tgt)
-        err("tried to set the source of target port of an optical ctl to itself");
-        return false;
-        
-}
-
+bool opticalCtlConfig(OpticalCtl *oc, Dir src, Dir tgt);
 
 OpticalCtl opticalCtlNE();
 OpticalCtl opticalCtlSW();

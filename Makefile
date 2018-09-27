@@ -1,34 +1,33 @@
-
-
 CFLAGS=-Wall -g -std=c11 -lSDL2 -llua5.3
+TESTFLAGS=-Wall -g -std=c11
+TESTLIBS= -lSDL2 -llua5.3 -lcheck -lsubunit -pthread -lrt -lm -lsubunit
 EXE=sim
+TESTEXE=testbin
 
-all: main.c ## build
+all: main ## build
 
 docs: FORCE
 	doxygen doxygen.cfg
 
 cell.o:
-	gcc ${CFLAGS} -o $@ cell.c
+	${CC} ${CFLAGS} -o $@ src/cell.c
 
-err.o: 
-	gcc -c err.c -o $@
+err: 
+	${CC} -c src/$@.c -o $@.o
 
-optical-ctl.o: 
-	gcc -c optical-ctl.c -o $@ 
+optical-ctl: 
+	${CC} -c src/$@.c -o $@.o
 
-main.c: optical-ctl.o
-	gcc ${CFLAGS} $@ -o ${EXE}
+main: optical-ctl
+	${CC} ${CFLAGS} src/$@.c -o ${EXE}
 
-test: ## test
-	echo test
+test-optical-ctl: optical-ctl FORCE ## test
+	${CC} ${TESTFLAGS} test/test-optical-ctl.c ${TESTLIBS} -o ${TESTEXE}
+	./${TESTEXE}
+
 
 work: ## open all files in editor
-	emacs -nw *.c *.h *.lua Makefile
-
-setup:
-	touch battle-plan.org
-	mkdir -p design
+	emacs -nw src/*.c src/*.h lua/*.lua Makefile
 
 add: clean ## add files to the git repo
 	git add -A :/
@@ -43,6 +42,8 @@ help:
 	'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 clean: FORCE ## clean all the things
+	rm -f ${EXE}
+	rm -f ${TESTEXE}
 	bash clean.bash
 
 FORCE:

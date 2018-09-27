@@ -94,12 +94,12 @@ int main (void) {
         }
         
         if (strncmp(buff, "reload", 6) == 0) {
-            luaL_dofile(L, "grid.lua");
+            luaL_dofile(L, "lua/grid.lua");
             continue;
         }
         
-        if (strncmp(buff, "help", 4) == 0) {
-            luaL_dofile(L, "help.lua");            
+        if (strncmp(buff, "help", 4) == 0 || strncmp(buff, "h\n", 2) == 0) {
+            luaL_dofile(L, "lua/help.lua");            
             continue;
         }
         
