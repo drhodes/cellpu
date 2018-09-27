@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <assert.h>
 
+#include "err.h"
 // managing the SDL renderer state in lua. ---------------------------------------------------------
 
 void lPutRenderer(lua_State *L, SDL_Renderer* renderer) {
@@ -38,12 +39,9 @@ static int l_clear(lua_State *L) {
 
 // Register callbacks ------------------------------------------------------------------------------
 void register_callbacks(lua_State *L) {
-    // lua_pushcfunction(L, l_square);
-    // lua_setglobal(L, "mysin");
-
     // clear the renderer
     lua_pushcfunction(L, l_clear);
-    lua_setglobal(L, "clear");    
+    lua_setglobal(L, "clear");
 }
 
 int main (void) {
@@ -51,7 +49,6 @@ int main (void) {
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
     
-    // Create an application window with the following settings:
     window = SDL_CreateWindow( "proc sim",                // window title
                                SDL_WINDOWPOS_UNDEFINED,   // initial x position
                                SDL_WINDOWPOS_UNDEFINED,   // initial y position
@@ -65,7 +62,7 @@ int main (void) {
     // Check that the window was successfully created
     if (window == NULL) {
         // In the case that the window could not be made...
-        printf("Could not create window: %s\n", SDL_GetError());
+        perr("Could not create window"); perr(SDL_GetError());
         return 1;
     }
 
@@ -90,7 +87,8 @@ int main (void) {
         char *eof = fgets(buff, sizeof(buff), stdin);
         
         if (eof == NULL) break;
-        
+
+        // directives.
         if (strncmp(buff, "quit", 4) == 0) {
             break;
         }
@@ -108,6 +106,7 @@ int main (void) {
         err = luaL_loadbuffer(L, buff, strlen(buff), "line") || lua_pcall(L, 0, 0, 0);        
         if (err) {
             fprintf(stderr, "%s\n", lua_tostring(L, -1));
+            perr(lua_tostring(L, -1));
             lua_pop(L, 1);  /* pop error message from the stack */
         }
     }
@@ -120,10 +119,10 @@ int main (void) {
     // Clean up
     SDL_Quit();
 
+    reportUnwind();
     lua_close(L);
     return 0;
 }
-
 
 // static int l_square (lua_State *L) {
 //     double d = lua_tonumber(L, 1);  /* get argument */

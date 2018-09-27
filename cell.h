@@ -1,10 +1,10 @@
 #ifndef CELL_H
 #define CELL_H
 
-typedef struct {
-    
+#include "optical-ctl.h"
 
-    OpticalCtl oc;
+typedef struct {
+    OpticalCtl oc;    
 } Cell;
 
 
