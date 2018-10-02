@@ -13,21 +13,12 @@ function Instruction(name, oper)
    return self
 end
 
-print("loaded cell")
-
-
 function NOP()
    local f = function(x)
       return x
-   end
-   
+   end   
    return Instruction("NOP", f)
 end
-
--- What kind of instructions are there? for each permutation of
--- row broadcast, column broadcast, cell register.
--- nbr communication.
-
 
 function CMP()
    local f = function(x, y)
@@ -36,4 +27,4 @@ function CMP()
    return Instruction("CMP", f)
 end
 
-   
+print("loaded instruction")

@@ -133,6 +133,16 @@ void register_callbacks(lua_State *L) {
     lua_pop(L, 4);
 }
 
+void doFile(lua_State *L, const char *filename) {
+    int err = luaL_dofile(L, filename);
+    if (err) {
+        fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        perr(lua_tostring(L, -1));
+        lua_pop(L, 1);  /* pop error message from the stack */
+    }
+}
+
+
 int main (void) {
     SDL_Init(SDL_INIT_VIDEO);            
     SDL_Window *window = NULL;
@@ -179,7 +189,7 @@ int main (void) {
     
     register_callbacks(L);
     
-    luaL_dofile(L, "lua/display.lua");            
+    doFile(L, "lua/display.lua");            
     
     printf("Local Distributed Processing Unit Simulator\n\n");
     
@@ -195,15 +205,15 @@ int main (void) {
         }
         
         if (strncmp(buff, "reload", 6) == 0) { 
-            luaL_dofile(L, "lua/cell.lua");
-            luaL_dofile(L, "lua/display.lua");            
-            luaL_dofile(L, "lua/grid.lua");
-            luaL_dofile(L, "lua/instructions.lua");
+            doFile(L, "lua/cell.lua");
+            doFile(L, "lua/display.lua");            
+            doFile(L, "lua/grid.lua");
+            doFile(L, "lua/instructions.lua");
             continue;
         }
         
         if (strncmp(buff, "help", 4) == 0 || strncmp(buff, "h\n", 2) == 0) {
-            luaL_dofile(L, "lua/help.lua");            
+            doFile(L, "lua/help.lua");            
             continue;
         }
         
@@ -213,6 +223,7 @@ int main (void) {
             perr(lua_tostring(L, -1));
             lua_pop(L, 1);  /* pop error message from the stack */
         }
+        //lua_pop(L, 200);
     }
 
     // The window is open: could enter program loop here (see SDL_PollEvent())

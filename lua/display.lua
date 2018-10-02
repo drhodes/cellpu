@@ -43,3 +43,5 @@ function tiles()
    end
    update()
 end
+
+print("loaded display")

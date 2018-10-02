@@ -28,7 +28,6 @@ function Grid(n)
       end
    end
 
-
    self.selectColSegment = function(x, y, n, s)
       local top = y - n
       local bottom = y + s
@@ -48,27 +47,44 @@ function Grid(n)
       
       while x <= right do
          self.cells[x][y].select()
-         print(self.cells[x][y].color)
          x = x + 1
       end
    end
    
-   self.broadcastSelect = function(x, y, n, e, s, w)
+   self.crossSelect = function(x, y, n, e, s, w)
       -- select a cross of cells, that is a row segment intersected
       -- with a column segment, relative to x, y
       self.selectColSegment(x, y, n, s)
       self.selectRowSegment(x, y, e, w)
    end
+
+   self.alterSelected = function(f) 
+      for i=0, self.size do
+         for j=0, self.size do
+            c = self.cells[i][j]
+            if c.selected then
+               f(c)
+            end
+         end
+      end
+   end
    
-   return self
+   return self -- end of class grid.
 end
 
-
-
 function gridtest()   
-   g = Grid(10)
-   g.cells[5][5].op = CMP()
-   g.broadcastSelect(5,5,2,2,2,2)
+   local g = Grid(10)
+   local c = g.cells[5][5]
+   c.op = CMP()
+   c.data = 7
+   g.crossSelect(5,5,2,3,2,4)
+   c.setBroadcast(true)
+   
+   function setVal(cell)
+      cell.data = c.data
+   end
+   
+   g.alterSelected(setVal)      
    g.render()
    update()
 end

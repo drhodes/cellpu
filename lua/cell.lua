@@ -9,6 +9,8 @@ function Cell(x, y, c)
       color = c,
       selected = false,
       broadcasting = false,
+      listening = false,
+      data = 0,
       op = NOP(),
    }         
 
@@ -23,29 +25,33 @@ function Cell(x, y, c)
 
    self.setBroadcast = function(bool)
       self.broadcasting = bool
-      self.setListening(not bool)
+      self.listening = not bool
    end
 
    self.setListen = function(bool)
       self.listening = bool
-      self.setBroadcast(not bool)
+      self.broadcasting = not bool
    end
-
-   self.setCap = function(dir)
+   
+   self.setCap = function(dir)      
    end
    
    self.render = function()
       blackBorderBox(self.x * self.size,
                      self.y * self.size,
-                     self.size,
-                     self.size,
-                     self.color)
+                     self.size, self.size, self.color)
+      
       drawText(self.x * self.size + 4,
                self.y * self.size + 4,
-               tostring(self.x) .. "," .. tostring(self.y))
+               "[" .. tostring(self.x) .. " " .. tostring(self.y) .. "]")
+      
       drawText(self.x * self.size + 4,
                self.y * self.size + 16,
                self.op.name)
+      
+      drawText(self.x * self.size + self.size / 2,
+               self.y * self.size + self.size / 2,
+               tostring(self.data))
    end
 
    return self
