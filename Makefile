@@ -1,4 +1,4 @@
-CFLAGS=-Wall -g -std=c11 -lSDL2 -llua5.3
+CFLAGS=-Wall -g -std=c11 -lSDL2 -llua5.3 -lSDL2_ttf
 TESTFLAGS=-Wall -g -std=c11
 TESTLIBS= -lSDL2 -llua5.3 -lcheck -lsubunit -pthread -lrt -lm -lsubunit
 EXE=sim
@@ -7,7 +7,7 @@ TESTEXE=testbin
 all: main ## build
 
 run: all
-	./${EXE}
+	rlwrap ./${EXE}
 
 docs: FORCE
 	doxygen doxygen.cfg
@@ -27,7 +27,6 @@ main: optical-ctl
 test-optical-ctl: optical-ctl FORCE ## test
 	${CC} ${TESTFLAGS} test/test-optical-ctl.c ${TESTLIBS} -o ${TESTEXE}
 	./${TESTEXE}
-
 
 work: ## open all files in editor
 	emacs -nw src/*.c src/*.h lua/*.lua Makefile

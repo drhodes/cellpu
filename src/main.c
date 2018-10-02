@@ -1,14 +1,14 @@
-#include <stdio.h>
-#include <string.h>
-#include <lua5.3/lua.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <assert.h>
 #include <lua5.3/lauxlib.h>
+#include <lua5.3/lua.h>
 #include <lua5.3/lualib.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
-#include <stdlib.h>
 #include <stdbool.h> 
 #include <stdint.h>
-#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "err.h"
 // managing the SDL renderer state in lua. ---------------------------------------------------------
@@ -26,6 +26,23 @@ SDL_Renderer* lGetRenderer(lua_State *L) {
     lua_pop(L, 1);
     return (SDL_Renderer*)ptr2;
 }
+
+// managing the SDL font state in lua. ---------------------------------------------------------
+
+void lPutFont(lua_State *L, TTF_Font* font) {
+    lua_pushinteger(L, (uintptr_t)font);
+    lua_setglobal(L, "font");
+}
+
+TTF_Font* lGetFont(lua_State *L) {
+    // fetch the pointer to font and place at top of stack.
+    lua_getglobal(L, "font");
+    // get top of stack and coerce to pointer type.
+    uintptr_t ptr2 = (uintptr_t)lua_tointeger(L, -1);
+    lua_pop(L, 1);
+    return (TTF_Font*)ptr2;
+}
+
 
 // C callbacks for lua -----------------------------------------------------------------------------
 
@@ -63,6 +80,29 @@ static int lDrawBox(lua_State *L) {
     return 0;
 }
 
+static int lDrawText(lua_State *L) {
+    int x = lua_tonumber(L, 1);  /* get argument */
+    int y = lua_tonumber(L, 2);  /* get argument */
+    const char *msgString = lua_tostring(L, 3);  // change to string.
+    lua_pop(L, 2);
+
+    SDL_Renderer *renderer = lGetRenderer(L);
+    TTF_Font *font = lGetFont(L);
+
+    SDL_Color white = {255, 255, 255};
+    SDL_Surface* surfaceTxt = TTF_RenderText_Solid(font, msgString, white);
+    SDL_Texture* msg = SDL_CreateTextureFromSurface(renderer, surfaceTxt);
+    
+    int msgW = 0;
+    int msgH = 0;
+    SDL_QueryTexture(msg, NULL, NULL, &msgW, &msgH);
+    
+    SDL_Rect msgRect = { x, y, msgW, msgH };
+    SDL_RenderCopy(renderer, msg, NULL, &msgRect);
+    return 0;
+}
+
+
 static int lUpdate(lua_State *L) {
     //get the renderer pointer from lua.
     SDL_Renderer *renderer = lGetRenderer(L);
@@ -86,7 +126,11 @@ void register_callbacks(lua_State *L) {
 
     lua_pushcfunction(L, lUpdate);
     lua_setglobal(L, "update");
+    
+    lua_pushcfunction(L, lDrawText);
+    lua_setglobal(L, "drawText");
 
+    
     lua_pop(L, 4);
 }
 
@@ -94,6 +138,7 @@ int main (void) {
     SDL_Init(SDL_INIT_VIDEO);            
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
+    
     
     window = SDL_CreateWindow( "proc sim",                // window title
                                SDL_WINDOWPOS_UNDEFINED,   // initial x position
@@ -105,7 +150,8 @@ int main (void) {
     
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-        
+
+    
     // Check that the window was successfully created
     if (window == NULL) {
         // In the case that the window could not be made...
@@ -113,6 +159,18 @@ int main (void) {
         return 1;
     }
 
+    // font ----------------------------------------------------------------------------------------
+    TTF_Init();
+    TTF_Font* font = TTF_OpenFont("./media/Inconsolata-g.ttf", 16);
+    // SDL_Color white = {255, 255, 255};
+    // SDL_Surface* surfaceTxt = TTF_RenderText_Solid(font, "msg", white);
+    // SDL_Texture* msg = SDL_CreateTextureFromSurface(renderer, surfaceTxt);
+    // SDL_Rect msgRect = {0, 0, 100, 100};
+    
+        
+
+
+    
     // lua -----------------------------------------------------------------------------------------
     char buff[256];
     int err;
@@ -125,6 +183,7 @@ int main (void) {
     luaopen_math(L);           // opens the math lib. 
 
     lPutRenderer(L, renderer);
+    lPutFont(L, font);
     register_callbacks(L);
     luaL_dofile(L, "lua/display.lua");            
     
