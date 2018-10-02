@@ -93,8 +93,7 @@ static int lDrawText(lua_State *L) {
     SDL_Surface* surfaceTxt = TTF_RenderText_Solid(font, msgString, white);
     SDL_Texture* msg = SDL_CreateTextureFromSurface(renderer, surfaceTxt);
     
-    int msgW = 0;
-    int msgH = 0;
+    int msgW, msgH;
     SDL_QueryTexture(msg, NULL, NULL, &msgW, &msgH);
     
     SDL_Rect msgRect = { x, y, msgW, msgH };
@@ -161,14 +160,7 @@ int main (void) {
 
     // font ----------------------------------------------------------------------------------------
     TTF_Init();
-    TTF_Font* font = TTF_OpenFont("./media/Inconsolata-g.ttf", 16);
-    // SDL_Color white = {255, 255, 255};
-    // SDL_Surface* surfaceTxt = TTF_RenderText_Solid(font, "msg", white);
-    // SDL_Texture* msg = SDL_CreateTextureFromSurface(renderer, surfaceTxt);
-    // SDL_Rect msgRect = {0, 0, 100, 100};
-    
-        
-
+    TTF_Font* font = TTF_OpenFont("./media/Terminus.ttf", 16);
 
     
     // lua -----------------------------------------------------------------------------------------
@@ -184,7 +176,9 @@ int main (void) {
 
     lPutRenderer(L, renderer);
     lPutFont(L, font);
+    
     register_callbacks(L);
+    
     luaL_dofile(L, "lua/display.lua");            
     
     printf("Local Distributed Processing Unit Simulator\n\n");

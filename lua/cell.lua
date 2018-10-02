@@ -9,7 +9,7 @@ function Cell(x, y, c)
       color = c,
       selected = false,
       broadcasting = false,
-      
+      op = NOP(),
    }         
 
    self.show = function()
@@ -18,6 +18,7 @@ function Cell(x, y, c)
 
    self.select = function()
       self.selected = true
+      self.color = {255,0,0,255}
    end
 
    self.setBroadcast = function(bool)
@@ -33,18 +34,19 @@ function Cell(x, y, c)
    self.setCap = function(dir)
    end
    
-   
-   
    self.render = function()
       blackBorderBox(self.x * self.size,
                      self.y * self.size,
                      self.size,
                      self.size,
                      self.color)
+      drawText(self.x * self.size + 4,
+               self.y * self.size + 4,
+               tostring(self.x) .. "," .. tostring(self.y))
+      drawText(self.x * self.size + 4,
+               self.y * self.size + 16,
+               self.op.name)
    end
-   
-   
-
 
    return self
 end
