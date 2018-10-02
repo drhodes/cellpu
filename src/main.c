@@ -22,26 +22,72 @@ SDL_Renderer* lGetRenderer(lua_State *L) {
     // fetch the pointer to renderer and place at top of stack.
     lua_getglobal(L, "renderer");
     // get top of stack and coerce to pointer type.
-    uintptr_t ptr2 = (uintptr_t)lua_tointeger(L, -1);    
+    uintptr_t ptr2 = (uintptr_t)lua_tointeger(L, -1);
+    lua_pop(L, 1);
     return (SDL_Renderer*)ptr2;
 }
 
 // C callbacks for lua -----------------------------------------------------------------------------
 
-static int l_clear(lua_State *L) {
+static int lClear(lua_State *L) {
     //get the renderer pointer from lua.
     SDL_Renderer *renderer = lGetRenderer(L);
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
     return 0;
 }
 
+static int lSetColor(lua_State *L) {
+    int r = lua_tonumber(L, 1);  /* get argument */
+    int g = lua_tonumber(L, 2);  /* get argument */
+    int b = lua_tonumber(L, 3);  /* get argument */
+    int a = lua_tonumber(L, 4);  /* get argument */
+    lua_pop(L, 4);
+    
+    SDL_Renderer *renderer = lGetRenderer(L);
+    SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    return 0;
+}
+
+
+static int lDrawBox(lua_State *L) {
+    int x = lua_tonumber(L, 1);  /* get argument */
+    int y = lua_tonumber(L, 2);  /* get argument */
+    int h = lua_tonumber(L, 3);  /* get argument */
+    int w = lua_tonumber(L, 4);  /* get argument */
+    lua_pop(L, 4);
+    
+    SDL_Renderer *renderer = lGetRenderer(L);
+    SDL_Rect rect = { x, y, h, w};
+    SDL_RenderFillRect(renderer, &rect);
+    return 0;
+}
+
+static int lUpdate(lua_State *L) {
+    //get the renderer pointer from lua.
+    SDL_Renderer *renderer = lGetRenderer(L);
+    SDL_RenderPresent(renderer);
+    return 0;
+}
+
+
 // Register callbacks ------------------------------------------------------------------------------
+
 void register_callbacks(lua_State *L) {
     // clear the renderer
-    lua_pushcfunction(L, l_clear);
+    lua_pushcfunction(L, lClear);
     lua_setglobal(L, "clear");
+
+    lua_pushcfunction(L, lSetColor);
+    lua_setglobal(L, "setColor");
+
+    lua_pushcfunction(L, lDrawBox);
+    lua_setglobal(L, "drawBox");
+
+    lua_pushcfunction(L, lUpdate);
+    lua_setglobal(L, "update");
+
+    lua_pop(L, 4);
 }
 
 int main (void) {
@@ -58,7 +104,8 @@ int main (void) {
                                );
     
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        
     // Check that the window was successfully created
     if (window == NULL) {
         // In the case that the window could not be made...
@@ -79,6 +126,7 @@ int main (void) {
 
     lPutRenderer(L, renderer);
     register_callbacks(L);
+    luaL_dofile(L, "lua/display.lua");            
     
     printf("Local Distributed Processing Unit Simulator\n\n");
     
@@ -93,8 +141,11 @@ int main (void) {
             break;
         }
         
-        if (strncmp(buff, "reload", 6) == 0) {
+        if (strncmp(buff, "reload", 6) == 0) { 
+            luaL_dofile(L, "lua/cell.lua");
+            luaL_dofile(L, "lua/display.lua");            
             luaL_dofile(L, "lua/grid.lua");
+            luaL_dofile(L, "lua/instructions.lua");
             continue;
         }
         
@@ -123,6 +174,8 @@ int main (void) {
     lua_close(L);
     return 0;
 }
+
+
 
 // static int l_square (lua_State *L) {
 //     double d = lua_tonumber(L, 1);  /* get argument */

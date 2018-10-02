@@ -30,8 +30,6 @@ function Cell(x, y, c)
       self.setBroadcast(not bool)
    end
 
-   self.setCap = function(dir)
-   end
    
    
    

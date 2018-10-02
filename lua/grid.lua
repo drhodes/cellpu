@@ -3,31 +3,48 @@
 
 function Grid(n)
    -- grid object contains many cells --------------------------------------------------------------
-   self = {
+   local self = {
       size = n,
-      cells = {},
+      cells = {}
    }
 
-   -- init cells
-   function init()
-      for i=0, self.size do
-         self.cells[i] = {}
-         for j=0, self.size do
-            self.cells[i][j] = "cell"
-            -- print(self.cells[i][j])
-         end
+   for i=0, self.size do
+      self.cells[i] = {}
+      for j=0, self.size do
+         self.cells[i][j] = Cell(i, j, {0,0,255,255})
       end
    end
-   init()
-         
+   
    -------------------------------------------------------------------------------------------------
    self.show = function()
       return "<Grid size=" .. self.size .. ">"
    end
+   
+   self.render = function()
+      for i=0, self.size do
+         for j=0, self.size do
+            self.cells[i][j].render()
+         end
+      end
+   end
 
+
+   self.selectColSegment = function()
+   end
+
+   self.selectRowSegment = function()
+   end
+   
    
    return self
 end
 
+
+
+function gridtest()
+   g = Grid(10)
+   g.render()
+   update()
+end
 
 print("loaded grid")
