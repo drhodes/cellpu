@@ -11,7 +11,7 @@ function Grid(n)
    for i=0, self.size do
       self.cells[i] = {}
       for j=0, self.size do
-         self.cells[i][j] = Cell(i, j, {0,0,255,255})
+         self.cells[i][j] = Cell(i, j, {100,100,255,255})
       end
    end
    
@@ -73,15 +73,16 @@ function Grid(n)
 end
 
 function gridtest()   
-   local g = Grid(10)
-   local c = g.cells[5][5]
-   c.op = CMP()
-   c.data = 7
-   g.crossSelect(5,5,2,3,2,4)
-   c.setBroadcast(true)
-   
+   local g = Grid(14)
+   local c1 = g.cells[5][5]
+   c1.op = CMP()
+   c1.data = 7
+   g.crossSelect(5,5, 4,3,3,4)
+   c1.setBroadcast(true)
+   c1.deselect()
    function setVal(cell)
-      cell.data = c.data
+      cell.data = 5
+      cell.op = CMP()
    end
    
    g.alterSelected(setVal)      

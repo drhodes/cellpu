@@ -1,5 +1,8 @@
 -- Instructions. -----------------------------------------------------------------------------------
 
+-- GridInstruction
+-- CellInstruction
+
 function Instruction(name, oper)   
    local self = {
       name = name,
@@ -12,6 +15,8 @@ function Instruction(name, oper)
 
    return self
 end
+
+-- Cell Instructions -------------------------------------------------------------------------------
 
 function NOP()
    local f = function(x)
@@ -26,5 +31,8 @@ function CMP()
    end
    return Instruction("CMP", f)
 end
+
+
+
 
 print("loaded instruction")

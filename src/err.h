@@ -17,6 +17,11 @@ typedef struct ErrorStack {
     struct ErrorStack *next;
 } ErrorStack;
 
+
+
+// -------------------------------------------------------------------------------------------------
+// GLOBAL error stack.
+
 static ErrorStack *_estack = NULL;
 
 void pushErr(Err e) {                     

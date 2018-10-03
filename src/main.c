@@ -101,14 +101,12 @@ static int lDrawText(lua_State *L) {
     return 0;
 }
 
-
 static int lUpdate(lua_State *L) {
     //get the renderer pointer from lua.
     SDL_Renderer *renderer = lGetRenderer(L);
     SDL_RenderPresent(renderer);
     return 0;
 }
-
 
 // Register callbacks ------------------------------------------------------------------------------
 
@@ -128,9 +126,8 @@ void register_callbacks(lua_State *L) {
     
     lua_pushcfunction(L, lDrawText);
     lua_setglobal(L, "drawText");
-
     
-    lua_pop(L, 4);
+    lua_pop(L, 5);
 }
 
 void doFile(lua_State *L, const char *filename) {
@@ -142,38 +139,9 @@ void doFile(lua_State *L, const char *filename) {
     }
 }
 
-
 int main (void) {
-    SDL_Init(SDL_INIT_VIDEO);            
-    SDL_Window *window = NULL;
-    SDL_Renderer *renderer = NULL;
-    
-    
-    window = SDL_CreateWindow( "proc sim",                // window title
-                               SDL_WINDOWPOS_UNDEFINED,   // initial x position
-                               SDL_WINDOWPOS_UNDEFINED,   // initial y position
-                               800,                       // width, in pixels
-                               800,                       // height, in pixels
-                               SDL_WINDOW_OPENGL          // flags - see below
-                               );
-    
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-
-    
-    // Check that the window was successfully created
-    if (window == NULL) {
-        // In the case that the window could not be made...
-        perr("Could not create window"); perr(SDL_GetError());
-        return 1;
-    }
-
-    // font ----------------------------------------------------------------------------------------
-    TTF_Init();
-    TTF_Font* font = TTF_OpenFont("./media/Terminus.ttf", 16);
-
-    
     // lua -----------------------------------------------------------------------------------------
+    
     char buff[256];
     int err;
     lua_State *L = luaL_newstate();
@@ -184,7 +152,38 @@ int main (void) {
     luaopen_string(L);         // opens the string lib. 
     luaopen_math(L);           // opens the math lib. 
 
+
+    // SDL -----------------------------------------------------------------------------------------
+    
+    SDL_Init(SDL_INIT_VIDEO);            
+    SDL_Window *window = NULL;
+    SDL_Renderer *renderer = NULL;
+    
+    
+    window = SDL_CreateWindow( "proc sim",                // window title
+                               SDL_WINDOWPOS_UNDEFINED,   // initial x position
+                               SDL_WINDOWPOS_UNDEFINED,   // initial y position
+                               1100,                       // width, in pixels
+                               1100,                       // height, in pixels
+                               SDL_WINDOW_OPENGL          // flags - see below
+                               );
+    
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     lPutRenderer(L, renderer);
+
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    
+    // Check that the window was successfully created
+    if (window == NULL) {
+        // In the case that the window could not be made...
+        perr("Could not create window"); perr(SDL_GetError());
+        return 1;
+    }
+
+    // font ----------------------------------------------------------------------------------------
+    
+    TTF_Init();
+    TTF_Font* font = TTF_OpenFont("./media/FIXED_V0.TTF", 8);
     lPutFont(L, font);
     
     register_callbacks(L);
@@ -221,9 +220,8 @@ int main (void) {
         if (err) {
             fprintf(stderr, "%s\n", lua_tostring(L, -1));
             perr(lua_tostring(L, -1));
-            lua_pop(L, 1);  /* pop error message from the stack */
+            lua_pop(L, 1);
         }
-        //lua_pop(L, 200);
     }
 
     // The window is open: could enter program loop here (see SDL_PollEvent())

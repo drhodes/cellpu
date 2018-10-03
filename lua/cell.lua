@@ -5,7 +5,7 @@ function Cell(x, y, c)
       x = x,
       y = y,
       value = 0,
-      size = 80,
+      size = 60,
       color = c,
       selected = false,
       broadcasting = false,
@@ -20,7 +20,12 @@ function Cell(x, y, c)
 
    self.select = function()
       self.selected = true
-      self.color = {255,0,0,255}
+      self.color = {255,100,100,255}
+   end
+
+   self.deselect = function()
+      self.selected = false
+      self.color = {100,100,255,255}
    end
 
    self.setBroadcast = function(bool)
@@ -54,7 +59,7 @@ function Cell(x, y, c)
                tostring(self.data))
    end
 
-   return self
+   return self -- 
 end
 
 print("loaded cell")
