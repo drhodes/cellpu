@@ -18,32 +18,16 @@ typedef struct ErrorStack {
 } ErrorStack;
 
 
-
 // -------------------------------------------------------------------------------------------------
 // GLOBAL error stack.
 
-static ErrorStack *_estack = NULL;
-
-void pushErr(Err e) {                     
-    ErrorStack *stk = (ErrorStack*)malloc(sizeof(ErrorStack));
-    stk->e = e;
-    stk->next = _estack;
-    _estack = stk;
-}
     
 #define perr(errmsg) {                                                  \
         Err e = { .msg = errmsg, .file = __FILE__, .line = __LINE__ };  \
         pushErr(e);                                                     \
     };
 
-void reportUnwind() {
-    if (_estack) printf(" -- ERROR STACK --\n");
-    while (_estack) {
-        printf(" %s (%s, %d)\n", _estack->e.msg, _estack->e.file, _estack->e.line );
-        ErrorStack *tmp = _estack;
-        _estack = _estack->next;
-        free(tmp);
-    }
-}
+void pushErr(Err e);
+void reportUnwind();
 
 #endif // ERR_H

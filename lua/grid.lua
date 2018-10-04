@@ -170,8 +170,4 @@ function sortCfg()
    update()
 end
 
-
-
-
-
 print("loaded grid")

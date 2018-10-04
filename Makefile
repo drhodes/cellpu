@@ -1,4 +1,5 @@
-CFLAGS=-Wall -g -std=c11 -lSDL2 -llua5.3 -lSDL2_ttf
+CFLAGS=-Wall -g -std=c11 
+LDFLAGS=-lSDL2 -llua5.3 -lSDL2_ttf
 TESTFLAGS=-Wall -g -std=c11
 TESTLIBS= -lSDL2 -llua5.3 -lcheck -lsubunit -pthread -lrt -lm -lsubunit
 EXE=sim
@@ -12,17 +13,17 @@ run: all
 docs: FORCE
 	doxygen doxygen.cfg
 
-cell.o:
-	${CC} ${CFLAGS} -o $@ src/cell.c
+display-state.o:
+	${CC} -c ${CFLAGS} src/display-state.c -o $@ 
 
-err: 
-	${CC} -c src/$@.c -o $@.o
+err.o: 
+	${CC} -c ${CFLAGS} src/err.c -o $@
 
-optical-ctl: 
-	${CC} -c src/$@.c -o $@.o
+callbacks.o:
+	${CC} -c ${CFLAGS} src/callbacks.c -o $@  
 
-main: optical-ctl
-	${CC} ${CFLAGS} src/$@.c -o ${EXE}
+main: display-state.o callbacks.o err.o
+	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.c $? 
 
 test-optical-ctl: optical-ctl FORCE ## test
 	${CC} ${TESTFLAGS} test/test-optical-ctl.c ${TESTLIBS} -o ${TESTEXE}
