@@ -64,6 +64,7 @@ function Grid(n)
    self.selectRowSegmentAbs = function(y, w, e)
       local cs = {};
       while w <= e do
+         self.assertRange(Loc(w, y))
          local c = self.cells[w][y]
          c.select()
          table.insert(cs, c)
@@ -73,10 +74,9 @@ function Grid(n)
    end
 
    self.assertRange = function(loc) 
-      if loc.x < 0 then error("location out of range") end
-      if loc.x >= self.size then error("location out of range") end
-      if loc.y < 0 then error("location out of range") end
-      if loc.y >= self.size then error("location out of range") end
+      if loc.x < 0 or loc.x >= self.size or loc.y < 0 or loc.y >= self.size
+      then error("location out of range: " .. tostring(loc.x) .. ", " .. tostring(loc.y))
+      end
    end
    
    self.getCell = function(loc)
@@ -121,10 +121,57 @@ function gridtest()
    local c4 = g.getCell(Loc(2, 5))
    c4.op = CMPLE()   
    c4.data = c4.op.oper(c4.rowReg, c4.colReg)
-
    
    g.render()
    update()
 end
+
+
+function sortCfg()
+   local g = Grid(10)
+   local SIZE = 8
+   local LEFT = 1
+   local RIGHT = SIZE
+   local TOP = 1
+   local BOTTOM = SIZE
+   
+   for x = 1,8 do
+      for y = 1,8 do
+         if x ~= y then
+            c = g.getCell(Loc(x,y))
+            c.op = CMPLE()
+         end         
+      end
+   end
+   
+   for x = LEFT,RIGHT do
+      y=x
+      c = g.getCell(Loc(x,x))
+      c.op = CAST(0,0,0,0)
+      c.data = math.random(1,9)
+      
+      n = y - TOP
+      e = RIGHT - x
+      s = BOTTOM - y
+      w = x - LEFT
+      g.crossBroadcast(Loc(x,y), DirVec(n, e, s, w))
+   end
+
+   for x = 1,8 do
+      for y = 1,8 do
+         if x ~= y then
+            c = g.getCell(Loc(x,y))
+            c.data = c.op.oper(c.rowReg, c.colReg)
+         end         
+      end
+   end
+   
+   g.render()
+   update()
+end
+
+
+
+
 
 print("loaded grid")

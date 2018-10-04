@@ -84,7 +84,7 @@ static int lDrawText(lua_State *L) {
     int x = lua_tonumber(L, 1);  /* get argument */
     int y = lua_tonumber(L, 2);  /* get argument */
     const char *msgString = lua_tostring(L, 3);  // change to string.
-    lua_pop(L, 2);
+    lua_pop(L, 3);
 
     SDL_Renderer *renderer = lGetRenderer(L);
     TTF_Font *font = lGetFont(L);
@@ -98,6 +98,9 @@ static int lDrawText(lua_State *L) {
     
     SDL_Rect msgRect = { x, y, msgW, msgH };
     SDL_RenderCopy(renderer, msg, NULL, &msgRect);
+
+    SDL_FreeSurface(surfaceTxt);
+    SDL_DestroyTexture(msg);
     return 0;
 }
 
@@ -222,6 +225,7 @@ int main (void) {
             perr(lua_tostring(L, -1));
             lua_pop(L, 1);
         }
+        
     }
 
     // The window is open: could enter program loop here (see SDL_PollEvent())
