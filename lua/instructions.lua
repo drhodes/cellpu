@@ -3,10 +3,11 @@
 -- GridInstruction
 -- CellInstruction
 
-function Instruction(name, oper)   
+function Instruction(name, oper, color)   
    local self = {
       name = name,
       oper = oper,
+      color = color,
    }
    
    self.render = function(x, y)
@@ -22,16 +23,22 @@ function NOP()
    local f = function(x)
       return x
    end   
-   return Instruction("NOP", f)
+   return Instruction("NOP", f, {0x30, 0x30, 0x30, 0xFF})
 end
 
-function CMP()
+function CMPLE()
    local f = function(x, y)
-      return x <= y
+      if x <= y then return 1 else return 0 end
    end
-   return Instruction("CMP", f)
+   return Instruction("CMPLE", f, {0x30, 0xAA, 0x30, 0xFF})
 end
 
+function CAST(n,s,e,w)
+   local f = function()
+      error ("Cast instruction undefined")
+   end
+   return Instruction("CAST",  f, {0xAA, 0x30, 0x30, 0xFF})
+end
 
 
 

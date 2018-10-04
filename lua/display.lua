@@ -20,8 +20,8 @@ function boxes()
    update()
 end
 
-function blackBorderBox(x, y, h, w, color)
-   setBlack()
+function borderBox(x, y, h, w, bColor, color)
+   setColor(bColor[1], bColor[2], bColor[3], bColor[4])
    drawBox(x,y,h,w)
    setColor(color[1], color[2], color[3], color[4])
    drawBox(x+1, y+1, h-2, w-2)

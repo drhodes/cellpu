@@ -6,26 +6,30 @@ function Cell(x, y, c)
       y = y,
       value = 0,
       size = 60,
-      color = c,
       selected = false,
       broadcasting = false,
-      listening = false,
+      listening = false,      
       data = 0,
+      colReg = 0, -- photonics column register
+      rowReg = 0, -- photonics row register
       op = NOP(),
    }         
 
+   self.setColReg = function(n) self.colReg = n end
+   self.setRowReg = function(n) self.rowReg = n end
+   self.color = function() return self.op.color end
+   
+   
    self.show = function()
       return "<Cell size=" .. self.size .. ">"
    end
 
    self.select = function()
       self.selected = true
-      self.color = {255,100,100,255}
    end
 
    self.deselect = function()
       self.selected = false
-      self.color = {100,100,255,255}
    end
 
    self.setBroadcast = function(bool)
@@ -40,11 +44,20 @@ function Cell(x, y, c)
    
    self.setCap = function(dir)      
    end
+
+   self.borderColor = function()
+      if self.selected then
+         return {0x30, 0x40, 0xFF, 0xFF}
+      else 
+         return {0x00, 0x00, 0x00, 0xFF}
+      end
+   end
+   
    
    self.render = function()
-      blackBorderBox(self.x * self.size,
-                     self.y * self.size,
-                     self.size, self.size, self.color)
+      borderBox(self.x * self.size,
+                self.y * self.size,
+                self.size, self.size, self.borderColor(), self.color())
       
       drawText(self.x * self.size + 4,
                self.y * self.size + 4,
@@ -57,6 +70,14 @@ function Cell(x, y, c)
       drawText(self.x * self.size + self.size / 2,
                self.y * self.size + self.size / 2,
                tostring(self.data))
+      
+      drawText(self.x * self.size + self.size / 2 + self.size/4,
+               self.y * self.size + self.size / 2,
+               tostring(self.rowReg))
+      
+      drawText(self.x * self.size + self.size / 2,
+               self.y * self.size + self.size / 2 + self.size/4,
+               tostring(self.colReg))
    end
 
    return self -- 
