@@ -84,7 +84,6 @@ function Grid(n)
       return self.cells[loc.x][loc.y]
    end
    
-   
    self.crossBroadcast = function(loc, dirVec)      
       local cellsN = self.selectColSegmentAbs(loc.x, loc.y - dirVec.n, loc.y-1)
       local cellsE = self.selectRowSegmentAbs(loc.y, loc.x+1, loc.x + dirVec.e)
@@ -98,9 +97,109 @@ function Grid(n)
       for _, c in ipairs(cellsW) do c.setRowReg(broadcastCell.data) end
    end
    
+   self.getRelCell = function(cell, dir)
+      if     dir == N then return self.getCell(Loc(cell.x, cell.y-1))
+      elseif dir == E then return self.getCell(Loc(cell.x+1, cell.y))
+      elseif dir == S then return self.getCell(Loc(cell.x, cell.y+1))
+      elseif dir == W then return self.getCell(Loc(cell.x-1, cell.y))
+      end
+   end
    
    return self -- end of class grid.
 end
+
+----------------------------------------------------------------------------------------------------
+
+function sort2(T)
+   local g = Grid(T+2)
+
+   for i = 1,T do
+      if i%2 == 0 then
+         c = g.getCell(Loc(i, 2-(i%2)))
+         c.op = CMPSWP(N, W)
+      end      
+   end
+
+   -- set up data cells.
+   for i = 1,T do
+      if i%2 == 0 then
+         c = g.getCell(Loc(i, 1))
+         c.op = DATA()
+      else       
+         c = g.getCell(Loc(i, 2))
+         c.op = DATA()
+      end
+      c.data = math.random(99) --  9-i
+   end
+      
+   local swapCells = {}
+   for i = 1,T do
+      if i%2 == 0 then
+         table.insert(swapCells, g.getCell(Loc(i,2)))
+      end
+   end
+   
+   local dataCells = {}
+   for i = 1,T do
+      if i%2 == 0 then
+         table.insert(dataCells, g.getCell(Loc(i,1)))
+      else
+         table.insert(dataCells, g.getCell(Loc(i,2)))
+      end
+   end
+
+   function allSorted()
+      for i = 1,T-1 do
+         if dataCells[i].data > dataCells[i+1].data then
+            return false
+         end
+      end
+      return true
+   end
+
+   local cycles = 0
+   while true do
+      if allSorted() then break end
+      for _, c in ipairs(swapCells) do
+         c.select()
+         c.op = CMPSWP(N, W)
+         c.op.oper(g, c)
+         c.deselect()
+      end
+      cycles = cycles + 1
+      for _, c in ipairs(swapCells) do
+         c.select()
+         c.op = CMPSWP(E, N)
+         c.op.oper(g, c)
+         c.deselect()
+      end
+      cycles = cycles + 1
+   end
+   -- g.render()
+   -- update()
+   return cycles
+end
+
+function measureSort2(size)
+   local avg = 0
+   local TRIALS=1
+   for i = 1,TRIALS do
+      avg = avg + sort2(size)
+   end
+   return (avg / TRIALS)
+end
+
+function trialSort2()
+   math.randomseed(os.time())
+   for i = 1,10 do
+      if i%2 ~= 0 then
+         collectgarbage()
+         print(i, measureSort2(i))
+      end      
+   end   
+end
+
+----------------------------------------------------------------------------------------------------
 
 function gridtest()   
    local g = Grid(14)
@@ -126,7 +225,6 @@ function gridtest()
    update()
 end
 
-
 function sortCfg()
    local g = Grid(10)
    local SIZE = 8
@@ -134,7 +232,9 @@ function sortCfg()
    local RIGHT = SIZE
    local TOP = 1
    local BOTTOM = SIZE
-   
+
+
+   -- CYCLE 1 --------------------------------------------------------------------------------------
    for x = 1,8 do
       for y = 1,8 do
          if x ~= y then
@@ -143,19 +243,22 @@ function sortCfg()
          end         
       end
    end
-   
+
+   data = {7,6,5,9,2,1,8,4}
    for x = LEFT,RIGHT do
       y=x
       c = g.getCell(Loc(x,x))
-      c.op = CAST(0,0,0,0)
-      c.data = math.random(1,9)
-      
+      c.op = CAST(0,0,0,0)      
+      c.data = data[x]
       n = y - TOP
       e = RIGHT - x
       s = BOTTOM - y
       w = x - LEFT
       g.crossBroadcast(Loc(x,y), DirVec(n, e, s, w))
+      
    end
+
+   -- CYCLE 2 --------------------------------------------------------------------------------------
 
    for x = 1,8 do
       for y = 1,8 do
@@ -165,9 +268,40 @@ function sortCfg()
          end         
       end
    end
+
+   for x = LEFT,RIGHT do
+      c = g.getCell(Loc(x,x))
+      c.SWAPDR()      
+   end
+
+   
+   -- CYCLE 3 --------------------------------------------------------------------------------------
+   for x = 1,8 do
+      for y = 1,8 do
+         if x ~= y then
+            c = g.getCell(Loc(x,y))
+         end         
+      end
+   end
+   
    
    g.render()
    update()
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 print("loaded grid")

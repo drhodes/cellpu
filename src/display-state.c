@@ -19,7 +19,7 @@
 // managing the SDL renderer state in lua. ---------------------------------------------------------
 
 void
-lPutRenderer(lua_State *L, SDL_Renderer* renderer)
+lPutRenderer(lua_State *L, SDL_Renderer *renderer)
 {
     lua_pushinteger(L, (uintptr_t)renderer);
     lua_setglobal(L, "renderer");
@@ -39,7 +39,7 @@ SDL_Renderer
 // managing the SDL font state in lua. ---------------------------------------------------------
 
 void
-lPutFont(lua_State *L, TTF_Font* font)
+lPutFont(lua_State *L, TTF_Font *font)
 {
     lua_pushinteger(L, (uintptr_t)font);
     lua_setglobal(L, "font");

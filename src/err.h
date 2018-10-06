@@ -28,6 +28,6 @@ typedef struct ErrorStack {
     };
 
 void pushErr(Err e);
-void reportUnwind();
+void dumpStack();
 
 #endif // ERR_H

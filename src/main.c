@@ -75,6 +75,10 @@ int main (void) {
     register_callbacks(L);
     
     doFile(L, "lua/display.lua");            
+    doFile(L, "lua/cell.lua");
+    doFile(L, "lua/grid.lua");
+    doFile(L, "lua/instructions.lua");
+    doFile(L, "lua/startup.lua");
     
     printf("Local Distributed Processing Unit Simulator\n\n");
     
@@ -94,6 +98,7 @@ int main (void) {
             doFile(L, "lua/display.lua");            
             doFile(L, "lua/grid.lua");
             doFile(L, "lua/instructions.lua");
+            doFile(L, "lua/startup.lua");
             continue;
         }
         
@@ -108,7 +113,6 @@ int main (void) {
             perr(lua_tostring(L, -1));
             lua_pop(L, 1);
         }
-        
     }
 
     // The window is open: could enter program loop here (see SDL_PollEvent())
@@ -119,7 +123,7 @@ int main (void) {
     // Clean up
     SDL_Quit();
 
-    reportUnwind();
+    dumpStack();
     lua_close(L);
     return 0;
 }

@@ -1,5 +1,11 @@
 -- The unit cell
 
+N = "N"
+E = "E"
+S = "S"
+W = "W"
+
+
 function Cell(x, y, c)   
    local self = {
       x = x,
@@ -45,6 +51,12 @@ function Cell(x, y, c)
    self.setCap = function(dir)      
    end
 
+   self.SWAPDR = function()
+      tmp = self.rowReg
+      self.rowReg = self.data
+      self.data = tmp
+   end
+   
    self.borderColor = function()
       if self.selected then
          return {0x30, 0x40, 0xFF, 0xFF}

@@ -7,7 +7,6 @@
 
 static ErrorStack *_estack = NULL;
 
-
 #define perr(errmsg) {                                                  \
         Err e = { .msg = errmsg, .file = __FILE__, .line = __LINE__ };  \
         pushErr(e);                                                     \
@@ -23,7 +22,7 @@ pushErr(Err e)
 }
     
 void
-reportUnwind()
+dumpStack()
 {
     if (_estack) printf(" -- ERROR STACK --\n");
     while (_estack) {

@@ -40,6 +40,39 @@ function CAST(n,s,e,w)
    return Instruction("CAST",  f, {0xAA, 0x30, 0x30, 0xFF})
 end
 
+function ROWCHAN()
+   local f = function()
+      error ("ROWCHAN instruction undefined")
+   end
+   return Instruction("═ROWCHAN═", f, {0xAA, 0x30, 0xAA, 0xFF})
+end
+
+function ADDE()
+   local f = function()
+      error ("ROWCHAN instruction undefined")
+   end
+   return Instruction("", f, {0xAA, 0x30, 0x30, 0xFF})
+end
+
+function CMPSWP(d1, d2)
+   local f = function(grid, cell)
+      c1 = grid.getRelCell(cell, d1)
+      c2 = grid.getRelCell(cell, d2)
+      if c1.data < c2.data then
+         tmp = c2.data
+         c2.data = c1.data
+         c1.data = tmp
+      end
+   end
+   return Instruction("CMPSWP", f, {0xBB, 0x78, 0x23, 0xFF})
+end
+
+function DATA()
+   local f = function()
+      error ("DATA instruction undefined")
+   end
+   return Instruction("DATA", f, {0xBB, 0xBB, 0xBB, 0xFF})
+end
 
 
 print("loaded instruction")
