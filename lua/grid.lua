@@ -284,24 +284,8 @@ function sortCfg()
       end
    end
    
-   
    g.render()
    update()
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 print("loaded grid")
