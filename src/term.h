@@ -16,15 +16,15 @@
 #define TERM_MAX_LINES 2<<16
 
 typedef struct {
-    // a text buffer
-    TTF_Font *font;
-    const char *lines[TERM_MAX_LINES];
+    SDL_Window* window; // for dimensions
+    TTF_Font *font;  
+    char *lines[TERM_MAX_LINES];    
     int linesShown;
     int curLine;
     int width;
 } Term;
 
-Term *newTerm(int width);
+Term *newTerm(SDL_Window* win, int width);
 void termSetLinesShown(Term *term, int linesShown);
 void termPut(Term *term, const char *line);
 void termFree(Term *term);

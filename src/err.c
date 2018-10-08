@@ -12,6 +12,7 @@ static ErrorStack *_estack = NULL;
         pushErr(e);                                                     \
     };
 
+
 void
 pushErr(Err e)
 { 
@@ -32,5 +33,7 @@ dumpStack()
         free(tmp);
     }
 }
+
+
 
 #endif // ERR_C

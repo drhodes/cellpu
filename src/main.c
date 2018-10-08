@@ -39,13 +39,11 @@ int main (void) {
     luaopen_string(L);         // opens the string lib. 
     luaopen_math(L);           // opens the math lib. 
 
-
     // SDL -----------------------------------------------------------------------------------------
     
     SDL_Init(SDL_INIT_VIDEO);            
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
-    
     
     window = SDL_CreateWindow( "proc sim",                // window title
                                SDL_WINDOWPOS_UNDEFINED,   // initial x position
@@ -59,7 +57,6 @@ int main (void) {
     lPutRenderer(L, renderer);
 
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-    
     // Check that the window was successfully created
     if (window == NULL) {
         // In the case that the window could not be made...
@@ -84,15 +81,15 @@ int main (void) {
     printf("Local Distributed Processing Unit Simulator\n\n");
 
     // terminal ------------------------------------------------------------------------------------
-    Term* term = newTerm(80);
-    termFree(term);
+    Term* term = newTerm(window, 80);
+    termPut(term, "top");
+    termPut(term, "line1");
+    termPut(term, "line2");
+    termPut(term, "bottom");
     
     while (true) {
-        SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0xFF, 0xFF);
-        SDL_RenderClear(renderer);
+        //SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0xFF, 0xFF);
         printf(">>  ");
-        termPut(term, "abcdefghijklmnopqrstuvwxyz");
-        termRender(term, renderer);
 
         char *eof = fgets(buff, sizeof(buff), stdin);
         
@@ -108,7 +105,7 @@ int main (void) {
             doFile(L, "lua/display.lua");            
             doFile(L, "lua/grid.lua");
             doFile(L, "lua/instructions.lua");
-            //doFile(L, "lua/startup.lua");
+            doFile(L, "lua/startup.lua");
             continue;
         }
         
@@ -124,6 +121,7 @@ int main (void) {
             lua_pop(L, 1);
         }
         
+        termRender(term, renderer);
         SDL_RenderPresent(renderer);
     }
 

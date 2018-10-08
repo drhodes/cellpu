@@ -1,17 +1,26 @@
 #ifndef TERM_C
 #define TERM_C
 
+#include <SDL2/SDL_ttf.h>
 #include "term.h"
+#include "err.h"
 
-Term *newTerm(int width) {
-    TTF_Font* font = TTF_OpenFont("./media/FIXED_V0.TTF", 8);
+Term *newTerm(SDL_Window* window, int width) {
+    TTF_Font* font = TTF_OpenFont("./media/Inconsolata-g.ttf", 18);
+    nullDie(font);
+    TTF_SetFontHinting(font, TTF_HINTING_LIGHT);
+    
     Term *term = (Term*)malloc(sizeof(Term));
+    nullDie(term);
+    term->window = window;
     term->font = font;    
     term->linesShown = 20;
     term->curLine = 0;
     term->width = width;
 
-    for (int i=0; i<TERM_MAX_LINES; i++) term->lines[i] = "";
+    for (int i=0; i<TERM_MAX_LINES; i++) {
+        term->lines[i] = (char*)malloc(sizeof(char)*term->width);
+    }
     return term;
 }
 
@@ -23,49 +32,52 @@ void termFree(Term *term) {
     if (term != NULL) {
         TTF_CloseFont(term->font);
         free(term);
+        term = NULL;
+        for (int i=0; i<TERM_MAX_LINES; i++) {
+            free(term->lines[i]);
+        }
     }
 }
 
 void termPut(Term *term, const char *line) {
-    // ring buffer
-    term->lines[term->curLine % TERM_MAX_LINES] = line;
-    printf("! %s\n", term->lines[term->curLine % TERM_MAX_LINES]);
-    term->curLine++;
+    // ring buffer    
+    char *curLine = term->lines[term->curLine];
+    strncpy(curLine, line, 255);
+    printf("! %s\n", term->lines[term->curLine]);
+    term->curLine += 1;
 }
 
 void termRender(Term *term, SDL_Renderer *renderer) {
-    SDL_Color white = {255, 255, 255};
-
-    SDL_Surface* surfaceTxt = TTF_RenderText_Solid(term->font, "ASDFASDF", white);
-    SDL_Texture* msg = SDL_CreateTextureFromSurface(renderer, surfaceTxt);
     
-    int msgW, msgH;
-    SDL_QueryTexture(msg, NULL, NULL, &msgW, &msgH);
+    SDL_Color white = {255, 255, 255, 255};
+    int winW, winH;
+    SDL_GetWindowSize(term->window, &winW, &winH);
     
-    SDL_Rect msgRect = { 100, 100, msgW, msgH };
-    SDL_RenderCopy(renderer, msg, NULL, &msgRect);
+    SDL_Surface* surfaceTxt;
+    SDL_Texture* line; 
 
+    int stop = term->curLine;
+    int start = stop - term->linesShown;
+    start = start < 0 ? 0 : start;
+
+    int MARGIN = 5;
+    int curY = 2*winH - MARGIN
+    for (int lineNum=start; lineNum <= stop; lineNum++) {
+        char str[300] = "> ";
+        strcat(str, term->lines[lineNum]);         
+        surfaceTxt = TTF_RenderText_Blended(term->font, str, white);
+        line = SDL_CreateTextureFromSurface(renderer, surfaceTxt);
+        
+        int lineW, lineH;
+        SDL_QueryTexture(line, NULL, NULL, &lineW, &lineH);
+        curY -= lineH;
+        SDL_Rect msgRect = { MARGIN, curY, lineW, lineH };
+        SDL_RenderCopy(renderer, line, NULL, &msgRect);
+    }
+    
     SDL_FreeSurface(surfaceTxt);
-    SDL_DestroyTexture(msg);
+    SDL_DestroyTexture(line);
 
-
-    
-    // for (int lineNum=0; lineNum<1; lineNum++) {
-    //     SDL_Surface* surfaceTxt = TTF_RenderText_Solid(term->font, term->lines[lineNum], white);
-    //     SDL_Texture* line = SDL_CreateTextureFromSurface(renderer, surfaceTxt);
-    //     printf("] %s\n", term->lines[lineNum]);
-    
-    //     int lineW, lineH;
-    //     SDL_QueryTexture(line, NULL, NULL, &lineW, &lineH);
-        
-    //     // SDL_Rect msgRect = { 5, lineNum*14, lineW, lineH };
-    //     SDL_Rect msgRect = { 100, 100, 100, 100}; //lineW, lineH };
-    //     SDL_RenderCopy(renderer, line, NULL, &msgRect);
-        
-    //     SDL_FreeSurface(surfaceTxt);
-    //     SDL_DestroyTexture(line);
-    //     break;
-    // }    
 }
 
 
