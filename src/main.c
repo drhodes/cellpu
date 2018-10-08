@@ -13,6 +13,7 @@
 #include "err.h"
 #include "display-state.h"
 #include "callbacks.h"
+#include "term.h"
 
 // Register callbacks ------------------------------------------------------------------------------
 
@@ -78,12 +79,21 @@ int main (void) {
     doFile(L, "lua/cell.lua");
     doFile(L, "lua/grid.lua");
     doFile(L, "lua/instructions.lua");
-    doFile(L, "lua/startup.lua");
+    //doFile(L, "lua/startup.lua");
     
     printf("Local Distributed Processing Unit Simulator\n\n");
+
+    // terminal ------------------------------------------------------------------------------------
+    Term* term = newTerm(80);
+    termFree(term);
     
     while (true) {
+        SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0xFF, 0xFF);
+        SDL_RenderClear(renderer);
         printf(">>  ");
+        termPut(term, "abcdefghijklmnopqrstuvwxyz");
+        termRender(term, renderer);
+
         char *eof = fgets(buff, sizeof(buff), stdin);
         
         if (eof == NULL) break;
@@ -98,7 +108,7 @@ int main (void) {
             doFile(L, "lua/display.lua");            
             doFile(L, "lua/grid.lua");
             doFile(L, "lua/instructions.lua");
-            doFile(L, "lua/startup.lua");
+            //doFile(L, "lua/startup.lua");
             continue;
         }
         
@@ -113,16 +123,19 @@ int main (void) {
             perr(lua_tostring(L, -1));
             lua_pop(L, 1);
         }
+        
+        SDL_RenderPresent(renderer);
     }
 
     // The window is open: could enter program loop here (see SDL_PollEvent())
     // Close and destroy the window
     
     SDL_DestroyWindow(window);
-
+    TTF_CloseFont(font);
+    
     // Clean up
     SDL_Quit();
-
+    TTF_Quit();
     dumpStack();
     lua_close(L);
     return 0;

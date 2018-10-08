@@ -5,7 +5,7 @@ TESTLIBS= -lSDL2 -llua5.3 -lcheck -lsubunit -pthread -lrt -lm -lsubunit
 EXE=sim
 TESTEXE=testbin
 
-all: main ## build
+all: clean main ## build
 
 run: all
 	rlwrap ./${EXE}
@@ -22,7 +22,10 @@ err.o:
 callbacks.o:
 	${CC} -c ${CFLAGS} src/callbacks.c -o $@  
 
-main: display-state.o callbacks.o err.o
+term.o:
+	${CC} -c ${CFLAGS} src/term.c -o $@  
+
+main: display-state.o callbacks.o err.o term.o
 	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.c $? 
 
 test-optical-ctl: optical-ctl FORCE ## test

@@ -175,8 +175,8 @@ function sort2(T)
       end
       cycles = cycles + 1
    end
-   -- g.render()
-   -- update()
+   g.render()
+   update()
    return cycles
 end
 
