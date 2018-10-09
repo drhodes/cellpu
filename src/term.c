@@ -61,8 +61,10 @@ void termRender(Term *term, SDL_Renderer *renderer) {
     start = start < 0 ? 0 : start;
 
     int MARGIN = 5;
-    int curY = 2*winH - MARGIN
+    int curY = winH - MARGIN;
+    
     for (int lineNum=start; lineNum <= stop; lineNum++) {
+        printf("asdf\n");
         char str[300] = "> ";
         strcat(str, term->lines[lineNum]);         
         surfaceTxt = TTF_RenderText_Blended(term->font, str, white);

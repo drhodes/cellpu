@@ -76,7 +76,6 @@ int main (void) {
     doFile(L, "lua/cell.lua");
     doFile(L, "lua/grid.lua");
     doFile(L, "lua/instructions.lua");
-    //doFile(L, "lua/startup.lua");
     
     printf("Local Distributed Processing Unit Simulator\n\n");
 
@@ -86,11 +85,9 @@ int main (void) {
     termPut(term, "line1");
     termPut(term, "line2");
     termPut(term, "bottom");
-    
-    while (true) {
-        //SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0xFF, 0xFF);
-        printf(">>  ");
 
+    while (true) {
+        termPut(term, ">>  ");
         char *eof = fgets(buff, sizeof(buff), stdin);
         
         if (eof == NULL) break;
