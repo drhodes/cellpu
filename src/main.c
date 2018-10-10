@@ -30,7 +30,6 @@ int main (void) {
     // lua -----------------------------------------------------------------------------------------
     
     char buff[256];
-    int err;
     lua_State *L = luaL_newstate();
     luaL_openlibs(L);          // opens Lua 
     luaopen_base(L);           // opens the basic library
@@ -40,6 +39,7 @@ int main (void) {
     luaopen_math(L);           // opens the math lib. 
 
     // SDL -----------------------------------------------------------------------------------------
+
     
     SDL_Init(SDL_INIT_VIDEO);            
     SDL_Window *window = NULL;
@@ -48,15 +48,18 @@ int main (void) {
     window = SDL_CreateWindow( "proc sim",                // window title
                                SDL_WINDOWPOS_UNDEFINED,   // initial x position
                                SDL_WINDOWPOS_UNDEFINED,   // initial y position
-                               1100,                      // width, in pixels
+                               1100,                      // width, in pixels                               
                                1100,                      // height, in pixels
                                SDL_WINDOW_OPENGL          // flags - see below
                                );
     
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1,
+                                  SDL_RENDERER_ACCELERATED |
+                                  SDL_RENDERER_PRESENTVSYNC );
     lPutRenderer(L, renderer);
 
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
     // Check that the window was successfully created
     if (window == NULL) {
         // In the case that the window could not be made...
@@ -80,18 +83,35 @@ int main (void) {
     printf("Local Distributed Processing Unit Simulator\n\n");
 
     // terminal ------------------------------------------------------------------------------------
-    Term* term = newTerm(window, 80);
-    termPut(term, "top");
-    termPut(term, "line1");
-    termPut(term, "line2");
-    termPut(term, "bottom");
+    
+    Term* term = newTerm(window, 0, 0, 80, 17);
+    nullDie(term);
+    
+    //termPut(term, "top");
+    // termPut(term, "line1");
+    // termPut(term, "line2");
+    // termPut(term, "bottom");
+    
+    SDL_Event event;
+    while( SDL_WaitEvent(&event) ) {
+        if (event.type == SDL_KEYDOWN) {
+            if(event.key.keysym.sym == SDLK_q) exit(0);
+        }
+        // different state machines for different parts of the app.
+        // the terminal should own a state machine?
+        // each cell could own a state machine.
+        // ok, event listen interface for each
+        // guiProcessEvent(gui, &event);
+        termProcessEvent(term, &event);
 
-    while (true) {
+        /* do some other stuff here -- draw your app, etc. */
+
+        /*
         termPut(term, ">>  ");
         char *eof = fgets(buff, sizeof(buff), stdin);
         
         if (eof == NULL) break;
-
+        
         // directives.
         if (strncmp(buff, "quit", 4) == 0) {
             break;
@@ -111,34 +131,25 @@ int main (void) {
             continue;
         }
         
-        err = luaL_loadbuffer(L, buff, strlen(buff), "line") || lua_pcall(L, 0, 0, 0);        
+        int err = luaL_loadbuffer(L, buff, strlen(buff), "line") || lua_pcall(L, 0, 0, 0);        
         if (err) {
             fprintf(stderr, "%s\n", lua_tostring(L, -1));
             perr(lua_tostring(L, -1));
             lua_pop(L, 1);
         }
-        
-        termRender(term, renderer);
+        */
+        //termRender(term, renderer);
         SDL_RenderPresent(renderer);
     }
-
-    // The window is open: could enter program loop here (see SDL_PollEvent())
-    // Close and destroy the window
+    // fgets(buff, sizeof(buff), stdin);
     
     SDL_DestroyWindow(window);
-    TTF_CloseFont(font);
+    // TTF_CloseFont(font);
     
     // Clean up
     SDL_Quit();
     TTF_Quit();
     dumpStack();
-    lua_close(L);
+    // lua_close(L);
     return 0;
 }
-
-
-// static int l_square (lua_State *L) {
-//     double d = lua_tonumber(L, 1);  /* get argument */
-//     lua_pushnumber(L, d*d);  /* push result */
-//     return 1;  /* number of results */
-// }

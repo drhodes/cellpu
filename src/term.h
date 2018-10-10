@@ -15,20 +15,42 @@
 
 #define TERM_MAX_LINES 2<<16
 
-typedef struct {
+typedef struct Term {
     SDL_Window* window; // for dimensions
     TTF_Font *font;  
     char *lines[TERM_MAX_LINES];    
-    int linesShown;
     int curLine;
-    int width;
+    int numCols, numRows;
+    int lineHeight, colWidth;
+    int top, left;
 } Term;
 
-Term *newTerm(SDL_Window* win, int width);
-void termSetLinesShown(Term *term, int linesShown);
+Term *newTerm(SDL_Window* window, int top, int left, int columns, int rows);
+void termSetNumRows(Term *term, int linesShown);
 void termPut(Term *term, const char *line);
 void termFree(Term *term);
 void termRender(Term *term, SDL_Renderer *renderer);
 int  termLineHeight(Term *term);
+bool termContainsPoint(Term *term, Sint32 x, Sint32 y);
+
+
+bool termProcessEvent(Term*, SDL_Event*);
+
+
+// State diagram for terminal.
+
+// Which states can the terminal be in?
+
+// scrolling
+// maybe not necessary
+// 
+
+
+
+
+
+
+
+
 
 #endif // TERM_H

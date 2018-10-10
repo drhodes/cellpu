@@ -16,6 +16,11 @@
 #include "err.h"
 #include "display-state.h"
 
+// global state ------------------------------------------------------------------------------------
+
+// SDL_Window *window = NULL;
+// SDL_Renderer *renderer = NULL;
+
 // managing the SDL renderer state in lua. ---------------------------------------------------------
 
 void
