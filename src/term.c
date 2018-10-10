@@ -9,7 +9,7 @@
 #include "err.h"
 #include "term.h"
 
-Term *newTerm(SDL_Window* window, int top, int left, int columns, int rows) {
+Term *newTerm(SDL_Window* window, int left, int top, int columns, int rows) {
     TTF_Font* font = TTF_OpenFont("./media/Inconsolata-g.ttf", 18);
     nullDie(font);
     TTF_SetFontHinting(font, TTF_HINTING_LIGHT);
@@ -30,6 +30,7 @@ Term *newTerm(SDL_Window* window, int top, int left, int columns, int rows) {
     
     for (int i=0; i<TERM_MAX_LINES; i++) {        
         term->lines[i] = (char*)malloc(sizeof(char)*term->numCols);
+        term->lines[i][0] = '\0';
     }
     return term;
 }
@@ -43,11 +44,14 @@ void termFree(Term *term) {
     if (term != NULL) {
         TTF_CloseFont(term->font);
         free(term);
-        term = NULL;
         for (int i=0; i<TERM_MAX_LINES; i++) {
             free(term->lines[i]);
         }
+
+        // TODO free SDL surfaces.
+        
     }
+    term = NULL;    
 }
 
 void termPut(Term *term, const char *str) {
@@ -63,12 +67,26 @@ void termPut(Term *term, const char *str) {
     term->curLine += 1;
 }
 
-int TERM_MARGIN = 5;
+void termBBox(Term *term, BBox *bb) {
+    nullDie(term);
+    nullDie(bb);
+    // including the margin.
+    bb->top = term->top;
+    bb->left = term->left;
+    bb->height = term->numRows  * term->lineHeight;
+    bb->width  = term->colWidth * term->numCols;
+}
 
 void termRender(Term *term, SDL_Renderer *renderer) {
     nullDie(term);
+    // draw a background.
+    BBox bb;
+    termBBox(term, &bb);
+    SDL_SetRenderDrawColor(renderer, 0x33, 0x33, 0xff, 0xff);
+    SDL_Rect rect = {bb.left, bb.top, bb.width, bb.height};
+    SDL_RenderFillRect(renderer, &rect);
     
-    SDL_Color white = {255, 255, 255, 255};
+    //
     int winW, winH;
     SDL_GetWindowSize(term->window, &winW, &winH);
 
@@ -76,9 +94,10 @@ void termRender(Term *term, SDL_Renderer *renderer) {
     int start = stop - term->numRows;
     start = start < 0 ? 0 : start;
 
-    int curY = winH - TERM_MARGIN;
+    int curY = term->top;
+    SDL_Color white = {255, 255, 255, 255};
     
-    for (int lineNum=stop; lineNum > start; lineNum--) {        
+    for (int lineNum=start; lineNum <= stop; lineNum++) {        
         char str[300] = "> ";
         strcat(str, term->lines[lineNum]);         
         SDL_Surface* surfaceTxt = TTF_RenderText_Blended(term->font, str, white);
@@ -86,23 +105,14 @@ void termRender(Term *term, SDL_Renderer *renderer) {
         
         int lineW, lineH;
         SDL_QueryTexture(line, NULL, NULL, &lineW, &lineH);
-        curY -= lineH;
-        SDL_Rect msgRect = { TERM_MARGIN, curY, lineW, lineH };
+        curY += lineH;
+        
+        SDL_Rect msgRect = { bb.left, curY, lineW, lineH };
         SDL_RenderCopy(renderer, line, NULL, &msgRect);
         
         SDL_FreeSurface(surfaceTxt);
         SDL_DestroyTexture(line);
     }
-}
-
-void termBBox(Term *term, BBox *bb) {
-    nullDie(term);
-    nullDie(bb);
-    // including the margin.
-    bb->top = term->top;
-    bb->left = term->left;
-    bb->height = term->numRows  * term->lineHeight + 2*TERM_MARGIN;
-    bb->width  = term->colWidth * term->numCols    + 2*TERM_MARGIN;    
 }
 
 bool termContainsPoint(Term *term, Sint32 x, Sint32 y) {    
@@ -125,15 +135,11 @@ bool termProcessEvent(Term* term, SDL_Event* ev) {
     case SDL_MOUSEMOTION: {
         Sint32 x = ev->motion.x;
         Sint32 y = ev->motion.y;
-        // if (termContainsPoint(term, x, y)) {
-        printf("termProcessEvent mouse motion %d, %d\n", x, y);
-            //}
+        if (termContainsPoint(term, x, y)) {
+            printf("termProcessEvent mouse motion %d, %d\n", x, y);
+        }
     }
 
-    case SDL_KEYDOWN: {
-        printf("keyboard sym: %s\n");
-        if(ev->key.keysym.sym == SDLK_q) exit(0);
-    }
 
     default: {
         //perr("Unhandled event");

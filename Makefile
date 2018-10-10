@@ -58,6 +58,7 @@ clean: FORCE ## clean all the things
 	rm -f ${EXE}
 	rm -f ${TESTEXE}
 	rm -f callgrind.out*
+	rm -f gmon.out*
 	bash clean.bash
 
 FORCE:

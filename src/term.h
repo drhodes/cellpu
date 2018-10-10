@@ -23,9 +23,13 @@ typedef struct Term {
     int numCols, numRows;
     int lineHeight, colWidth;
     int top, left;
+
+    // ---------------------------------------------------------------------------------------------
+    // SDL Surfaces
+    
 } Term;
 
-Term *newTerm(SDL_Window* window, int top, int left, int columns, int rows);
+Term *newTerm(SDL_Window* window, int left, int top, int columns, int rows);
 void termSetNumRows(Term *term, int linesShown);
 void termPut(Term *term, const char *line);
 void termFree(Term *term);
