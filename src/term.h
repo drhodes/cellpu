@@ -13,10 +13,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "atlas.h"
+
 #define TERM_MAX_LINES 2<<16
+
 
 typedef struct Term {
     SDL_Window* window; // for dimensions
+    Atlas* atlas;
     TTF_Font *font;  
     char *lines[TERM_MAX_LINES];    
     int curLine;
@@ -29,16 +33,16 @@ typedef struct Term {
     
 } Term;
 
-Term *newTerm(SDL_Window* window, int left, int top, int columns, int rows);
+Term *newTerm(SDL_Window* window, Atlas* atlas, int left, int top, int columns, int rows);
 void termSetNumRows(Term *term, int linesShown);
 void termPut(Term *term, const char *line);
-void termFree(Term *term);
 void termRender(Term *term, SDL_Renderer *renderer);
 int  termLineHeight(Term *term);
 bool termContainsPoint(Term *term, Sint32 x, Sint32 y);
-
-
 bool termProcessEvent(Term*, SDL_Event*);
+
+void freeTerm(Term *term);
+
 
 
 // State diagram for terminal.

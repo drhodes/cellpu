@@ -1,4 +1,4 @@
-CFLAGS=-Wall -pg -std=c11
+CFLAGS=-Wall -g -std=c11
 LDFLAGS=-lSDL2 -llua5.3 -lSDL2_ttf
 TESTFLAGS=-Wall -g -std=c11
 TESTLIBS= -lSDL2 -llua5.3 -lcheck -lsubunit -pthread -lrt -lm -lsubunit
@@ -17,6 +17,9 @@ profile: clean main
 	valgrind --tool=callgrind --dump-instr=yes ./${EXE}
 	kcachegrind callgrind.out*
 
+atlas.o:
+	${CC} -c ${CFLAGS} src/atlas.c -o $@ 
+
 display-state.o:
 	${CC} -c ${CFLAGS} src/display-state.c -o $@ 
 
@@ -32,7 +35,7 @@ bbox.o:
 term.o: 
 	${CC} -c ${CFLAGS} src/term.c -o $@  
 
-main: display-state.o callbacks.o err.o term.o bbox.o
+main: display-state.o callbacks.o err.o term.o bbox.o atlas.o
 	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.c $? 
 
 test-optical-ctl: optical-ctl FORCE ## test

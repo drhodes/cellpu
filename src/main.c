@@ -80,89 +80,82 @@ int main (void) {
     printf("Local Distributed Processing Unit Simulator\n\n");
 
     // terminal ------------------------------------------------------------------------------------
-    
-    Term* term = newTerm(window, 0, 600, 80, 17);
+    Atlas* atlas = newAtlas(renderer);    
+    Term* term = newTerm(window, atlas, 5, 650, 80, 17);
     nullDie(term);
     
+    termPut(term, "1");
+    termPut(term, "1");
+    termPut(term, "2");
+    termPut(term, "h");
+    termPut(term, "1");
+    termPut(term, "2");
+    termPut(term, "h");
     termPut(term, "top");
     termPut(term, "line1");
     termPut(term, "line2");
     termPut(term, "bottom");
     termPut(term, "1");
     termPut(term, "2");
-    termPut(term, "3");
-    termPut(term, "4");
-    termPut(term, "5");
-    termPut(term, "6");
-    termPut(term, "7");
-    termPut(term, "8");
-    termPut(term, "9");
-    termPut(term, "a");
-    termPut(term, "b");
-    termPut(term, "c");
-    termPut(term, "d");
-    termPut(term, "e");
-    termPut(term, "f");
-    termPut(term, "g");
     termPut(term, "h");
     
     SDL_Event event;
     while( true ) {
         Uint64 loopTimeStart = SDL_GetTicks();
-        SDL_PollEvent(&event);
-        if (event.type == SDL_KEYDOWN) {            
-            if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
-                exit(0);
+        
+        while(SDL_PollEvent(&event)) {
+            if (event.type == SDL_KEYDOWN) {            
+                if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
+                    exit(0);
+                }
             }
-        }
         
-        // different state machines for different parts of the app.
-        // the terminal should own a state machine?
-        // each cell could own a state machine.
-        // ok, event listen interface for each
-        // guiProcessEvent(gui, &event);
+            // different state machines for different parts of the app.
+            // the terminal should own a state machine?
+            // each cell could own a state machine.
+            // ok, event listen interface for each
+            // guiProcessEvent(gui, &event);
         
-        termProcessEvent(term, &event);
+            termProcessEvent(term, &event);
         
-        /*
-          termPut(term, ">>  ");
-          char *eof = fgets(buff, sizeof(buff), stdin);
+            /*
+              termPut(term, ">>  ");
+              char *eof = fgets(buff, sizeof(buff), stdin);
           
-          if (eof == NULL) break;
+              if (eof == NULL) break;
           
-          // directives.
-          if (strncmp(buff, "quit", 4) == 0) {
-          break;
-          }
+              // directives.
+              if (strncmp(buff, "quit", 4) == 0) {
+              break;
+              }
           
-          if (strncmp(buff, "reload", 6) == 0) { 
-          doFile(L, "lua/cell.lua");
-          doFile(L, "lua/display.lua");            
-          doFile(L, "lua/grid.lua");
-          doFile(L, "lua/instructions.lua");
-          doFile(L, "lua/startup.lua");
-          continue;
-          }
+              if (strncmp(buff, "reload", 6) == 0) { 
+              doFile(L, "lua/cell.lua");
+              doFile(L, "lua/display.lua");            
+              doFile(L, "lua/grid.lua");
+              doFile(L, "lua/instructions.lua");
+              doFile(L, "lua/startup.lua");
+              continue;
+              }
         
-          if (strncmp(buff, "help", 4) == 0 || strncmp(buff, "h\n", 2) == 0) {
-          doFile(L, "lua/help.lua");            
-          continue;
-          }
+              if (strncmp(buff, "help", 4) == 0 || strncmp(buff, "h\n", 2) == 0) {
+              doFile(L, "lua/help.lua");            
+              continue;
+              }
         
-          int err = luaL_loadbuffer(L, buff, strlen(buff), "line") || lua_pcall(L, 0, 0, 0);        
-          if (err) {
-          fprintf(stderr, "%s\n", lua_tostring(L, -1));
-          perr(lua_tostring(L, -1));
-          lua_pop(L, 1);
-          }
-        */
-        
+              int err = luaL_loadbuffer(L, buff, strlen(buff), "line") || lua_pcall(L, 0, 0, 0);        
+              if (err) {
+              fprintf(stderr, "%s\n", lua_tostring(L, -1));
+              perr(lua_tostring(L, -1));
+              lua_pop(L, 1);
+              }
+            */
+        }        
         termRender(term, renderer);
         SDL_RenderPresent(renderer);
         Uint64 loopTimeStop = SDL_GetTicks();
         Uint64 delta = loopTimeStop - loopTimeStart;
         //double ddelta = ((double)delta*1000) / (double)SDL_GetPerformanceFrequency();
-        SDL_Log("1 million iterations of ticktock took %ld ms", delta);
         int wait = delta > 16 ? 0 : 16 - delta;
         SDL_Delay(wait);
     }
@@ -171,6 +164,7 @@ int main (void) {
     
     SDL_DestroyWindow(window);
     TTF_CloseFont(font);
+    freeTerm(term);
     // Clean up    
     SDL_Quit();
     TTF_Quit();

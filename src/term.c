@@ -8,14 +8,16 @@
 #include "bbox.h"
 #include "err.h"
 #include "term.h"
+#include "atlas.h"
 
-Term *newTerm(SDL_Window* window, int left, int top, int columns, int rows) {
+Term *newTerm(SDL_Window* window, Atlas* atlas, int left, int top, int columns, int rows) {
     TTF_Font* font = TTF_OpenFont("./media/Inconsolata-g.ttf", 18);
     nullDie(font);
     TTF_SetFontHinting(font, TTF_HINTING_LIGHT);
     
     Term *term = (Term*)malloc(sizeof(Term));
     term->window = window;
+    term->atlas = atlas;
     term->font = font;    
     term->curLine = 0;
     term->numCols = columns;
@@ -40,7 +42,7 @@ void termSetNumRows(Term *term, int numRows) {
     term->numRows = numRows;
 }
 
-void termFree(Term *term) {
+void freeTerm(Term *term) {
     if (term != NULL) {
         TTF_CloseFont(term->font);
         free(term);
@@ -73,7 +75,7 @@ void termBBox(Term *term, BBox *bb) {
     // including the margin.
     bb->top = term->top;
     bb->left = term->left;
-    bb->height = term->numRows  * term->lineHeight;
+    bb->height = term->numRows  * term->atlas->surfHeight;
     bb->width  = term->colWidth * term->numCols;
 }
 
@@ -95,23 +97,20 @@ void termRender(Term *term, SDL_Renderer *renderer) {
     start = start < 0 ? 0 : start;
 
     int curY = term->top;
-    SDL_Color white = {255, 255, 255, 255};
     
     for (int lineNum=start; lineNum <= stop; lineNum++) {        
         char str[300] = "> ";
         strcat(str, term->lines[lineNum]);         
-        SDL_Surface* surfaceTxt = TTF_RenderText_Blended(term->font, str, white);
-        SDL_Texture* line = SDL_CreateTextureFromSurface(renderer, surfaceTxt);
-        
-        int lineW, lineH;
-        SDL_QueryTexture(line, NULL, NULL, &lineW, &lineH);
-        curY += lineH;
-        
-        SDL_Rect msgRect = { bb.left, curY, lineW, lineH };
-        SDL_RenderCopy(renderer, line, NULL, &msgRect);
-        
-        SDL_FreeSurface(surfaceTxt);
-        SDL_DestroyTexture(line);
+        int curX = term->left;
+
+        for (int i=0; str[i]; i += 1) {
+            SDL_Rect msgRect = { curX, curY, term->atlas->surfWidth, term->atlas->surfHeight };
+            SDL_RenderCopy(renderer, term->atlas->table[str[i]], NULL, &msgRect);
+            // Why divide by two? Why does newAtlas/renderglyph add extra space?
+            curX += term->colWidth / 2; 
+        }
+        curY += term->atlas->surfHeight;
+
     }
 }
 
@@ -138,8 +137,10 @@ bool termProcessEvent(Term* term, SDL_Event* ev) {
         if (termContainsPoint(term, x, y)) {
             printf("termProcessEvent mouse motion %d, %d\n", x, y);
         }
+    }        
+    case SDL_KEYDOWN: {
+        ;
     }
-
 
     default: {
         //perr("Unhandled event");
