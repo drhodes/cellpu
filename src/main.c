@@ -15,10 +15,7 @@
 #include "callbacks.h"
 #include "term.h"
 
-// Register callbacks -----------------------------------------------------------------------------
 lua_State *L = 0; //luaL_newstate();
-
-
 
 void doFile(lua_State *L, const char *filename) {
     int err = luaL_dofile(L, filename);
@@ -29,20 +26,25 @@ void doFile(lua_State *L, const char *filename) {
     }
 }
 
-int main (void) {
-    // lua -----------------------------------------------------------------------------------------
-    
+
+void initLua() {
+    // init global state.
     L = luaL_newstate();
+    nullDie(L);
     luaL_openlibs(L);          // opens Lua 
     luaopen_base(L);           // opens the basic library
     luaopen_table(L);          // opens the table library 
     luaopen_io(L);             // opens the I/O library 
     luaopen_string(L);         // opens the string lib. 
     luaopen_math(L);           // opens the math lib. 
+}
+
+int main (void) {
+    initLua();
 
     // SDL -----------------------------------------------------------------------------------------
-    
-    SDL_Init(SDL_INIT_VIDEO);            
+    SDL_Init(SDL_INIT_VIDEO);
+    SDL_StartTextInput();
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
     
@@ -51,7 +53,7 @@ int main (void) {
                                SDL_WINDOWPOS_UNDEFINED,   // initial y position
                                1100,                      // width, in pixels                               
                                1100,                      // height, in pixels
-                               SDL_WINDOW_OPENGL          // flags - see below
+                               SDL_WINDOW_OPENGL
                                );
     
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); //SDL_RENDERER_PRESENTVSYNC );
@@ -86,13 +88,8 @@ int main (void) {
     Term* term = newTerm(window, atlas, 5, 650, 80, 17);
     nullDie(term);
     
-    termPut(term, "Distributed Processing Unit Simulator");
+    termPut(term, "CellPU / Distributed Processing Unit Simulator");
     termPut(term, "--");
-    termPut(term, "2");
-    termPut(term, "3");
-    termPut(term, "4");
-    termPut(term, "5");
-    termPut(term, "6");
     
     SDL_Event event;
     while( true ) {
@@ -101,9 +98,10 @@ int main (void) {
         while(SDL_PollEvent(&event)) {
             if (event.type == SDL_KEYDOWN) {            
                 if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
-                    exit(0);
+                    goto done;
                 }
             }
+            
             // different state machines for different parts of the app.
             // the terminal should own one?
             // each cell could own a state machine.
@@ -122,16 +120,16 @@ int main (void) {
     }    
     printf("SDL: %s\n", SDL_GetError());
     
-    // Clean up    
-
-    SDL_DestroyWindow(window);
-    TTF_CloseFont(font);
+ done:
     freeTerm(term);
     freeAtlas(atlas);
+    
+    SDL_DestroyWindow(window);
+    TTF_CloseFont(font);
     
     SDL_Quit();
     TTF_Quit();
     dumpStack();
-    // lua_close(L);
+    lua_close(L);
     return 0;
 }

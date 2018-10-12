@@ -1,3 +1,6 @@
+// @file
+// @brief This file is marvelous.
+
 #ifndef ATLAS_C
 #define ATLAS_C
 

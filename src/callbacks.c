@@ -1,3 +1,6 @@
+// @file
+// @brief This file is marvelous.
+
 // C callbacks for lua -----------------------------------------------------------------------------
 
 #include <SDL2/SDL.h>
@@ -18,7 +21,7 @@
 int
 lClear(lua_State *L)
 {
-    //get the renderer pointer from lua.
+    // get the renderer pointer from lua.
     SDL_Renderer *renderer = lGetRenderer(L);
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
@@ -28,10 +31,10 @@ lClear(lua_State *L)
 int
 lSetColor(lua_State *L)
 {
-    int r = lua_tonumber(L, 1);  /* get argument */
-    int g = lua_tonumber(L, 2);  /* get argument */
-    int b = lua_tonumber(L, 3);  /* get argument */
-    int a = lua_tonumber(L, 4);  /* get argument */
+    int r = lua_tonumber(L, 1);
+    int g = lua_tonumber(L, 2);
+    int b = lua_tonumber(L, 3);
+    int a = lua_tonumber(L, 4);
     lua_pop(L, 4);
     
     SDL_Renderer *renderer = lGetRenderer(L);
@@ -43,10 +46,10 @@ lSetColor(lua_State *L)
 int
 lDrawBox(lua_State *L)
 {
-    int x = lua_tonumber(L, 1);  /* get argument */
-    int y = lua_tonumber(L, 2);  /* get argument */
-    int h = lua_tonumber(L, 3);  /* get argument */
-    int w = lua_tonumber(L, 4);  /* get argument */
+    int x = lua_tonumber(L, 1);
+    int y = lua_tonumber(L, 2);
+    int h = lua_tonumber(L, 3);
+    int w = lua_tonumber(L, 4);
     lua_pop(L, 4);
     
     SDL_Renderer *renderer = lGetRenderer(L);
@@ -58,8 +61,8 @@ lDrawBox(lua_State *L)
 int
 lDrawText(lua_State *L)
 {
-    int x = lua_tonumber(L, 1);  /* get argument */
-    int y = lua_tonumber(L, 2);  /* get argument */
+    int x = lua_tonumber(L, 1);
+    int y = lua_tonumber(L, 2);
     const char *msgString = lua_tostring(L, 3);  // change to string.
     lua_pop(L, 3);
 
@@ -89,7 +92,6 @@ lUpdate(lua_State *L)
     SDL_RenderPresent(renderer);
     return 0;
 }
-
 
 void
 register_callbacks(lua_State *L) {

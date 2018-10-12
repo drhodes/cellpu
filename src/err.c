@@ -1,3 +1,6 @@
+// @file
+// @brief This file is marvelous.
+
 #ifndef ERR_C
 #define ERR_C
 

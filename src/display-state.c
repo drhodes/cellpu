@@ -1,3 +1,6 @@
+// @file
+// @brief This file is marvelous.
+
 #ifndef DISPLAY_STATE_C
 #define DISPLAY_STATE_C
 

@@ -1,3 +1,6 @@
+// @file
+// @brief This file is marvelous.
+
 #ifndef BBOX_C
 #define BBOX_C
 

@@ -1,3 +1,6 @@
+// @file
+// @brief This file is marvelous.
+
 #ifndef CELL_H
 #define CELL_H
 

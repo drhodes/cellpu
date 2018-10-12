@@ -17,7 +17,6 @@
 
 #define TERM_MAX_LINES 10000
 
-
 // TODO introduce cursor position.
 // TODO introduce cmd line apart from other lines. nb. only the cmd line is editable.
 
@@ -25,7 +24,7 @@ typedef struct Term {
     SDL_Window* window; // for dimensions
     Atlas* atlas;
     TTF_Font *font;  
-    char* lines[TERM_MAX_LINES];    
+    char* lines[TERM_MAX_LINES]; // this should be an array of linked lists.
     int curLine;
     int numCols, numRows;
     int lineHeight, colWidth;
