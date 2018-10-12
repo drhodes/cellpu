@@ -30,6 +30,7 @@ typedef struct ErrorStack {
 #define nullDieMsg(ptr, msg) { if (ptr==NULL) { perr(msg); dumpStack(); } }
 #define nullDie(ptr) { nullDieMsg(ptr, "got null pointer"); }
 
+#define die(msg) { perr(msg); dumpStack(); exit(1); }
 
 void pushErr(Err e);
 void dumpStack();

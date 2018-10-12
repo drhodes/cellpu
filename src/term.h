@@ -15,14 +15,17 @@
 
 #include "atlas.h"
 
-#define TERM_MAX_LINES 2<<16
+#define TERM_MAX_LINES 10000
 
+
+// TODO introduce cursor position.
+// TODO introduce cmd line apart from other lines. nb. only the cmd line is editable.
 
 typedef struct Term {
     SDL_Window* window; // for dimensions
     Atlas* atlas;
     TTF_Font *font;  
-    char *lines[TERM_MAX_LINES];    
+    char* lines[TERM_MAX_LINES];    
     int curLine;
     int numCols, numRows;
     int lineHeight, colWidth;
@@ -40,6 +43,9 @@ void termRender(Term *term, SDL_Renderer *renderer);
 int  termLineHeight(Term *term);
 bool termContainsPoint(Term *term, Sint32 x, Sint32 y);
 bool termProcessEvent(Term*, SDL_Event*);
+bool termPushChar(Term *term, char c);
+bool termPopChar(Term *term);
+char *getCurLine(Term *term);
 
 void freeTerm(Term *term);
 

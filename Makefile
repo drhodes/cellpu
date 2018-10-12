@@ -1,4 +1,4 @@
-CFLAGS=-Wall -g -std=c11
+CFLAGS=-Wall -g -std=c11 -fsanitize=address
 LDFLAGS=-lSDL2 -llua5.3 -lSDL2_ttf
 TESTFLAGS=-Wall -g -std=c11
 TESTLIBS= -lSDL2 -llua5.3 -lcheck -lsubunit -pthread -lrt -lm -lsubunit

@@ -79,3 +79,4 @@ flycheck_*.el
 # Debug files
 *.dSYM/
 *.su
+sim

@@ -15,7 +15,10 @@
 #include "callbacks.h"
 #include "term.h"
 
-// Register callbacks ------------------------------------------------------------------------------
+// Register callbacks -----------------------------------------------------------------------------
+lua_State *L = 0; //luaL_newstate();
+
+
 
 void doFile(lua_State *L, const char *filename) {
     int err = luaL_dofile(L, filename);
@@ -29,8 +32,7 @@ void doFile(lua_State *L, const char *filename) {
 int main (void) {
     // lua -----------------------------------------------------------------------------------------
     
-    char buff[256];
-    lua_State *L = luaL_newstate();
+    L = luaL_newstate();
     luaL_openlibs(L);          // opens Lua 
     luaopen_base(L);           // opens the basic library
     luaopen_table(L);          // opens the table library 
@@ -84,20 +86,13 @@ int main (void) {
     Term* term = newTerm(window, atlas, 5, 650, 80, 17);
     nullDie(term);
     
-    termPut(term, "1");
-    termPut(term, "1");
+    termPut(term, "Distributed Processing Unit Simulator");
+    termPut(term, "--");
     termPut(term, "2");
-    termPut(term, "h");
-    termPut(term, "1");
-    termPut(term, "2");
-    termPut(term, "h");
-    termPut(term, "top");
-    termPut(term, "line1");
-    termPut(term, "line2");
-    termPut(term, "bottom");
-    termPut(term, "1");
-    termPut(term, "2");
-    termPut(term, "h");
+    termPut(term, "3");
+    termPut(term, "4");
+    termPut(term, "5");
+    termPut(term, "6");
     
     SDL_Event event;
     while( true ) {
@@ -109,47 +104,13 @@ int main (void) {
                     exit(0);
                 }
             }
-        
             // different state machines for different parts of the app.
-            // the terminal should own a state machine?
+            // the terminal should own one?
             // each cell could own a state machine.
             // ok, event listen interface for each
             // guiProcessEvent(gui, &event);
         
             termProcessEvent(term, &event);
-        
-            /*
-              termPut(term, ">>  ");
-              char *eof = fgets(buff, sizeof(buff), stdin);
-          
-              if (eof == NULL) break;
-          
-              // directives.
-              if (strncmp(buff, "quit", 4) == 0) {
-              break;
-              }
-          
-              if (strncmp(buff, "reload", 6) == 0) { 
-              doFile(L, "lua/cell.lua");
-              doFile(L, "lua/display.lua");            
-              doFile(L, "lua/grid.lua");
-              doFile(L, "lua/instructions.lua");
-              doFile(L, "lua/startup.lua");
-              continue;
-              }
-        
-              if (strncmp(buff, "help", 4) == 0 || strncmp(buff, "h\n", 2) == 0) {
-              doFile(L, "lua/help.lua");            
-              continue;
-              }
-        
-              int err = luaL_loadbuffer(L, buff, strlen(buff), "line") || lua_pcall(L, 0, 0, 0);        
-              if (err) {
-              fprintf(stderr, "%s\n", lua_tostring(L, -1));
-              perr(lua_tostring(L, -1));
-              lua_pop(L, 1);
-              }
-            */
         }        
         termRender(term, renderer);
         SDL_RenderPresent(renderer);
@@ -158,14 +119,16 @@ int main (void) {
         //double ddelta = ((double)delta*1000) / (double)SDL_GetPerformanceFrequency();
         int wait = delta > 16 ? 0 : 16 - delta;
         SDL_Delay(wait);
-    }
-    
+    }    
     printf("SDL: %s\n", SDL_GetError());
     
+    // Clean up    
+
     SDL_DestroyWindow(window);
     TTF_CloseFont(font);
     freeTerm(term);
-    // Clean up    
+    freeAtlas(atlas);
+    
     SDL_Quit();
     TTF_Quit();
     dumpStack();

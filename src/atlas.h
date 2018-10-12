@@ -3,14 +3,17 @@
 
 #include <stdbool.h> 
 
+#define ATLAS_SIZE 256
+
 typedef struct {
-    SDL_Texture* table[128];
+    SDL_Texture* table[ATLAS_SIZE];
     int surfWidth, surfHeight;
 } Atlas;
 
 Atlas *newAtlas();
-void freeAtlas(Atlas*);
+SDL_Texture *atlasGetGlyph(Atlas*, char);
 
+void freeAtlas(Atlas*);
 
 
 #endif // ATLAS
