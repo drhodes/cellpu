@@ -1,6 +1,3 @@
-// @file
-// @brief This file is marvelous.
-
 #ifndef TERM_C
 #define TERM_C
 
@@ -20,30 +17,22 @@
 extern lua_State* L; //:: Lua_State* main.c
 
 Term *newTerm(SDL_Window* window, Atlas* atlas, int left, int top, int columns, int rows) {
-    TTF_Font* font = TTF_OpenFont("./media/Inconsolata-g.ttf", 16);
-    nullDie(font);
-    TTF_SetFontHinting(font, TTF_HINTING_LIGHT);
+    //TTF_Font* font = TTF_OpenFont("./media/Inconsolata-g.ttf", 16);
+    // TTF_Font* font = TTF_OpenFont("./media/FIXED_V0.TTF", 8);
+    // nullDie(font);
+    // TTF_SetFontHinting(font, TTF_HINTING_LIGHT);
     
     Term *term = (Term*)malloc(sizeof(Term));
+    nullDieMsg(term, "malloc fails allocate memory");
     term->window = window;
     term->atlas = atlas;
-    term->font = font;    
     term->curLine = 0;
     term->numCols = columns;
     term->numRows = rows;
     term->top = top;
     term->left = left;
 
-    // if (TTF_SizeText(font, "W", &(term->lineHeight), &(term->colWidth))) {        
-    //     perr("Couldn't figure out the font dimensions");
-    //     return NULL;
-    // }
-
-    //term->lines = (char**)malloc(TERM_MAX_LINES * sizeof(char*));
     for (int i=0; i<TERM_MAX_LINES; i++) {
-        // int numBytes = sizeof(char) * (term->numCols);
-        // term->lines[i] = (char*)malloc(numBytes);  
-        // memset( term->lines[i], '\0', numBytes);
         term->lines[i] = calloc(term->numCols, sizeof(char));
     }
     return term;
@@ -56,12 +45,10 @@ void termSetNumRows(Term *term, int numRows) {
 
 void freeTerm(Term *term) {
     if (term != NULL) {
-        TTF_CloseFont(term->font);
         free(term);
         for (int i=0; i<TERM_MAX_LINES; i++) {
             free(term->lines[i]);
         }
-
         // TODO free SDL surfaces.
     }
     term = NULL;    
@@ -70,7 +57,6 @@ void freeTerm(Term *term) {
 void termPut(Term *term, const char *str) {
     nullDie(term);
     // ring buffer
-    
     // TODO fix mod calculation, why was it failing?
     assert(term->curLine < TERM_MAX_LINES);
     char *line = getCurLine(term);
@@ -82,14 +68,14 @@ void termBBox(Term *term, BBox *bb) {
     nullDie(term);
     nullDie(bb);
     // including the margin.
+    int promptSize = 2;
     bb->top = term->top;
     bb->left = term->left;
-    bb->height = term->numRows  * term->atlas->surfHeight;
-    bb->width  = term->atlas->surfWidth * term->numCols;
+    bb->height = term->numRows * term->atlas->surfHeight;
+    bb->width  = term->atlas->surfWidth * (promptSize + term->numCols);
 }
 
-
-void renderCursor(Term *term, SDL_Renderer *renderer) {
+void termRenderCursor(Term *term, SDL_Renderer *renderer) {
     SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     char *line = getCurLine(term);
     int curCol = strlen(line);
@@ -100,16 +86,21 @@ void renderCursor(Term *term, SDL_Renderer *renderer) {
     SDL_RenderFillRect(renderer, &rect);
 }
 
+void termRenderBackground(Term *term, SDL_Renderer *renderer) {
+    BBox bb;
+    termBBox(term, &bb);
+    SDL_Rect rect = {bb.left, bb.top, bb.width, bb.height};
+    SDL_SetRenderDrawColor(renderer, 0x60, 0x35, 0x6A, 0x50);   
+    SDL_RenderFillRect(renderer, &rect);
+
+}
+
 void termRender(Term *term, SDL_Renderer *renderer) {
     nullDie(term);
     // draw a background.
-    BBox bb;
-    termBBox(term, &bb);
-    SDL_SetRenderDrawColor(renderer, 0x33, 0x33, 0xff, 0xff);
-    SDL_Rect rect = {bb.left, bb.top, bb.width, bb.height};
-    SDL_RenderFillRect(renderer, &rect);
 
-    renderCursor(term, renderer);
+    termRenderBackground(term, renderer);
+    termRenderCursor(term, renderer);
     
     //
     int winW, winH;
@@ -129,12 +120,11 @@ void termRender(Term *term, SDL_Renderer *renderer) {
         for (int i=0; str[i]; i++) {
             SDL_Rect msgRect = { curX, curY, term->atlas->surfWidth, term->atlas->surfHeight };
             SDL_Texture* glyph = atlasGetGlyph(term->atlas, str[i]);
+            nullDieMsg(glyph, "failed to get a glyph in termRender");            
             SDL_RenderCopy(renderer, glyph, NULL, &msgRect);
-            // Why divide by two? Why does newAtlas/renderglyph add extra space?
             curX += term->atlas->surfWidth;
         }
         curY += term->atlas->surfHeight;
-
     }
 }
 

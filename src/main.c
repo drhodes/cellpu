@@ -1,9 +1,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#include <assert.h>
+
 #include <lua5.3/lauxlib.h>
 #include <lua5.3/lua.h>
 #include <lua5.3/lualib.h>
+
+#include <assert.h>
 #include <stdbool.h> 
 #include <stdint.h>
 #include <stdio.h>
@@ -17,7 +19,7 @@
 
 lua_State *L = 0; //luaL_newstate();
 
-void doFile(lua_State *L, const char *filename) {
+void doFile(const char *filename) {
     int err = luaL_dofile(L, filename);
     if (err) {
         fprintf(stderr, "%s\n", lua_tostring(L, -1));
@@ -25,7 +27,6 @@ void doFile(lua_State *L, const char *filename) {
         lua_pop(L, 1);  /* pop error message from the stack */
     }
 }
-
 
 void initLua() {
     // init global state.
@@ -76,19 +77,20 @@ int main (void) {
     
     register_callbacks(L);
     
-    doFile(L, "lua/display.lua");            
-    doFile(L, "lua/cell.lua");
-    doFile(L, "lua/grid.lua");
-    doFile(L, "lua/instructions.lua");
+    doFile("lua/display.lua");            
+    doFile("lua/cell.lua");
+    doFile("lua/grid.lua");
+    doFile("lua/instructions.lua");
     
     printf("Local Distributed Processing Unit Simulator\n\n");
 
     // terminal ------------------------------------------------------------------------------------
-    Atlas* atlas = newAtlas(renderer);    
-    Term* term = newTerm(window, atlas, 5, 650, 80, 17);
+    //Atlas* atlas = newAtlas(renderer, "./media/Inconsolata-g.ttf", 16);
+    Atlas* atlas = newAtlas(renderer, "./media/Terminus.ttf", 16);
+    Term* term = newTerm(window, atlas, 5, 750, 80, 17);
     nullDie(term);
     
-    termPut(term, "CellPU / Distributed Processing Unit Simulator");
+    termPut(term, "CellPU / Distributed Processing Unit Simulator, the repl is Lua.");
     termPut(term, "--");
     
     SDL_Event event;

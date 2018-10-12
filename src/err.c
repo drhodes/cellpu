@@ -10,11 +10,6 @@
 
 static ErrorStack *_estack = NULL;
 
-#define perr(errmsg) {                                                  \
-        Err e = { .msg = errmsg, .file = __FILE__, .line = __LINE__ };  \
-        pushErr(e);                                                     \
-    };
-
 
 void
 pushErr(Err e)

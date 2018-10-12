@@ -23,7 +23,6 @@
 typedef struct Term {
     SDL_Window* window; // for dimensions
     Atlas* atlas;
-    TTF_Font *font;  
     char* lines[TERM_MAX_LINES]; // this should be an array of linked lists.
     int curLine;
     int numCols, numRows;

@@ -10,6 +10,7 @@ typedef struct Err {
     const char *msg;
     char *file;
     int line;    
+    const char *func;
 } Err;
 
 typedef struct ErrorStack {
@@ -22,9 +23,9 @@ typedef struct ErrorStack {
 // GLOBAL error stack.
 
     
-#define perr(errmsg) {                                                  \
-        Err e = { .msg = errmsg, .file = __FILE__, .line = __LINE__ };  \
-        pushErr(e);                                                     \
+#define perr(errmsg) {                                                                             \
+        Err e = { .msg = errmsg, .file = __FILE__, .line = __LINE__, .func = "__FUNCTION__" };     \
+        pushErr(e);                                                                                \
     };
 
 #define nullDieMsg(ptr, msg) { if (ptr==NULL) { perr(msg); dumpStack(); } }

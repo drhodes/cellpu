@@ -1,6 +1,3 @@
-// @file
-// @brief This file is marvelous.
-
 #ifndef ATLAS_C
 #define ATLAS_C
 
@@ -11,11 +8,11 @@
 #include "atlas.h"
 #include "err.h"
 
-Atlas *newAtlas(SDL_Renderer *renderer) {
-    TTF_Font* font = TTF_OpenFont("./media/Inconsolata-g.ttf", 18);
+Atlas *newAtlas(SDL_Renderer *renderer, const char *fontFilename, int size) {
+    TTF_Font* font = TTF_OpenFont(fontFilename, size);
     nullDie(font);
-    
-    TTF_SetFontHinting(font, TTF_HINTING_LIGHT);
+    TTF_SetFontHinting(font, TTF_HINTING_NONE); //TTF_HINTING_LIGHT);
+
     SDL_Color white = {255, 255, 255, 255};
     
     Atlas *atlas = (Atlas*)malloc(sizeof(Atlas));
