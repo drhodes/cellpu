@@ -1,4 +1,4 @@
-CFLAGS=-Wall -O3 -g -std=c11 # -fsanitize=address
+CFLAGS=-Wall -O0 -g -std=c11 # -fsanitize=address
 LDFLAGS=-lSDL2 -llua5.3 -lSDL2_ttf
 TESTFLAGS=-Wall -g -std=c11
 TESTLIBS= -lSDL2 -llua5.3 -lcheck -lsubunit -pthread -lrt -lm -lsubunit
@@ -16,6 +16,15 @@ docs: FORCE
 profile: clean main
 	valgrind --tool=callgrind --dump-instr=yes ./${EXE}
 	kcachegrind callgrind.out*
+
+watch:
+	when-changed -r src/*.c src/*.h -c "make clean && make main"
+
+grid.o:
+	${CC} -c ${CFLAGS} src/grid.c -o $@
+
+cell.o:
+	${CC} -c ${CFLAGS} src/cell.c -o $@
 
 atlas.o:
 	${CC} -c ${CFLAGS} src/atlas.c -o $@ 
@@ -35,7 +44,7 @@ bbox.o:
 term.o: 
 	${CC} -c ${CFLAGS} src/term.c -o $@  
 
-main: display-state.o callbacks.o err.o term.o bbox.o atlas.o
+main: display-state.o callbacks.o err.o term.o bbox.o atlas.o cell.o grid.o
 	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.c $? 
 
 test-optical-ctl: optical-ctl FORCE ## test

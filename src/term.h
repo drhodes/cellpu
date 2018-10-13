@@ -43,8 +43,10 @@ bool termContainsPoint(Term *term, Sint32 x, Sint32 y);
 bool termProcessEvent(Term*, SDL_Event*);
 bool termPushChar(Term *term, char c);
 bool termPopChar(Term *term);
-char *getCurLine(Term *term);
+void termDoReturn(Term *term);
+void termRenderLine(Term *term, SDL_Renderer *renderer, int lineNum, int rowNum);
 
+char *getCurLine(Term *term);
 void freeTerm(Term *term);
 
 

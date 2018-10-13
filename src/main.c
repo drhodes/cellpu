@@ -16,6 +16,7 @@
 #include "display-state.h"
 #include "callbacks.h"
 #include "term.h"
+#include "grid.h"
 
 lua_State *L = 0; //luaL_newstate();
 
@@ -83,11 +84,15 @@ int main (void) {
     doFile("lua/instructions.lua");
     
     printf("Local Distributed Processing Unit Simulator\n\n");
-
+    
     // terminal ------------------------------------------------------------------------------------
-    //Atlas* atlas = newAtlas(renderer, "./media/Inconsolata-g.ttf", 16);
-    Atlas* atlas = newAtlas(renderer, "./media/Terminus.ttf", 16);
-    Term* term = newTerm(window, atlas, 5, 750, 80, 17);
+    Atlas *gridAtlas = newAtlas(renderer, "./media/FIXED_V0.TTF", 8);
+
+    Grid *grid = newGrid(100, gridAtlas);
+    gridRender(grid, renderer);
+     
+    Atlas *termAtlas = newAtlas(renderer, "./media/Terminus.ttf", 16);
+    Term *term = newTerm(window, termAtlas, 5, 750, 80, 17);
     nullDie(term);
     
     termPut(term, "CellPU / Distributed Processing Unit Simulator, the repl is Lua.");
@@ -124,7 +129,8 @@ int main (void) {
     
  done:
     freeTerm(term);
-    freeAtlas(atlas);
+    freeAtlas(termAtlas);
+    freeAtlas(gridAtlas);
     
     SDL_DestroyWindow(window);
     TTF_CloseFont(font);

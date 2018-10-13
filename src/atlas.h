@@ -5,6 +5,7 @@
 #define ATLAS_H
 
 #include <stdbool.h> 
+#include <SDL2/SDL.h>
 
 #define ATLAS_SIZE 256
 

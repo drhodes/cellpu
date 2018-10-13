@@ -17,10 +17,7 @@
 extern lua_State* L; //:: Lua_State* main.c
 
 Term *newTerm(SDL_Window* window, Atlas* atlas, int left, int top, int columns, int rows) {
-    //TTF_Font* font = TTF_OpenFont("./media/Inconsolata-g.ttf", 16);
-    // TTF_Font* font = TTF_OpenFont("./media/FIXED_V0.TTF", 8);
-    // nullDie(font);
-    // TTF_SetFontHinting(font, TTF_HINTING_LIGHT);
+    nullDie(window); nullDie(atlas);
     
     Term *term = (Term*)malloc(sizeof(Term));
     nullDieMsg(term, "malloc fails allocate memory");
@@ -71,7 +68,7 @@ void termBBox(Term *term, BBox *bb) {
     int promptSize = 2;
     bb->top = term->top;
     bb->left = term->left;
-    bb->height = term->numRows * term->atlas->surfHeight;
+    bb->height = term->atlas->surfHeight * (term->numRows + 1);
     bb->width  = term->atlas->surfWidth * (promptSize + term->numCols);
 }
 
@@ -81,8 +78,16 @@ void termRenderCursor(Term *term, SDL_Renderer *renderer) {
     int curCol = strlen(line);
     int promptSize = 2; // TODO make a custom prompt.
     int x = term->left + ((promptSize + curCol) * term->atlas->surfWidth);
-    int y = term->top  + term->curLine * term->atlas->surfHeight;
-    SDL_Rect rect = {x, y, term->atlas->surfWidth, term->atlas->surfHeight};
+    int y = term->top;
+    
+    if (term->curLine >= term->numRows) {
+        // when the cursor hits the bottom of the terminal.
+        y += (term->numRows) * term->atlas->surfHeight;
+    } else {
+        y += term->curLine * term->atlas->surfHeight;
+    }
+    
+    SDL_Rect rect = { x, y, term->atlas->surfWidth, term->atlas->surfHeight };
     SDL_RenderFillRect(renderer, &rect);
 }
 
@@ -90,15 +95,13 @@ void termRenderBackground(Term *term, SDL_Renderer *renderer) {
     BBox bb;
     termBBox(term, &bb);
     SDL_Rect rect = {bb.left, bb.top, bb.width, bb.height};
-    SDL_SetRenderDrawColor(renderer, 0x60, 0x35, 0x6A, 0x50);   
+    SDL_SetRenderDrawColor(renderer, 0x60, 0x35, 0x6A, 0x10);   
     SDL_RenderFillRect(renderer, &rect);
 
 }
 
 void termRender(Term *term, SDL_Renderer *renderer) {
     nullDie(term);
-    // draw a background.
-
     termRenderBackground(term, renderer);
     termRenderCursor(term, renderer);
     
@@ -106,25 +109,30 @@ void termRender(Term *term, SDL_Renderer *renderer) {
     int winW, winH;
     SDL_GetWindowSize(term->window, &winW, &winH);
 
-    int stop = term->curLine;
-    int start = stop - term->numRows;
-    start = start < 0 ? 0 : start;
-
-    int curY = term->top;
+    int bottomLine = term->curLine;
+    int topLine = bottomLine - term->numRows;
+    if (topLine < 0) topLine = 0;
     
-    for (int lineNum=start; lineNum <= stop; lineNum++) {        
-        char str[300] = "> ";
-        strncat(str, term->lines[lineNum], term->numCols-2);         
-        int curX = term->left;
+    int rowNum = 0;
+    for (int lineNum=topLine; lineNum <= bottomLine; lineNum++) {
+        termRenderLine(term, renderer, lineNum, rowNum);
+        rowNum += 1;
+    }
+}
+
+void termRenderLine(Term *term, SDL_Renderer *renderer, int lineNum, int rowNum) {
+    char str[300] = "> ";
+    strncat(str, term->lines[lineNum], term->numCols-2);
         
-        for (int i=0; str[i]; i++) {
-            SDL_Rect msgRect = { curX, curY, term->atlas->surfWidth, term->atlas->surfHeight };
-            SDL_Texture* glyph = atlasGetGlyph(term->atlas, str[i]);
-            nullDieMsg(glyph, "failed to get a glyph in termRender");            
-            SDL_RenderCopy(renderer, glyph, NULL, &msgRect);
-            curX += term->atlas->surfWidth;
-        }
-        curY += term->atlas->surfHeight;
+    int curX = term->left;
+    int curY = term->top + rowNum * term->atlas->surfHeight;
+    
+    for (int i=0; str[i]; i++) {
+        SDL_Rect msgRect = { curX, curY, term->atlas->surfWidth, term->atlas->surfHeight };
+        SDL_Texture* glyph = atlasGetGlyph(term->atlas, str[i]);
+        nullDieMsg(glyph, "failed to get a glyph in termRender");            
+        SDL_RenderCopy(renderer, glyph, NULL, &msgRect);
+        curX += term->atlas->surfWidth;
     }
 }
 
@@ -137,6 +145,7 @@ bool termContainsPoint(Term *term, Sint32 x, Sint32 y) {
 
 bool termProcessEvent(Term* term, SDL_Event* ev) {
     nullDie(term); nullDie(ev);
+    
     // hack together some spaghetti state handling and then build a
     // state machine. Either the terminal has focus or it doesn't. 
     switch (ev->type) {
@@ -163,17 +172,7 @@ bool termProcessEvent(Term* term, SDL_Event* ev) {
             break;
         case SDL_SCANCODE_RETURN:
         case SDL_SCANCODE_RETURN2: {
-            char *line = getCurLine(term);
-
-            // 
-            int err = luaL_loadbuffer(L, line, strlen(line), "line") || lua_pcall(L, 0, 0, 0);        
-            if (err) {
-                fprintf(stderr, "%s\n", lua_tostring(L, -1));
-                perr(lua_tostring(L, -1));
-                lua_pop(L, 1);
-             }
-            
-            termPut(term, line);
+            termDoReturn(term);
             break;
         }
         default:
@@ -188,6 +187,18 @@ bool termProcessEvent(Term* term, SDL_Event* ev) {
     return true;
 }
 
+void termDoReturn(Term *term) {
+    char *line = getCurLine(term);
+    int err = luaL_loadbuffer(L, line, strlen(line), "line") || lua_pcall(L, 0, 0, 0);
+    
+    if (err) {
+        fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        perr(lua_tostring(L, -1));
+        lua_pop(L, 1);
+    }
+            
+    termPut(term, line);
+}
 
 char *getCurLine(Term *term) {
     return term->lines[term->curLine];
