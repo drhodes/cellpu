@@ -13,6 +13,7 @@ int lSetColor(lua_State *L);
 int lDrawBox(lua_State *L);
 int lDrawText(lua_State *L);
 int lUpdate(lua_State *L);
+int lSelectCell(lua_State *L);
 
 void register_callbacks(lua_State *L);
 

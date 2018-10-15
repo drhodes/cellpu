@@ -21,6 +21,8 @@ Grid* newGrid(int size, int displaySize, Atlas *atlas);
 void gridRender(Grid *grid, SDL_Renderer *renderer);
 bool gridProcessEvent(Grid*, SDL_Event*);
 
+Cell* gridGetCell(Grid *grid, int x, int y);
+
 Cell* gridCursorCell(Grid *grid, int pixelX, int pixelY);
 
 

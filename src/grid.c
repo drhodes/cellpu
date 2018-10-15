@@ -64,6 +64,16 @@ gridCursorCell(Grid *grid, Sint32 pixelX, Sint32 pixelY) {
     return grid->cells[x][y];
 }
 
+Cell*
+gridGetCell(Grid *grid, int x, int y) {
+    nullDie(grid);
+    if (x < 0) die("x must be greater than 0");
+    if (y < 0) die("y must be greater than 0");
+    if (x >= grid->size) die ("x cell coordinate outside of grid");
+    if (y >= grid->size) die ("y cell coordinate outside of grid");
+    return grid->cells[x][y];
+}
+
 bool
 gridProcessEvent(Grid *grid, SDL_Event *ev) {
     nullDie(grid); nullDie(ev);

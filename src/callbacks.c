@@ -16,7 +16,8 @@
 
 #include "callbacks.h"
 #include "err.h"
-
+#include "grid.h"
+#include "cell.h"
 
 int
 lClear(lua_State *L)
@@ -93,6 +94,22 @@ lUpdate(lua_State *L)
     return 0;
 }
 
+
+int
+lSelectCell(lua_State *L)
+{
+    int x = lua_tonumber(L, 1);
+    int y = lua_tonumber(L, 2);
+    lua_pop(L, 2);
+    
+    Grid *grid = lGetGrid(L);    
+    Cell *cell = gridGetCell(grid, x, y);
+    
+    cellSelect(cell);
+    return 0;
+}
+
+
 void
 register_callbacks(lua_State *L) {
     // clear the renderer
@@ -110,6 +127,9 @@ register_callbacks(lua_State *L) {
     
     lua_pushcfunction(L, lDrawText);
     lua_setglobal(L, "drawText");
+
+    lua_pushcfunction(L, lSelectCell);
+    lua_setglobal(L, "selectCell");
     
-    lua_pop(L, 5);
+    lua_pop(L, 6);
 }

@@ -39,7 +39,6 @@ NOP() {
 
 static void
 opCMPLE(Grid* grid) {
-    
 }
 
 Instruction*

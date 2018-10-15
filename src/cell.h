@@ -1,5 +1,5 @@
 // @file
-// @brief This file is marvelous.
+// @brief This is something something doughnuts
 
 #ifndef CELL_H
 #define CELL_H
@@ -27,8 +27,6 @@ void cellSetColReg(Cell* cell, int n);
 void cellSetRowReg(Cell* cell, int n);
 void cellSetDataReg(Cell* cell, int n);
 
-SDL_Color cellColor(Cell *cell);
-
 void cellSelect(Cell *cell);
 void cellDeselect(Cell *cell);
 
@@ -36,8 +34,7 @@ void cellSetBroadcast(Cell *cell, bool b);
 void cellSetListen(Cell *cell, bool b);
 void cellSetListen(Cell *cell, bool b);
 
-SDL_Color cellBorderColor(Cell *cell);
-
+SDL_Color cellColor(Cell *cell);
 
 void cellRender(Cell *cell, Atlas *atlas, SDL_Renderer *renderer);
 

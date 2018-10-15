@@ -18,7 +18,7 @@ profile: clean main
 	cachegrind callgrind.out*
 
 watch:
-	when-changed -r src/*.c src/*.h -c "make clean && make main"
+	when-changed -r src/*.c src/*.h -c "clear && make clean && make main"
 
 instruction.o: 
 	${CC} -c ${CFLAGS} src/instruction.c -o $@

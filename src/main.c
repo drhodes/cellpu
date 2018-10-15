@@ -19,7 +19,7 @@
 #include "grid.h"
 #include "instruction.h"
 
-lua_State *L = NULL; //luaL_newstate();
+lua_State *L = NULL; 
 
 void doFile(const char *filename) {
     int err = luaL_dofile(L, filename);
@@ -44,12 +44,10 @@ void initLua() {
 
 int main (void) {
     initLua();
-
     
     // SDL -----------------------------------------------------------------------------------------
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
-
     
     SDL_Init(SDL_INIT_VIDEO);
     SDL_StartTextInput();
@@ -90,6 +88,7 @@ int main (void) {
     Atlas *gridAtlas = newAtlas(renderer, "./media/FIXED_V0.TTF", 8);
     Grid *grid = newGrid(100, 12, gridAtlas);
     gridRender(grid, renderer);
+    lPutGrid(L, grid);
 
     Instruction *inst = NOP();
     

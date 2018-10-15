@@ -16,12 +16,17 @@ Cell* newCell(int x, int y) {
     cell->x = x;
     cell->y = y;
     cell->size = 60;
+    cell->selected = false;
     return cell;
 }
 
 // self.select = function()
 //    self.selected = true
 // end
+
+void cellSelect(Cell *cell) {
+    cell->selected = true;
+}
 
 // self.deselect = function()
 //    self.selected = false
@@ -51,16 +56,6 @@ SDL_Color cellColor(Cell *cell) {
     return c;
 }
 
-SDL_Color cellBorderColor(Cell *cell) {
-    if (cell->selected) {
-        SDL_Color c = {0x30, 0x40, 0xFF, 0xFF};
-        return c;
-    } else {
-        SDL_Color c = {0x00, 0x00, 0x00, 0xFF};
-        return c;
-    }
-}
-
 // self.SWAPDR = function()
 //    tmp = self.rowReg
 //    self.rowReg = self.data
@@ -71,10 +66,10 @@ void borderBox(SDL_Renderer *renderer, int x, int y, int w, int h, SDL_Color bor
     SDL_Rect rect = {x, y, h, w};
     SDL_SetRenderDrawColor(renderer, border.r, border.g, border.b, border.a);
     SDL_RenderFillRect(renderer, &rect);
-    rect.x++;
-    rect.y++;
-    rect.h--;
-    rect.w--;
+    rect.x += 2;
+    rect.y += 2;
+    rect.h -= 2;
+    rect.w -= 2; 
     SDL_SetRenderDrawColor(renderer, fill.r, fill.g, fill.b, fill.a);
     SDL_RenderFillRect(renderer, &rect);
 }
@@ -122,48 +117,46 @@ void cellRender(Cell *cell, Atlas *atlas, SDL_Renderer *renderer) {
     int y = cell->y;
     int size = cell->size;
     int n = 0;
+
+    SDL_Color cellBorderColor = {0x00, 0x00, 0x00, 0xFF};
     
-    borderBox(renderer, x * size, y * size, size, size, cellBorderColor(cell), cellColor(cell));
+    borderBox( renderer, x*size, y*size,
+               size, size, cellBorderColor, cellColor(cell));
+    
     char str[255]; // plenty of space.
     
     memset(str, '\0', 255);
     n = sprintf(str, "[%d %d]", x, y);
     drawText(renderer, atlas, x * size + 4, y * size + 4, str);
     
-    // drawText(self.x * self.size + 4,
-    //          self.y * self.size + 16,
-    //          self.op.name)
     memset(str, '\0', n);
     n = sprintf(str, "%s", "OPNAME");
     drawText(renderer, atlas,
              x * size + 4,
              y * size + 16, str);
 
-    // drawText(self.x * self.size + self.size / 2,
-    //          self.y * self.size + self.size / 2,
-    //          tostring(self.data))
     memset(str, '\0', n);
     n = sprintf(str, "%d", cell->dataReg);
     drawText(renderer, atlas, x * size + size/2, y * size + size/2, str);
       
-    // drawText(self.x * self.size + self.size / 2 + self.size/4,
-    //          self.y * self.size + self.size / 2,
-    //          tostring(self.rowReg))
     memset(str, '\0', n);
     n = sprintf(str, "%d", cell->rowReg);
     drawText(renderer, atlas,
              x * size + size/2 + size/4,
              y * size + size/2, str);
       
-    // drawText(self.x * self.size + self.size / 2,
-    //          self.y * self.size + self.size / 2 + self.size/4,
-    //          tostring(self.colReg))
     memset(str, '\0', n);
     n = sprintf(str, "%d", cell->colReg); 
     drawText(renderer, atlas,
              x * size + size/2,
              y * size + size/2 + size/4, str);
-    
+
+    if (cell->selected) {
+        borderBox( renderer, x*size, y*size,
+                   size, size,
+                   (SDL_Color){0, 0, 0, 0}, (SDL_Color){0, 0xff, 0, 0x11});
+        
+    }
 
     
 }

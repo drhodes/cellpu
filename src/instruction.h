@@ -27,8 +27,6 @@ typedef struct {
 Instruction* NOP();
 Instruction* CMPLE();
 
-
-
 void freeInstruction(Instruction* inst);
 
 

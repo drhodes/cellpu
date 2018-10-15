@@ -8,7 +8,6 @@
 #include "atlas.h"
 #include "err.h"
 
-
 // TODO table should be a hash table for more flexibility.
 Atlas *newAtlas(SDL_Renderer *renderer, const char *fontFilename, int size) {
     TTF_Font* font = TTF_OpenFont(fontFilename, size);

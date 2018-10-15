@@ -18,6 +18,7 @@
 
 #include "err.h"
 #include "display-state.h"
+#include "grid.h"
 
 // global state ------------------------------------------------------------------------------------
 
@@ -63,5 +64,25 @@ TTF_Font
     lua_pop(L, 1);
     return (TTF_Font*)ptr2;
 }
+
+// managing the grid -------------------------------------------------------------------------------
+
+void
+lPutGrid(lua_State *L, Grid *grid) {
+    lua_pushinteger(L, (uintptr_t)grid);
+    lua_setglobal(L, "grid");
+}
+
+Grid*
+lGetGrid(lua_State *L) {
+    // fetch the pointer to grid and place at top of stack.
+    lua_getglobal(L, "grid"); 
+    
+    // get top of stack and coerce to pointer type.    
+    uintptr_t ptr2 = (uintptr_t)lua_tointeger(L, -1);
+    lua_pop(L, 1);
+    return (Grid*)ptr2;
+}
+
 
 #endif // DISPLAY_STATE_C
