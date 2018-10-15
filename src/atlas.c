@@ -8,6 +8,8 @@
 #include "atlas.h"
 #include "err.h"
 
+
+// TODO table should be a hash table for more flexibility.
 Atlas *newAtlas(SDL_Renderer *renderer, const char *fontFilename, int size) {
     TTF_Font* font = TTF_OpenFont(fontFilename, size);
     nullDie(font);
@@ -33,7 +35,9 @@ Atlas *newAtlas(SDL_Renderer *renderer, const char *fontFilename, int size) {
 SDL_Texture *atlasGetGlyph(Atlas *atlas, char c) {
     nullDie(atlas);
     if (c < 0 || c >= ATLAS_SIZE) {
-        die("atlasGetGlyph got out of range char");
+        char msg[255];
+        sprintf(msg, "atlasGetGlyph got out of range char: %c, %d", c, c);
+        die(msg);
     }
     return atlas->table[(int)c];
 }

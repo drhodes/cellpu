@@ -15,37 +15,41 @@ docs: FORCE
 
 profile: clean main
 	valgrind --tool=callgrind --dump-instr=yes ./${EXE}
-	kcachegrind callgrind.out*
+	cachegrind callgrind.out*
 
 watch:
 	when-changed -r src/*.c src/*.h -c "make clean && make main"
 
-grid.o:
+instruction.o: 
+	${CC} -c ${CFLAGS} src/instruction.c -o $@
+
+
+grid.o: 
 	${CC} -c ${CFLAGS} src/grid.c -o $@
 
 cell.o:
 	${CC} -c ${CFLAGS} src/cell.c -o $@
 
 atlas.o:
-	${CC} -c ${CFLAGS} src/atlas.c -o $@ 
+	${CC} -c ${CFLAGS} src/atlas.c -o $@
 
 display-state.o:
-	${CC} -c ${CFLAGS} src/display-state.c -o $@ 
+	${CC} -c ${CFLAGS} src/display-state.c -o $@
 
-err.o: 
+err.o:
 	${CC} -c ${CFLAGS} src/err.c -o $@
 
 callbacks.o:
-	${CC} -c ${CFLAGS} src/callbacks.c -o $@  
+	${CC} -c ${CFLAGS} src/callbacks.c -o $@
 
-bbox.o: 
-	${CC} -c ${CFLAGS} src/bbox.c -o $@  
+bbox.o:
+	${CC} -c ${CFLAGS} src/bbox.c -o $@
 
-term.o: 
-	${CC} -c ${CFLAGS} src/term.c -o $@  
+term.o:
+	${CC} -c ${CFLAGS} src/term.c -o $@
 
-main: display-state.o callbacks.o err.o term.o bbox.o atlas.o cell.o grid.o
-	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.c $? 
+main: display-state.o callbacks.o err.o term.o bbox.o atlas.o cell.o grid.o instruction.o
+	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.c $?
 
 test-optical-ctl: optical-ctl FORCE ## test
 	${CC} ${TESTFLAGS} test/test-optical-ctl.c ${TESTLIBS} -o ${TESTEXE}
@@ -61,7 +65,7 @@ commit: ## git commit -a
 	git commit -a
 
 # http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
-.PHONY: help clean
+.PHONY: help clean docs
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk \
 	'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

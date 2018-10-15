@@ -28,7 +28,7 @@ typedef struct Term {
     int numCols, numRows;
     int lineHeight, colWidth;
     int top, left;
-
+    bool focus;
     // ---------------------------------------------------------------------------------------------
     // SDL Surfaces
     

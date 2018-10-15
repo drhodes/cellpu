@@ -4,14 +4,12 @@
 #include "cell.h"
 #include "err.h"
 
-
 // typedef struct {
 //     int x, y, value, size;
 //     bool selected, broadcasting, listening;
 //     int dataReg, colReg, rowReg;
 //     int op; // this will be of type Instruction soon.
 // } Cell;
-
 
 Cell* newCell(int x, int y) {
     Cell *cell = (Cell*)calloc(sizeof(Cell), 1);
@@ -20,7 +18,6 @@ Cell* newCell(int x, int y) {
     cell->size = 60;
     return cell;
 }
-
 
 // self.select = function()
 //    self.selected = true
@@ -40,7 +37,6 @@ Cell* newCell(int x, int y) {
 //    self.broadcasting = not bool
 // end
 
-
 // self.borderColor = function()
 //    if self.selected then
 //       return {0x30, 0x40, 0xFF, 0xFF}
@@ -55,7 +51,6 @@ SDL_Color cellColor(Cell *cell) {
     return c;
 }
 
-
 SDL_Color cellBorderColor(Cell *cell) {
     if (cell->selected) {
         SDL_Color c = {0x30, 0x40, 0xFF, 0xFF};
@@ -65,7 +60,6 @@ SDL_Color cellBorderColor(Cell *cell) {
         return c;
     }
 }
-
 
 // self.SWAPDR = function()
 //    tmp = self.rowReg
@@ -99,7 +93,7 @@ void drawText(SDL_Renderer *renderer, Atlas *atlas, int x, int y, const char* tx
 
 /*
 void cellRender(Cell *cell) {
-        drawText(self.x * self.size + 4,
+      drawText(self.x * self.size + 4,
                self.y * self.size + 4,
                "[" .. tostring(self.x) .. " " .. tostring(self.y) .. "]")
       

@@ -13,13 +13,17 @@
 typedef struct {
     Atlas *atlas;
     int size;
+    int displaySize; // number of cells shown.
     Cell ***cells;
 } Grid;
 
-
-
-Grid* newGrid(int size, Atlas *atlas);
+Grid* newGrid(int size, int displaySize, Atlas *atlas);
 void gridRender(Grid *grid, SDL_Renderer *renderer);
+bool gridProcessEvent(Grid*, SDL_Event*);
+
+Cell* gridCursorCell(Grid *grid, int pixelX, int pixelY);
+
+
 
 
 /*    

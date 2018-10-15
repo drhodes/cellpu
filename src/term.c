@@ -16,7 +16,8 @@
 
 extern lua_State* L; //:: Lua_State* main.c
 
-Term *newTerm(SDL_Window* window, Atlas* atlas, int left, int top, int columns, int rows) {
+Term*
+newTerm(SDL_Window* window, Atlas* atlas, int left, int top, int columns, int rows) {
     nullDie(window); nullDie(atlas);
     
     Term *term = (Term*)malloc(sizeof(Term));
@@ -35,12 +36,14 @@ Term *newTerm(SDL_Window* window, Atlas* atlas, int left, int top, int columns, 
     return term;
 }
 
-void termSetNumRows(Term *term, int numRows) {
+void
+termSetNumRows(Term *term, int numRows) {
     nullDie(term);
     term->numRows = numRows;
 }
 
-void freeTerm(Term *term) {
+void
+freeTerm(Term *term) {
     if (term != NULL) {
         free(term);
         for (int i=0; i<TERM_MAX_LINES; i++) {
@@ -51,7 +54,8 @@ void freeTerm(Term *term) {
     term = NULL;    
 }
 
-void termPut(Term *term, const char *str) {
+void
+termPut(Term *term, const char *str) {
     nullDie(term);
     // ring buffer
     // TODO fix mod calculation, why was it failing?
@@ -61,7 +65,8 @@ void termPut(Term *term, const char *str) {
     term->curLine += 1;
 }
 
-void termBBox(Term *term, BBox *bb) {
+void
+termBBox(Term *term, BBox *bb) {
     nullDie(term);
     nullDie(bb);
     // including the margin.
@@ -72,7 +77,8 @@ void termBBox(Term *term, BBox *bb) {
     bb->width  = term->atlas->surfWidth * (promptSize + term->numCols);
 }
 
-void termRenderCursor(Term *term, SDL_Renderer *renderer) {
+void
+termRenderCursor(Term *term, SDL_Renderer *renderer) {
     SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     char *line = getCurLine(term);
     int curCol = strlen(line);
@@ -88,22 +94,29 @@ void termRenderCursor(Term *term, SDL_Renderer *renderer) {
     }
     
     SDL_Rect rect = { x, y, term->atlas->surfWidth, term->atlas->surfHeight };
-    SDL_RenderFillRect(renderer, &rect);
+
+    if (SDL_GetTicks() % 2000 < 1000)
+        SDL_RenderFillRect(renderer, &rect);
 }
 
-void termRenderBackground(Term *term, SDL_Renderer *renderer) {
+void
+termRenderBackground(Term *term, SDL_Renderer *renderer) {
     BBox bb;
     termBBox(term, &bb);
     SDL_Rect rect = {bb.left, bb.top, bb.width, bb.height};
-    SDL_SetRenderDrawColor(renderer, 0x60, 0x35, 0x6A, 0x10);   
+    if (term->focus) {
+        SDL_SetRenderDrawColor(renderer, 0x60, 0x35, 0x6A, 0x70);
+    } else {
+        SDL_SetRenderDrawColor(renderer, 0x45, 0x45, 0x45, 0x20);
+    }
     SDL_RenderFillRect(renderer, &rect);
-
 }
 
-void termRender(Term *term, SDL_Renderer *renderer) {
+void
+termRender(Term *term, SDL_Renderer *renderer) {
     nullDie(term);
     termRenderBackground(term, renderer);
-    termRenderCursor(term, renderer);
+    if (term->focus) termRenderCursor(term, renderer);
     
     //
     int winW, winH;
@@ -120,7 +133,8 @@ void termRender(Term *term, SDL_Renderer *renderer) {
     }
 }
 
-void termRenderLine(Term *term, SDL_Renderer *renderer, int lineNum, int rowNum) {
+void
+termRenderLine(Term *term, SDL_Renderer *renderer, int lineNum, int rowNum) {
     char str[300] = "> ";
     strncat(str, term->lines[lineNum], term->numCols-2);
         
@@ -136,14 +150,16 @@ void termRenderLine(Term *term, SDL_Renderer *renderer, int lineNum, int rowNum)
     }
 }
 
-bool termContainsPoint(Term *term, Sint32 x, Sint32 y) {    
+bool
+termContainsPoint(Term *term, Sint32 x, Sint32 y) {    
     nullDie(term);
     BBox bb;
     termBBox(term, &bb);
     return bboxContains(bb, x, y);
 }
 
-bool termProcessEvent(Term* term, SDL_Event* ev) {
+bool
+termProcessEvent(Term* term, SDL_Event* ev) {
     nullDie(term); nullDie(ev);
     
     // hack together some spaghetti state handling and then build a
@@ -153,19 +169,19 @@ bool termProcessEvent(Term* term, SDL_Event* ev) {
     case SDL_MOUSEMOTION: {
         Sint32 x = ev->motion.x;
         Sint32 y = ev->motion.y;        
-        if (termContainsPoint(term, x, y)) {
-            printf("termProcessEvent mouse motion %d, %d\n", x, y);
-        }
+        term->focus = termContainsPoint(term, x, y);
         break;
     }
     
     case SDL_TEXTINPUT: {
-        termPushChar(term, ev->window.event);
+        if (term->focus) termPushChar(term, ev->window.event);
         break;
     }
 
         
     case SDL_KEYDOWN: {
+        if (!term->focus) break;
+        
         switch (ev->key.keysym.scancode) {
         case SDL_SCANCODE_BACKSPACE:
             termPopChar(term);
@@ -187,7 +203,8 @@ bool termProcessEvent(Term* term, SDL_Event* ev) {
     return true;
 }
 
-void termDoReturn(Term *term) {
+void
+termDoReturn(Term *term) {
     char *line = getCurLine(term);
     int err = luaL_loadbuffer(L, line, strlen(line), "line") || lua_pcall(L, 0, 0, 0);
     
@@ -200,17 +217,19 @@ void termDoReturn(Term *term) {
     termPut(term, line);
 }
 
-char *getCurLine(Term *term) {
+char*
+getCurLine(Term *term) {
     return term->lines[term->curLine];
 }
 
-bool curLineFull(Term *term) {
+bool
+curLineFull(Term *term) {
     return strlen(getCurLine(term)) >= term->numCols - 1;
 }
 
-
 /// returns false when can't append char to current line.
-bool termPushChar(Term *term, char c) {
+bool
+termPushChar(Term *term, char c) {
     // if line full return false
     if (!curLineFull(term)) {
         char *line = getCurLine(term);    
@@ -221,7 +240,8 @@ bool termPushChar(Term *term, char c) {
     return false;
 }
 
-bool termPopChar(Term *term) {
+bool
+termPopChar(Term *term) {
     // if line full return false
     char *line = getCurLine(term);
     int pos = strlen(line);
@@ -231,7 +251,6 @@ bool termPopChar(Term *term) {
     }
     return false;
 }
-
 
 
 /*

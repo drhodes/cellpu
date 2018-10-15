@@ -2,14 +2,16 @@
 #include "grid.h"
 #include "common.h"
 #include "cell.h"
+#include "bbox.h"
 
 Grid*
-newGrid(int size, Atlas *atlas) {
+newGrid(int size, int displaySize, Atlas *atlas) {
     if (size < 1) die("got bad size for new grid");
     Grid *grid = (Grid*)calloc(sizeof(Grid), 1);
     
     grid->atlas = atlas;
     grid->size = size;
+    grid->displaySize = displaySize;
     grid->cells = (Cell***)calloc(sizeof(Cell***), size);
     
     for (int row=0; row<size; row++) {
@@ -23,12 +25,63 @@ newGrid(int size, Atlas *atlas) {
 
 void
 gridRender(Grid *grid, SDL_Renderer *renderer) {
-    int temp = 12;
-    for (int row=0; row<temp; row++) {
-        for (int col=0; col<temp; col++) {
+    // render grid cells.
+    for (int row=0; row < grid->displaySize; row++) {
+        for (int col=0; col < grid->displaySize; col++) {
             cellRender(grid->cells[row][col], grid->atlas, renderer);
         }
     }
+}
+
+void
+gridBBox(Grid *grid, BBox *bb) {
+    nullDie(grid);
+    nullDie(bb);
+    int cellSize = grid->cells[0][0]->size;
+
+    bb->top = 0;
+    bb->left = 0;
+    bb->height = cellSize * grid->displaySize;
+    bb->width  = cellSize * grid->displaySize;    
+}
+
+bool
+gridContainsPoint(Grid *grid, Sint32 x, Sint32 y) {    
+    nullDie(grid);
+    BBox bb;
+    gridBBox(grid, &bb);
+    return bboxContains(bb, x, y);
+}
+
+Cell*
+gridCursorCell(Grid *grid, Sint32 pixelX, Sint32 pixelY) {
+    nullDie(grid);
+    if (!gridContainsPoint(grid, pixelX, pixelY)) return NULL;
+    
+    int cellSize = grid->cells[0][0]->size;
+    int x = pixelX / cellSize;
+    int y = pixelY / cellSize;    
+    return grid->cells[x][y];
+}
+
+bool
+gridProcessEvent(Grid *grid, SDL_Event *ev) {
+    nullDie(grid); nullDie(ev);
+    
+    // hack together some spaghetti state handling and then build a
+    // state machine. Either the grid has focus or it doesn't. 
+    switch (ev->type) {
+        
+    case SDL_MOUSEMOTION: {
+        Sint32 x = ev->motion.x;
+        Sint32 y = ev->motion.y;
+        Cell *c = gridCursorCell(grid, x, y);
+        if (!c) break;
+
+        printf("OVER CELL: %d, %d\n", c->x, c->y);
+    }}
+
+    return true;
 }
 
 

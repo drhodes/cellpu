@@ -17,8 +17,9 @@
 #include "callbacks.h"
 #include "term.h"
 #include "grid.h"
+#include "instruction.h"
 
-lua_State *L = 0; //luaL_newstate();
+lua_State *L = NULL; //luaL_newstate();
 
 void doFile(const char *filename) {
     int err = luaL_dofile(L, filename);
@@ -44,17 +45,20 @@ void initLua() {
 int main (void) {
     initLua();
 
+    
     // SDL -----------------------------------------------------------------------------------------
-    SDL_Init(SDL_INIT_VIDEO);
-    SDL_StartTextInput();
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
+
+    
+    SDL_Init(SDL_INIT_VIDEO);
+    SDL_StartTextInput();
     
     window = SDL_CreateWindow( "proc sim",                // window title
                                SDL_WINDOWPOS_UNDEFINED,   // initial x position
                                SDL_WINDOWPOS_UNDEFINED,   // initial y position
-                               1100,                      // width, in pixels                               
-                               1100,                      // height, in pixels
+                               1150,                      // width, in pixels                               
+                               1150,                      // height, in pixels
                                SDL_WINDOW_OPENGL
                                );
     
@@ -71,7 +75,6 @@ int main (void) {
     }
 
     // font ----------------------------------------------------------------------------------------
-    
     TTF_Init();
     TTF_Font* font = TTF_OpenFont("./media/FIXED_V0.TTF", 8);
     lPutFont(L, font);
@@ -82,21 +85,21 @@ int main (void) {
     doFile("lua/cell.lua");
     doFile("lua/grid.lua");
     doFile("lua/instructions.lua");
-    
-    printf("Local Distributed Processing Unit Simulator\n\n");
+
+    // grid ----------------------------------------------------------------------------------------
+    Atlas *gridAtlas = newAtlas(renderer, "./media/FIXED_V0.TTF", 8);
+    Grid *grid = newGrid(100, 12, gridAtlas);
+    gridRender(grid, renderer);
+
+    Instruction *inst = NOP();
     
     // terminal ------------------------------------------------------------------------------------
-    Atlas *gridAtlas = newAtlas(renderer, "./media/FIXED_V0.TTF", 8);
-
-    Grid *grid = newGrid(100, gridAtlas);
-    gridRender(grid, renderer);
-     
     Atlas *termAtlas = newAtlas(renderer, "./media/Terminus.ttf", 16);
     Term *term = newTerm(window, termAtlas, 5, 750, 80, 17);
     nullDie(term);
-    
-    termPut(term, "CellPU / Distributed Processing Unit Simulator, the repl is Lua.");
-    termPut(term, "--");
+
+    termPut(term, "-- PUNC   Distributed Processing Unit Simulator, the repl is Lua.");
+    termPut(term, "--  UNCPU -------------------------------------------------------");
     
     SDL_Event event;
     while( true ) {
@@ -112,12 +115,13 @@ int main (void) {
             // different state machines for different parts of the app.
             // the terminal should own one?
             // each cell could own a state machine.
-            // ok, event listen interface for each
-            // guiProcessEvent(gui, &event);
         
             termProcessEvent(term, &event);
+            gridProcessEvent(grid, &event);
         }        
         termRender(term, renderer);
+        gridRender(grid, renderer);
+        
         SDL_RenderPresent(renderer);
         Uint64 loopTimeStop = SDL_GetTicks();
         Uint64 delta = loopTimeStop - loopTimeStart;
