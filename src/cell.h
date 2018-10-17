@@ -1,24 +1,38 @@
 // @file
-// @brief This is something something doughnuts
+// @brief something something doughnuts
 
 #ifndef CELL_H
 #define CELL_H
 
 #include <stdbool.h>
-
-#include "atlas.h"
-#include "common.h"
 #include <SDL2/SDL.h>
 
-// The unit cell
+//#include "atlas.h"
+//#include "common.h"
+#include "opcode.h"
+//#include "grid.h"
+#include "instruction.h"
+
+struct Grid;
+
+typedef struct CellConfig {
+    Opcode opcode; 
+    Way heading; 
+    bool broadcasting; // is the cell broadcasting?
+    DirFlags broadcastFlags; // LRFB flags -> 1000, 0100, 0010, 0001.
+    DirFlags inputsPorts; // LRFB flags -> 1000, 0100, 0010, 0001.
+    // cell outputs
+} CellConfig;
 
 
-typedef struct {
+typedef struct Cell {
     int x, y, value, size;
     bool selected, broadcasting, listening;
     int dataReg, colReg, rowReg;
-    int op; // this will be of type Instruction soon.
+    CellConfig cfg;
+    struct Instruction *inst;
 } Cell;
+
 
 
 Cell* newCell(int x, int y);
@@ -36,6 +50,7 @@ void cellSetListen(Cell *cell, bool b);
 
 SDL_Color cellColor(Cell *cell);
 
+void cellCycle(Cell *cell, struct Grid *grid);
 void cellRender(Cell *cell, Atlas *atlas, SDL_Renderer *renderer);
 
 // move these to display.c or something.

@@ -10,10 +10,8 @@
 
 static ErrorStack *_estack = NULL;
 
-
 void
-pushErr(Err e)
-{ 
+pushErr(Err e) { 
     ErrorStack *stk = (ErrorStack*)malloc(sizeof(ErrorStack));
     stk->e = e;
     stk->next = _estack;
@@ -21,8 +19,7 @@ pushErr(Err e)
 }
     
 void
-dumpStack()
-{
+dumpStack() {
     if (_estack) printf(" -- ERROR STACK --\n");
     while (_estack) {
         printf(" %s (%s, %d)\n", _estack->e.msg, _estack->e.file, _estack->e.line );
@@ -32,6 +29,9 @@ dumpStack()
     }
 }
 
-
+const char*
+errTopMsg() {
+    return _estack->e.msg;
+}
 
 #endif // ERR_C

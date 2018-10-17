@@ -3,6 +3,9 @@
 
 #include "cell.h"
 #include "err.h"
+#include "instruction.h"
+
+struct Cell; //fwd decl
 
 // typedef struct {
 //     int x, y, value, size;
@@ -17,6 +20,7 @@ Cell* newCell(int x, int y) {
     cell->y = y;
     cell->size = 60;
     cell->selected = false;
+    cell->inst = iNOP();
     return cell;
 }
 
@@ -86,6 +90,13 @@ void drawText(SDL_Renderer *renderer, Atlas *atlas, int x, int y, const char* tx
 }
 
 
+void cellCycle(Cell *cell, struct Grid *grid) {
+    // the instruction needs to see the neighborhood, so it needs a
+    // pointer to grid. 
+    cell->inst->op(grid, cell);
+}
+
+
 /*
 void cellRender(Cell *cell) {
       drawText(self.x * self.size + 4,
@@ -151,7 +162,7 @@ void cellRender(Cell *cell, Atlas *atlas, SDL_Renderer *renderer) {
              x * size + size/2,
              y * size + size/2 + size/4, str);
 
-    if (cell->selected) {
+    if (cell->selected && oddSecond()) {
         borderBox( renderer, x*size, y*size,
                    size, size,
                    (SDL_Color){0, 0, 0, 0}, (SDL_Color){0, 0xff, 0, 0x11});

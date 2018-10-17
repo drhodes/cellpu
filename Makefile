@@ -4,6 +4,7 @@ TESTFLAGS=-Wall -g -std=c11
 TESTLIBS= -lSDL2 -llua5.3 -lcheck -lsubunit -pthread -lrt -lm -lsubunit
 EXE=sim
 TESTEXE=testbin
+CC=gcc
 
 all: clean main ## build
 
@@ -20,9 +21,11 @@ profile: clean main
 watch:
 	when-changed -r src/*.c src/*.h -c "clear && make clean && make main"
 
+common.o: 
+	${CC} -c ${CFLAGS} src/common.c -o $@
+
 instruction.o: 
 	${CC} -c ${CFLAGS} src/instruction.c -o $@
-
 
 grid.o: 
 	${CC} -c ${CFLAGS} src/grid.c -o $@
@@ -48,7 +51,7 @@ bbox.o:
 term.o:
 	${CC} -c ${CFLAGS} src/term.c -o $@
 
-main: display-state.o callbacks.o err.o term.o bbox.o atlas.o cell.o grid.o instruction.o
+main: common.o display-state.o callbacks.o err.o term.o bbox.o atlas.o cell.o grid.o instruction.o
 	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.c $?
 
 test-optical-ctl: optical-ctl FORCE ## test

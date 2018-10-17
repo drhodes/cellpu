@@ -1,5 +1,5 @@
-#include "instruction.h"
 #include "err.h"
+#include "instruction.h"
 
 // function NOP()
 //    local f = function(x)
@@ -8,11 +8,7 @@
 //    return Instruction("NOP", f, {0x30, 0x30, 0x30, 0xFF})
 // end
 
-static void
-opNOP(Grid *grid) {
-    // nop doesn't do anything.
-}
-
+struct Instruction;
 
 Instruction*
 instEmpty() {
@@ -20,15 +16,19 @@ instEmpty() {
     return inst;
 }
 
+void
+opNOP(struct Grid *grid, struct Cell* cell) {
+    // nop doesn't do anything.
+}
+
 Instruction*
-NOP() {
+iNOP() {
     Instruction *inst = instEmpty();
     strcpy(inst->name, "NOP");
     inst->color = (SDL_Color){0x30, 0x30, 0x30, 0xFF};
     inst->op = opNOP;
     return inst;
 }
-
 
 // function CMPLE()
 //    local f = function(x, y)
@@ -38,21 +38,20 @@ NOP() {
 // end
 
 static void
-opCMPLE(Grid* grid) {
+opCMPLE(struct Grid* grid, struct Cell* cell) {
+    // make sure there are only two direction flags set.
+    //cell->
 }
 
 Instruction*
-CMPLE(Way heading) {
+iCMPLE() {
     Instruction *inst = instEmpty();
     strcpy(inst->name, "CMPLE");
     inst->color = (SDL_Color){0x30, 0xAA, 0x30, 0xFF};
     inst->op = opCMPLE;
-    inst->heading = heading;
     return inst;
 }
 
-
 void freeInstruction(Instruction* inst) {
-    
     free(inst);
 }

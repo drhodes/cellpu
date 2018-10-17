@@ -2,8 +2,11 @@
 #define INSTRUCTION_H
 
 #include <SDL2/SDL.h>
-#include "grid.h"
+
 #include "common.h"
+#include "grid.h"
+#include "cell.h"
+#include "opcode.h"
 
 // -- Instructions. -----------------------------------------------------------------------------------
 
@@ -16,16 +19,22 @@
 //       oper = oper,
 //       color = color,
 //    }
-typedef struct {
+
+
+struct Grid;
+struct Cell;
+
+typedef struct Instruction {
     char name[8];
     SDL_Color color;    
-    void (*op)(Grid*);
-    Way heading;
+    void (*op)(struct Grid*, struct Cell*);
 } Instruction;
 
 
-Instruction* NOP();
-Instruction* CMPLE();
+
+
+Instruction* iNOP();
+Instruction* iCMPLE();
 
 void freeInstruction(Instruction* inst);
 

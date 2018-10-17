@@ -7,7 +7,7 @@
 #include <stdbool.h> 
 #include <SDL2/SDL.h>
 
-#define ATLAS_SIZE 256
+#define ATLAS_SIZE 127
 
 typedef struct {
     SDL_Texture* table[ATLAS_SIZE];

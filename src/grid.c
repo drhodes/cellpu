@@ -67,12 +67,31 @@ gridCursorCell(Grid *grid, Sint32 pixelX, Sint32 pixelY) {
 Cell*
 gridGetCell(Grid *grid, int x, int y) {
     nullDie(grid);
-    if (x < 0) die("x must be greater than 0");
-    if (y < 0) die("y must be greater than 0");
-    if (x >= grid->size) die ("x cell coordinate outside of grid");
-    if (y >= grid->size) die ("y cell coordinate outside of grid");
+    if (x < 0) {
+        perr("x must be greater than 0");
+        return NULL;
+    }
+    if (y < 0) {
+        perr("y must be greater than 0");
+        return NULL;
+    }
+    if (x >= grid->size) {
+        perr("x cell coordinate outside of grid");
+        return NULL;
+    }
+    if (y >= grid->size) {
+        perr("y cell coordinate outside of grid");
+        return NULL;
+    }
     return grid->cells[x][y];
 }
+
+void
+gridCycleCell(Grid *grid, int x, int y) {
+    Cell* c = gridGetCell(grid, x, y);
+    cellCycle(c, grid);
+}
+
 
 bool
 gridProcessEvent(Grid *grid, SDL_Event *ev) {

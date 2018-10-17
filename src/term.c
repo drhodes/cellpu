@@ -13,6 +13,7 @@
 #include "err.h"
 #include "term.h"
 #include "atlas.h"
+#include "common.h"
 
 extern lua_State* L; //:: Lua_State* main.c
 
@@ -95,8 +96,7 @@ termRenderCursor(Term *term, SDL_Renderer *renderer) {
     
     SDL_Rect rect = { x, y, term->atlas->surfWidth, term->atlas->surfHeight };
 
-    if (SDL_GetTicks() % 2000 < 1000)
-        SDL_RenderFillRect(renderer, &rect);
+    if (oddSecond()) SDL_RenderFillRect(renderer, &rect);
 }
 
 void

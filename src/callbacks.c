@@ -94,7 +94,6 @@ lUpdate(lua_State *L)
     return 0;
 }
 
-
 int
 lSelectCell(lua_State *L)
 {
@@ -104,11 +103,14 @@ lSelectCell(lua_State *L)
     
     Grid *grid = lGetGrid(L);    
     Cell *cell = gridGetCell(grid, x, y);
+    if (cell==NULL) {        
+        luaL_error(L, errTopMsg()); 
+        return 1;
+    }
     
     cellSelect(cell);
     return 0;
 }
-
 
 void
 register_callbacks(lua_State *L) {

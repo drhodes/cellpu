@@ -10,20 +10,20 @@
 #include "common.h"
 #include "cell.h"
 
-typedef struct {
+typedef struct Grid {
     Atlas *atlas;
     int size;
     int displaySize; // number of cells shown.
-    Cell ***cells;
+    struct Cell ***cells;
 } Grid;
 
 Grid* newGrid(int size, int displaySize, Atlas *atlas);
 void gridRender(Grid *grid, SDL_Renderer *renderer);
 bool gridProcessEvent(Grid*, SDL_Event*);
 
-Cell* gridGetCell(Grid *grid, int x, int y);
-
-Cell* gridCursorCell(Grid *grid, int pixelX, int pixelY);
+struct Cell* gridGetCell(Grid *grid, int x, int y);
+struct Cell* gridCursorCell(Grid *grid, int pixelX, int pixelY);
+void gridCycleCell(Grid *grid, int x, int y);
 
 
 

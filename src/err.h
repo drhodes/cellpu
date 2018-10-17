@@ -35,5 +35,7 @@ typedef struct ErrorStack {
 
 void pushErr(Err e);
 void dumpStack();
+const char* errTopMsg();
+
 
 #endif // ERR_H

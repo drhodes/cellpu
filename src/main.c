@@ -26,7 +26,7 @@ void doFile(const char *filename) {
     if (err) {
         fprintf(stderr, "%s\n", lua_tostring(L, -1));
         perr(lua_tostring(L, -1));
-        lua_pop(L, 1);  /* pop error message from the stack */
+        lua_pop(L, 1);  // pop error message from the stack 
     }
 }
 
@@ -79,10 +79,10 @@ int main (void) {
     
     register_callbacks(L);
     
-    doFile("lua/display.lua");            
-    doFile("lua/cell.lua");
-    doFile("lua/grid.lua");
-    doFile("lua/instructions.lua");
+    // doFile("lua/display.lua");            
+    // doFile("lua/cell.lua");
+    // doFile("lua/grid.lua");
+    // doFile("lua/instructions.lua");
 
     // grid ----------------------------------------------------------------------------------------
     Atlas *gridAtlas = newAtlas(renderer, "./media/FIXED_V0.TTF", 8);
@@ -90,7 +90,7 @@ int main (void) {
     gridRender(grid, renderer);
     lPutGrid(L, grid);
 
-    Instruction *inst = NOP();
+    //Instruction *inst = NOP();
     
     // terminal ------------------------------------------------------------------------------------
     Atlas *termAtlas = newAtlas(renderer, "./media/Terminus.ttf", 16);
@@ -136,7 +136,7 @@ int main (void) {
     freeAtlas(gridAtlas);
     
     SDL_DestroyWindow(window);
-    TTF_CloseFont(font);
+    // TTF_CloseFont(font);
     
     SDL_Quit();
     TTF_Quit();
