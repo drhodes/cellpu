@@ -45,8 +45,8 @@ bool termPushChar(Term *term, char c);
 bool termPopChar(Term *term);
 void termDoReturn(Term *term);
 void termRenderLine(Term *term, SDL_Renderer *renderer, int lineNum, int rowNum);
+char *termGetCurLine(Term *term);
 
-char *getCurLine(Term *term);
 void freeTerm(Term *term);
 
 

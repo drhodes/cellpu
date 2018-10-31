@@ -8,17 +8,14 @@ CC=gcc
 
 all: clean main ## build
 
-run: all
-	rlwrap ./${EXE}
-
-docs: FORCE
+docs: FORCE ## create documentation with doxygen
 	doxygen doxygen.cfg
 
-profile: clean main
+profile: clean main ## start cachegrind after some use
 	valgrind --tool=callgrind --dump-instr=yes ./${EXE}
 	cachegrind callgrind.out*
 
-watch:
+watch: ## setup a watch for the source directory to rebuild on change
 	when-changed -r src/*.c src/*.h -c "clear && make clean && make main"
 
 common.o: 

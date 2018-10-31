@@ -8,12 +8,12 @@
 #include "atlas.h"
 #include "err.h"
 
-// TODO table should be a hash table for more flexibility.
+// TODO table should be a hash table to hand unicode
 Atlas *newAtlas(SDL_Renderer *renderer, const char *fontFilename, int size) {
     TTF_Font* font = TTF_OpenFont(fontFilename, size);
     nullDie(font);
     TTF_SetFontHinting(font, TTF_HINTING_NONE); //TTF_HINTING_LIGHT);
-
+    
     SDL_Color white = {255, 255, 255, 255};
     
     Atlas *atlas = (Atlas*)malloc(sizeof(Atlas));
@@ -42,6 +42,7 @@ SDL_Texture *atlasGetGlyph(Atlas *atlas, char c) {
 }
 
 void freeAtlas(Atlas *atlas) {
+    nullDie(atlas);
     for (int i=0; i<ATLAS_SIZE; i++) {
         if (atlas->table[i]) {
             SDL_DestroyTexture(atlas->table[i]);

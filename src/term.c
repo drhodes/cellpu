@@ -15,7 +15,7 @@
 #include "atlas.h"
 #include "common.h"
 
-extern lua_State* L; //:: Lua_State* main.c
+extern lua_State* L; // from main.c
 
 Term*
 newTerm(SDL_Window* window, Atlas* atlas, int left, int top, int columns, int rows) {
@@ -50,7 +50,7 @@ freeTerm(Term *term) {
         for (int i=0; i<TERM_MAX_LINES; i++) {
             free(term->lines[i]);
         }
-        // TODO free SDL surfaces.
+        // TODO free SDL surfaces. Which surfaces? 
     }
     term = NULL;    
 }
@@ -61,7 +61,7 @@ termPut(Term *term, const char *str) {
     // ring buffer
     // TODO fix mod calculation, why was it failing?
     assert(term->curLine < TERM_MAX_LINES);
-    char *line = getCurLine(term);
+    char *line = termGetCurLine(term);
     strcpy(line, str);
     term->curLine += 1;
 }
@@ -71,7 +71,7 @@ termBBox(Term *term, BBox *bb) {
     nullDie(term);
     nullDie(bb);
     // including the margin.
-    int promptSize = 2;
+    int promptSize = 2; // TODO consider custom prompt.
     bb->top = term->top;
     bb->left = term->left;
     bb->height = term->atlas->surfHeight * (term->numRows + 1);
@@ -81,22 +81,23 @@ termBBox(Term *term, BBox *bb) {
 void
 termRenderCursor(Term *term, SDL_Renderer *renderer) {
     SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    char *line = getCurLine(term);
+    char *line = termGetCurLine(term);
     int curCol = strlen(line);
-    int promptSize = 2; // TODO make a custom prompt.
+    int promptSize = 2; // TODO consider custom prompt.
     int x = term->left + ((promptSize + curCol) * term->atlas->surfWidth);
     int y = term->top;
     
     if (term->curLine >= term->numRows) {
         // when the cursor hits the bottom of the terminal.
-        y += (term->numRows) * term->atlas->surfHeight;
+        y += term->numRows * term->atlas->surfHeight;
     } else {
         y += term->curLine * term->atlas->surfHeight;
     }
     
     SDL_Rect rect = { x, y, term->atlas->surfWidth, term->atlas->surfHeight };
 
-    if (oddSecond()) SDL_RenderFillRect(renderer, &rect);
+    // Blink
+    if (oddSecond()) SDL_RenderFillRect(renderer, &rect); 
 }
 
 void
@@ -177,7 +178,6 @@ termProcessEvent(Term* term, SDL_Event* ev) {
         if (term->focus) termPushChar(term, ev->window.event);
         break;
     }
-
         
     case SDL_KEYDOWN: {
         if (!term->focus) break;
@@ -205,7 +205,7 @@ termProcessEvent(Term* term, SDL_Event* ev) {
 
 void
 termDoReturn(Term *term) {
-    char *line = getCurLine(term);
+    char *line = termGetCurLine(term);
     int err = luaL_loadbuffer(L, line, strlen(line), "line") || lua_pcall(L, 0, 0, 0);
     
     if (err) {
@@ -218,13 +218,13 @@ termDoReturn(Term *term) {
 }
 
 char*
-getCurLine(Term *term) {
+termGetCurLine(Term *term) {
     return term->lines[term->curLine];
 }
 
-bool
+static bool
 curLineFull(Term *term) {
-    return strlen(getCurLine(term)) >= term->numCols - 1;
+    return strlen(termGetCurLine(term)) >= term->numCols - 1;
 }
 
 /// returns false when can't append char to current line.
@@ -232,7 +232,7 @@ bool
 termPushChar(Term *term, char c) {
     // if line full return false
     if (!curLineFull(term)) {
-        char *line = getCurLine(term);    
+        char *line = termGetCurLine(term);    
         int pos = strlen(line);
         line[pos] = c;
         return true;
@@ -243,7 +243,7 @@ termPushChar(Term *term, char c) {
 bool
 termPopChar(Term *term) {
     // if line full return false
-    char *line = getCurLine(term);
+    char *line = termGetCurLine(term);
     int pos = strlen(line);
     if (pos > 0) {
         line[pos-1] = '\0';
