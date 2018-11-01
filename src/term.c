@@ -62,7 +62,11 @@ termPut(Term *term, const char *str) {
     // TODO fix mod calculation, why was it failing?
     assert(term->curLine < TERM_MAX_LINES);
     char *line = termGetCurLine(term);
-    strcpy(line, str);
+
+    if (str != line) {
+        // if these are the same strings, then nothing need be copied.
+        strncpy(line, str, term->numCols);
+    }
     term->curLine += 1;
 }
 
@@ -212,8 +216,7 @@ termDoReturn(Term *term) {
         fprintf(stderr, "%s\n", lua_tostring(L, -1));
         perr(lua_tostring(L, -1));
         lua_pop(L, 1);
-    }
-            
+    }    
     termPut(term, line);
 }
 

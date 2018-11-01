@@ -36,7 +36,6 @@ Instruction* iCMPLE();
 Instruction* iAND();
 Instruction* iOR();
 
-
 void freeInstruction(Instruction* inst);
 
 

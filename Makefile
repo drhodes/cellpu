@@ -1,4 +1,4 @@
-## c-json is crying about depracated functions that have since been undepracated.
+## c-json is crying about deprecated functions that have since been undeprecated.
 
 CFLAGS=-Wall -O0 -g -std=c11 -fsanitize=address -Wno-deprecated-declarations
 LDFLAGS=-lSDL2 -llua5.3 -lSDL2_ttf -ljson-c
@@ -95,3 +95,28 @@ clean: FORCE ## clean all the things
 	bash clean.bash
 
 FORCE:
+
+
+
+
+
+
+
+
+
+
+# SRC = $(wildcard src/*.c)
+# OBJ = $(SRC:src/*.c=obj/*.o)
+
+# ${OBJ}.o:
+# 	${CC} -c ${CFLAGS} src/$@.c -o $@
+
+# .PRECIOUS: ${OBJ}
+# obj/%.o: src/%.c
+# 	$(CC) $(CFLAGS) -c $< -o $@
+
+# obj/%.o: src/%.c
+# 	${CC} ${CFLAGS} -c $< -o $@
+
+# main: ${OBJ}
+# 	${CC} ${CFLAGS} ${LDFLAGS} ${OBJ} -o ${EXE}
