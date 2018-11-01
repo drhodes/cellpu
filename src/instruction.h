@@ -20,7 +20,6 @@
 //       color = color,
 //    }
 
-
 struct Grid;
 struct Cell;
 
@@ -30,11 +29,13 @@ typedef struct Instruction {
     void (*op)(struct Grid*, struct Cell*);
 } Instruction;
 
-
-
-
 Instruction* iNOP();
 Instruction* iCMPLE();
+
+// bitwise AND of two cells.
+Instruction* iAND();
+Instruction* iOR();
+
 
 void freeInstruction(Instruction* inst);
 

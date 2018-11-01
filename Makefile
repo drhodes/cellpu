@@ -1,5 +1,7 @@
-CFLAGS=-Wall -O0 -g -std=c11 # -fsanitize=address
-LDFLAGS=-lSDL2 -llua5.3 -lSDL2_ttf
+## c-json is crying about depracated functions that have since been undepracated.
+
+CFLAGS=-Wall -O0 -g -std=c11 -fsanitize=address -Wno-deprecated-declarations
+LDFLAGS=-lSDL2 -llua5.3 -lSDL2_ttf -ljson-c
 TESTFLAGS=-Wall -g -std=c11
 TESTLIBS= -lSDL2 -llua5.3 -lcheck -lsubunit -pthread -lrt -lm -lsubunit
 EXE=sim
@@ -16,7 +18,7 @@ profile: clean main ## start cachegrind after some use
 	cachegrind callgrind.out*
 
 watch: ## setup a watch for the source directory to rebuild on change
-	when-changed -r src/*.c src/*.h -c "clear && make clean && make main"
+	when-changed -r Makefile src/*.c src/*.h -c "clear && make clean && make main"
 
 common.o: 
 	${CC} -c ${CFLAGS} src/common.c -o $@
@@ -48,7 +50,22 @@ bbox.o:
 term.o:
 	${CC} -c ${CFLAGS} src/term.c -o $@
 
-main: common.o display-state.o callbacks.o err.o term.o bbox.o atlas.o cell.o grid.o instruction.o
+opcode.o:
+	${CC} -c ${CFLAGS} src/opcode.c -o $@
+
+
+OBJ	=	common.o\
+		display-state.o\
+		callbacks.o err.o\
+		term.o\
+		bbox.o\
+		atlas.o\
+		cell.o\
+		grid.o\
+		instruction.o\
+		opcode.o
+
+main: ${OBJ}
 	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.c $?
 
 test-optical-ctl: optical-ctl FORCE ## test

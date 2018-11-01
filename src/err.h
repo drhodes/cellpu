@@ -22,6 +22,7 @@ typedef struct ErrorStack {
 // -------------------------------------------------------------------------------------------------
 // GLOBAL error stack.
 
+// TODO improve perr to accept var args
     
 #define perr(errmsg) {                                                                             \
         Err e = { .msg = errmsg, .file = __FILE__, .line = __LINE__, .func = "__FUNCTION__" };     \

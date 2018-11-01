@@ -37,10 +37,28 @@ iNOP() {
 //    return Instruction("CMPLE", f, {0x30, 0xAA, 0x30, 0xFF})
 // end
 
+
+// Bitwise AND of two nbr cells. -------------------------------------------------------------------
+
+static void
+opAND(struct Grid *grid, struct Cell* cell) {    
+}
+
+Instruction*
+iAND() {
+    Instruction *inst = instEmpty();
+    strcpy(inst->name, "AND");
+    inst->color = (SDL_Color){0x30, 0xFF, 0x30, 0xFF};
+    inst->op = opAND;
+    return inst;
+}
+
+// Bitwise AND of two nbr cells. -------------------------------------------------------------------
+
 static void
 opCMPLE(struct Grid* grid, struct Cell* cell) {
-    // make sure there are only two direction flags set.
-    //cell->
+    // make sure there are exactly two input direction flags set.
+    // cell->
 }
 
 Instruction*

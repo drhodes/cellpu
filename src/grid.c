@@ -92,7 +92,6 @@ gridCycleCell(Grid *grid, int x, int y) {
     cellCycle(c, grid);
 }
 
-
 bool
 gridProcessEvent(Grid *grid, SDL_Event *ev) {
     nullDie(grid); nullDie(ev);
@@ -108,10 +107,20 @@ gridProcessEvent(Grid *grid, SDL_Event *ev) {
         if (!c) break;
 
         printf("OVER CELL: %d, %d\n", c->x, c->y);
+        
     }}
-
+    
     return true;
 }
+
+
+// void
+// gridUpdateHoodView(Grid *grid, int x, int y) {
+// }
+
+
+
+
 
 
 /*

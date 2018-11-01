@@ -18,6 +18,7 @@
 #include "term.h"
 #include "grid.h"
 #include "instruction.h"
+#include "opcode.h"
 
 lua_State *L = NULL; 
 
@@ -72,6 +73,15 @@ int main (void) {
         return 1;
     }
 
+
+    // Opcode opc = NOP;
+    // opcodeToJson(opc);
+
+    // move this to test code.
+    Opcode opc = jsonToOpcode("{\"type\": \"Opcode\", \"value\": 0}");
+    printf("opcode :%d\n", opc);
+
+    
     // font ----------------------------------------------------------------------------------------
     TTF_Init();
     TTF_Font* font = TTF_OpenFont("./media/FIXED_V0.TTF", 8);

@@ -49,8 +49,6 @@ char *termGetCurLine(Term *term);
 
 void freeTerm(Term *term);
 
-
-
 // State diagram for terminal.
 
 // Which states can the terminal be in?
