@@ -20,10 +20,13 @@ typedef struct Grid {
 Grid* newGrid(int size, int displaySize, Atlas *atlas);
 void gridRender(Grid *grid, SDL_Renderer *renderer);
 bool gridProcessEvent(Grid*, SDL_Event*);
-
+void gridCycleCell(Grid *grid, int x, int y);
+bool gridContainsPoint(Grid *grid, Sint32 x, Sint32 y);
+void gridSetSelectAllCells(Grid *grid, bool b);
+    
 struct Cell* gridGetCell(Grid *grid, int x, int y);
 struct Cell* gridCursorCell(Grid *grid, int pixelX, int pixelY);
-void gridCycleCell(Grid *grid, int x, int y);
+
 
 
 

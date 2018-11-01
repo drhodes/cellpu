@@ -1,6 +1,6 @@
 ## c-json is crying about deprecated functions that have since been undeprecated.
 
-CFLAGS=-Wall -O0 -g -std=c11 -fsanitize=address -Wno-deprecated-declarations
+CFLAGS=-Wall -O0 -g -std=c11 -Wno-deprecated-declarations -fsanitize=address -Wno-switch
 LDFLAGS=-lSDL2 -llua5.3 -lSDL2_ttf -ljson-c
 TESTFLAGS=-Wall -g -std=c11
 TESTLIBS= -lSDL2 -llua5.3 -lcheck -lsubunit -pthread -lrt -lm -lsubunit
@@ -29,6 +29,9 @@ instruction.o:
 grid.o: 
 	${CC} -c ${CFLAGS} src/grid.c -o $@
 
+grid-edit.o: 
+	${CC} -c ${CFLAGS} src/grid-edit.c -o $@
+
 cell.o:
 	${CC} -c ${CFLAGS} src/cell.c -o $@
 
@@ -53,7 +56,6 @@ term.o:
 opcode.o:
 	${CC} -c ${CFLAGS} src/opcode.c -o $@
 
-
 OBJ	=	common.o\
 		display-state.o\
 		callbacks.o err.o\
@@ -63,7 +65,8 @@ OBJ	=	common.o\
 		cell.o\
 		grid.o\
 		instruction.o\
-		opcode.o
+		opcode.o\
+		grid-edit.o
 
 main: ${OBJ}
 	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.c $?

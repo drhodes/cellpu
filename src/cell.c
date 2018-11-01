@@ -28,9 +28,11 @@ Cell* newCell(int x, int y) {
 //    self.selected = true
 // end
 
-void cellSelect(Cell *cell) {
-    cell->selected = true;
+void cellSetSelect(Cell *cell, bool b) {
+    cell->selected = b;
+    printf("cell->selected: %d\n", cell->selected);
 }
+
 
 // self.deselect = function()
 //    self.selected = false
@@ -162,7 +164,7 @@ void cellRender(Cell *cell, Atlas *atlas, SDL_Renderer *renderer) {
              x * size + size/2,
              y * size + size/2 + size/4, str);
 
-    if (cell->selected && oddSecond()) {
+    if (cell->selected && oddMoment()) {
         borderBox( renderer, x*size, y*size,
                    size, size,
                    (SDL_Color){0, 0, 0, 0}, (SDL_Color){0, 0xff, 0, 0x11});

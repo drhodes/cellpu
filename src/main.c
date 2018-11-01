@@ -19,6 +19,7 @@
 #include "grid.h"
 #include "instruction.h"
 #include "opcode.h"
+#include "grid-edit.h"
 
 lua_State *L = NULL; 
 
@@ -65,6 +66,8 @@ int main (void) {
     lPutRenderer(L, renderer);
 
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    // SDL_EnableKeyRepeat(0, 0); // disable key repeat.
+ 
 
     // Check that the window was successfully created
     if (window == NULL) {
@@ -73,14 +76,12 @@ int main (void) {
         return 1;
     }
 
-
     // Opcode opc = NOP;
     // opcodeToJson(opc);
 
     // move this to test code.
     Opcode opc = jsonToOpcode("{\"type\": \"Opcode\", \"value\": 0}");
     printf("opcode :%d\n", opc);
-
     
     // font ----------------------------------------------------------------------------------------
     TTF_Init();
@@ -88,19 +89,14 @@ int main (void) {
     lPutFont(L, font);
     
     register_callbacks(L);
-    
-    // doFile("lua/display.lua");            
-    // doFile("lua/cell.lua");
-    // doFile("lua/grid.lua");
-    // doFile("lua/instructions.lua");
 
     // grid ----------------------------------------------------------------------------------------
     Atlas *gridAtlas = newAtlas(renderer, "./media/FIXED_V0.TTF", 8);
     Grid *grid = newGrid(100, 12, gridAtlas);
-    gridRender(grid, renderer);
     lPutGrid(L, grid);
 
-    //Instruction *inst = NOP();
+    GridEditor *ge = newGridEditor(grid);
+    
     
     // terminal ------------------------------------------------------------------------------------
     Atlas *termAtlas = newAtlas(renderer, "./media/Terminus.ttf", 16);
@@ -115,18 +111,20 @@ int main (void) {
         Uint64 loopTimeStart = SDL_GetTicks();
         
         while(SDL_PollEvent(&event)) {
-            if (event.type == SDL_KEYDOWN) {            
-                if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
-                    goto done;
-                }
-            }
             
             // different state machines for different parts of the app.
             // the terminal should own one?
             // each cell could own a state machine.
         
+            gridEditorProcessEvent(ge, &event);
             termProcessEvent(term, &event);
             gridProcessEvent(grid, &event);
+            
+            if (event.type == SDL_KEYDOWN) {            
+                if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
+                    goto done;
+                }
+            }
         }        
         termRender(term, renderer);
         gridRender(grid, renderer);
@@ -135,7 +133,7 @@ int main (void) {
         Uint64 loopTimeStop = SDL_GetTicks();
         Uint64 delta = loopTimeStop - loopTimeStart;
         //double ddelta = ((double)delta*1000) / (double)SDL_GetPerformanceFrequency();
-        int wait = delta > 16 ? 0 : 16 - delta;
+        int wait = delta > 32 ? 0 : 32 - delta;
         SDL_Delay(wait);
     }    
     printf("SDL: %s\n", SDL_GetError());

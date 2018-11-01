@@ -13,6 +13,7 @@ newGrid(int size, int displaySize, Atlas *atlas) {
     grid->size = size;
     grid->displaySize = displaySize;
     grid->cells = (Cell***)calloc(sizeof(Cell***), size);
+    //grid->editor = newGridEditor();
     
     for (int row=0; row<size; row++) {
         grid->cells[row] = (Cell**)calloc(sizeof(Cell**), size);
@@ -86,10 +87,22 @@ gridGetCell(Grid *grid, int x, int y) {
     return grid->cells[x][y];
 }
 
+
 void
 gridCycleCell(Grid *grid, int x, int y) {
     Cell* c = gridGetCell(grid, x, y);
     cellCycle(c, grid);
+}
+
+void gridSetSelectAllCells(Grid *grid, bool b) {
+    nullDie(grid)
+    for (int x = 0; x < grid->size; x++) {
+        for (int y = 0; y < grid->size; y++) {
+            Cell *c = gridGetCell(grid, x, y);
+            nullDie(c);
+            cellSetSelect(c, b);
+        }
+    }
 }
 
 bool
@@ -97,17 +110,21 @@ gridProcessEvent(Grid *grid, SDL_Event *ev) {
     nullDie(grid); nullDie(ev);
     
     // hack together some spaghetti state handling and then build a
-    // state machine. Either the grid has focus or it doesn't. 
+    // state machine. Either the grid has focus or it doesn't.
+    
     switch (ev->type) {
+    case SDL_KEYDOWN: {
+        printf("GOT MOUSEDOWN IN gridProcessEvent\n");
+        break;
+    }
         
     case SDL_MOUSEMOTION: {
         Sint32 x = ev->motion.x;
         Sint32 y = ev->motion.y;
         Cell *c = gridCursorCell(grid, x, y);
         if (!c) break;
-
-        printf("OVER CELL: %d, %d\n", c->x, c->y);
         
+        printf("OVER CELL: %d, %d\n", c->x, c->y);        
     }}
     
     return true;

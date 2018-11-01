@@ -31,6 +31,7 @@ typedef struct {
 
 
 bool oddSecond();
+bool oddMoment();
 
 
 

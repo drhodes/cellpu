@@ -170,7 +170,6 @@ termProcessEvent(Term* term, SDL_Event* ev) {
     // hack together some spaghetti state handling and then build a
     // state machine. Either the terminal has focus or it doesn't. 
     switch (ev->type) {
-            
     case SDL_MOUSEMOTION: {
         Sint32 x = ev->motion.x;
         Sint32 y = ev->motion.y;        

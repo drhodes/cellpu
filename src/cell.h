@@ -35,8 +35,7 @@ void cellSetColReg(Cell* cell, int n);
 void cellSetRowReg(Cell* cell, int n);
 void cellSetDataReg(Cell* cell, int n);
 
-void cellSelect(Cell *cell);
-void cellDeselect(Cell *cell);
+void cellSetSelect(Cell *cell, bool b);
 
 void cellSetBroadcast(Cell *cell, bool b);
 void cellSetListen(Cell *cell, bool b);
