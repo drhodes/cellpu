@@ -68,7 +68,7 @@ OBJ	=	common.o\
 		opcode.o\
 		grid-edit.o
 
-main: ${OBJ}
+main: ${OBJ} ## 
 	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.c $?
 
 test-optical-ctl: optical-ctl FORCE ## test
@@ -97,15 +97,10 @@ clean: FORCE ## clean all the things
 	rm -f gmon.out*
 	bash clean.bash
 
+webdocs:
+	bash webdocs.bash
+
 FORCE:
-
-
-
-
-
-
-
-
 
 
 # SRC = $(wildcard src/*.c)

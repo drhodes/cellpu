@@ -21,27 +21,27 @@
 #include "opcode.h"
 #include "grid-edit.h"
 
-lua_State *L = NULL; 
+lua_State *_LS = NULL; 
 
 void doFile(const char *filename) {
-    int err = luaL_dofile(L, filename);
+    int err = luaL_dofile(_LS, filename);
     if (err) {
-        fprintf(stderr, "%s\n", lua_tostring(L, -1));
-        perr(lua_tostring(L, -1));
-        lua_pop(L, 1);  // pop error message from the stack 
+        fprintf(stderr, "%s\n", lua_tostring(_LS, -1));
+        perr(lua_tostring(_LS, -1));
+        lua_pop(_LS, 1);  // pop error message from the stack 
     }
 }
 
 void initLua() {
     // init global state.
-    L = luaL_newstate();
-    nullDie(L);
-    luaL_openlibs(L);          // opens Lua 
-    luaopen_base(L);           // opens the basic library
-    luaopen_table(L);          // opens the table library 
-    luaopen_io(L);             // opens the I/O library 
-    luaopen_string(L);         // opens the string lib. 
-    luaopen_math(L);           // opens the math lib. 
+    _LS = luaL_newstate();
+    nullDie(_LS);
+    luaL_openlibs(_LS);          // opens Lua 
+    luaopen_base(_LS);           // opens the basic library
+    luaopen_table(_LS);          // opens the table library 
+    luaopen_io(_LS);             // opens the I/O library 
+    luaopen_string(_LS);         // opens the string lib. 
+    luaopen_math(_LS);           // opens the math lib. 
 }
 
 int main (void) {
@@ -63,11 +63,8 @@ int main (void) {
                                );
     
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); //SDL_RENDERER_PRESENTVSYNC );
-    lPutRenderer(L, renderer);
-
+    lPutRenderer(_LS, renderer);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-    // SDL_EnableKeyRepeat(0, 0); // disable key repeat.
- 
 
     // Check that the window was successfully created
     if (window == NULL) {
@@ -86,17 +83,14 @@ int main (void) {
     // font ----------------------------------------------------------------------------------------
     TTF_Init();
     TTF_Font* font = TTF_OpenFont("./media/FIXED_V0.TTF", 8);
-    lPutFont(L, font);
-    
-    register_callbacks(L);
+    lPutFont(_LS, font);
+    register_callbacks(_LS);
 
     // grid ----------------------------------------------------------------------------------------
     Atlas *gridAtlas = newAtlas(renderer, "./media/FIXED_V0.TTF", 8);
     Grid *grid = newGrid(100, 12, gridAtlas);
-    lPutGrid(L, grid);
-
+    lPutGrid(_LS, grid);
     GridEditor *ge = newGridEditor(grid);
-    
     
     // terminal ------------------------------------------------------------------------------------
     Atlas *termAtlas = newAtlas(renderer, "./media/Terminus.ttf", 16);
@@ -110,8 +104,7 @@ int main (void) {
     while( true ) {
         Uint64 loopTimeStart = SDL_GetTicks();
         
-        while(SDL_PollEvent(&event)) {
-            
+        while(SDL_PollEvent(&event)) {           
             // different state machines for different parts of the app.
             // the terminal should own one?
             // each cell could own a state machine.
@@ -149,6 +142,6 @@ int main (void) {
     SDL_Quit();
     TTF_Quit();
     dumpStack();
-    lua_close(L);
+    lua_close(_LS);
     return 0;
 }

@@ -15,7 +15,8 @@ newGridEditor(Grid* grid) {
     return ge;        
 }
 
-void gridEditorUpdateFocus(GridEditor *ge, SDL_Event *ev) {
+void
+gridEditorUpdateFocus(GridEditor *ge, SDL_Event *ev) {
     nullDie(ge); nullDie(ev);
     if (ev->type == SDL_MOUSEMOTION) {
         ge->hasFocus = gridContainsPoint(ge->grid, ev->motion.x, ev->motion.y);
@@ -26,7 +27,8 @@ void gridEditorUpdateFocus(GridEditor *ge, SDL_Event *ev) {
 
 // states
 // row select
-void gridEditorHandleTextInput(GridEditor *ge, SDL_Event *ev) {
+void
+gridEditorHandleTextInput(GridEditor *ge, SDL_Event *ev) {
     if (ev->type != SDL_TEXTINPUT) die("Got the wrong event type");
     switch(ev->window.event) {
     case 'q': exit(1);
@@ -44,7 +46,8 @@ void gridEditorHandleTextInput(GridEditor *ge, SDL_Event *ev) {
     } // end switch
 }
 
-void gridEditorProcessEvent(GridEditor *ge, SDL_Event *ev) {
+void
+gridEditorProcessEvent(GridEditor *ge, SDL_Event *ev) {
     nullDie(ge); nullDie(ev);
     
     // hack together some spaghetti state handling and then build a
@@ -85,20 +88,31 @@ void gridEditorProcessEvent(GridEditor *ge, SDL_Event *ev) {
     }}
 }
 
-
-void gridEditorUpdateOverCell(GridEditor *ge, SDL_Event *ev) {
+void
+gridEditorUpdateOverCell(GridEditor *ge, SDL_Event *ev) {
     Sint32 x = ev->motion.x;
     Sint32 y = ev->motion.y;
     ge->overCell = gridCursorCell(ge->grid, x, y);
+    gridEditorShowArguments(ge);
     printf("Got curCell @ (%d, %d)\n", x, y);
 }
 
-void gridEditorUpdateSelectedCell(GridEditor *ge, SDL_Event *ev) {
+void
+gridEditorShowArguments(GridEditor *ge) {
+    // draw arrows from the cells that contain argument.
+    // clear info box.
+    // draw this cell info.    
+}
+
+
+void
+gridEditorUpdateSelectedCell(GridEditor *ge, SDL_Event *ev) {
     // if over cell is not null then use that
     // otherwise wait until there is an overcell.
     if (!ge->overCell) return;
     ge->selectedCell = ge->overCell;
-    // select if deselected, deselect if selected.
+    
+    // select cell if deselected, deselect cell if already selected.
     cellSetSelect(ge->selectedCell, !ge->selectedCell->selected);
     printf("updated selected cell @ (%d, %d)\n", ge->overCell->x, ge->overCell->y);
 }

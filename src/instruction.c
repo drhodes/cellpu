@@ -1,5 +1,6 @@
 #include "err.h"
 #include "instruction.h"
+#include "common.h"
 
 // function NOP()
 //    local f = function(x)
@@ -37,18 +38,23 @@ iNOP() {
 //    return Instruction("CMPLE", f, {0x30, 0xAA, 0x30, 0xFF})
 // end
 
-
 // Bitwise AND of two nbr cells. -------------------------------------------------------------------
 
 static void
-opAND(struct Grid *grid, struct Cell* cell) {    
+opAND(struct Grid *grid, struct Cell* cell) {
+    nullDie(grid); nullDie(cell);
+    Cell* argCell1 = gridGetNbr(grid, cell->x, cell->y, cellGetArgWay1(cell));
+    Cell* argCell2 = gridGetNbr(grid, cell->x, cell->y, cellGetArgWay2(cell));
+    byte arg1 = argCell1->dataReg;
+    byte arg2 = argCell2->dataReg;    
+    cell->dataReg = arg1 & arg2;
 }
 
 Instruction*
 iAND() {
     Instruction *inst = instEmpty();
     strcpy(inst->name, "AND");
-    inst->color = (SDL_Color){0x30, 0xFF, 0x30, 0xFF};
+    inst->color = (SDL_Color){0xFF, 0x30, 0x30, 0xFF};
     inst->op = opAND;
     return inst;
 }

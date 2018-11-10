@@ -19,6 +19,7 @@ void gridEditorUpdateOverCell(GridEditor *ge, SDL_Event *ev);
 void gridEditorUpdateSelectedCell(GridEditor *ge, SDL_Event *ev);
 void gridEditorUpdateFocus(GridEditor *ge, SDL_Event *ev);
 void gridEditorHandleTextInput(GridEditor *ge, SDL_Event *ev);
+void gridEditorShowArguments(GridEditor *ge);
 
 // these may be used to display help for user.
 void gridEditShowKeys();

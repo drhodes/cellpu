@@ -80,3 +80,4 @@ flycheck_*.el
 *.dSYM/
 *.su
 sim
+dreamcell.html

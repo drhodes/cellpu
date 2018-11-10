@@ -130,10 +130,23 @@ gridProcessEvent(Grid *grid, SDL_Event *ev) {
     return true;
 }
 
+struct Cell*
+gridGetNbr(Grid *grid, int x, int y, Way w) {
+    switch (w) {
+    case N: return gridGetCell(grid, x, y-1);
+    case S: return gridGetCell(grid, x, y+1);
+    case E: return gridGetCell(grid, x+1, y);
+    case W: return gridGetCell(grid, x-1, y);
+    }
+    die("bad code path");
+}
+
 
 // void
 // gridUpdateHoodView(Grid *grid, int x, int y) {
 // }
+
+
 
 
 

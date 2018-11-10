@@ -15,7 +15,7 @@
 #include "atlas.h"
 #include "common.h"
 
-extern lua_State* L; // from main.c
+extern lua_State* _LS; // from main.c
 
 Term*
 newTerm(SDL_Window* window, Atlas* atlas, int left, int top, int columns, int rows) {
@@ -209,12 +209,12 @@ termProcessEvent(Term* term, SDL_Event* ev) {
 void
 termDoReturn(Term *term) {
     char *line = termGetCurLine(term);
-    int err = luaL_loadbuffer(L, line, strlen(line), "line") || lua_pcall(L, 0, 0, 0);
+    int err = luaL_loadbuffer(_LS, line, strlen(line), "line") || lua_pcall(_LS, 0, 0, 0);
     
     if (err) {
-        fprintf(stderr, "%s\n", lua_tostring(L, -1));
-        perr(lua_tostring(L, -1));
-        lua_pop(L, 1);
+        fprintf(stderr, "%s\n", lua_tostring(_LS, -1));
+        perr(lua_tostring(_LS, -1));
+        lua_pop(_LS, 1);
     }    
     termPut(term, line);
 }

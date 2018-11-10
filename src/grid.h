@@ -26,6 +26,7 @@ void gridSetSelectAllCells(Grid *grid, bool b);
     
 struct Cell* gridGetCell(Grid *grid, int x, int y);
 struct Cell* gridCursorCell(Grid *grid, int pixelX, int pixelY);
+struct Cell *gridGetNbr(Grid *grid, int x, int y, Way w);
 
 
 

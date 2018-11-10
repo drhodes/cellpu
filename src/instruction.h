@@ -29,14 +29,21 @@ typedef struct Instruction {
     void (*op)(struct Grid*, struct Cell*);
 } Instruction;
 
+
+// Broadcast instructions --------------------------------------------------------------------------
+
 Instruction* iNOP();
 Instruction* iCMPLE();
+
+Instruction* iDATA(); // instruction as data.
+Instruction* iPROC(); // data as instruction.
 
 // bitwise AND of two cells.
 Instruction* iAND();
 Instruction* iOR();
 
 void freeInstruction(Instruction* inst);
+
 
 
 //    self.render = function(x, y)
