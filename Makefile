@@ -1,12 +1,12 @@
 ## c-json is crying about deprecated functions that have since been undeprecated.
 
-CFLAGS=-Wall -O0 -g -std=c11 -Wno-deprecated-declarations -fsanitize=address -Wno-switch
+CFLAGS=-Wall -O0 -g -std=c++17 -Wno-deprecated-declarations -fsanitize=address -Wno-switch
 LDFLAGS=-lSDL2 -llua5.3 -lSDL2_ttf -ljson-c
 TESTFLAGS=-Wall -g -std=c11
 TESTLIBS= -lSDL2 -llua5.3 -lcheck -lsubunit -pthread -lrt -lm -lsubunit
 EXE=sim
 TESTEXE=testbin
-CC=gcc
+CC=g++
 
 all: clean main ## build
 

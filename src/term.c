@@ -1,6 +1,3 @@
-#ifndef TERM_C
-#define TERM_C
-
 #include <stdbool.h>
 
 #include <SDL2/SDL_ttf.h>
@@ -34,6 +31,7 @@ newTerm(SDL_Window* window, Atlas* atlas, int left, int top, int columns, int ro
     for (int i=0; i<TERM_MAX_LINES; i++) {
         term->lines[i] = calloc(term->numCols, sizeof(char));
     }
+    
     return term;
 }
 
@@ -160,7 +158,7 @@ termContainsPoint(Term *term, Sint32 x, Sint32 y) {
     nullDie(term);
     BBox bb;
     termBBox(term, &bb);
-    return bboxContains(bb, x, y);
+    return bb.containsPx(x, y);    
 }
 
 bool
@@ -287,8 +285,6 @@ void termDoLineInput(Term *term) {
     //  }
 }
 */
-
-#endif // TERM_C
 
 
 

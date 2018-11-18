@@ -1,8 +1,7 @@
 // @file
 // @brief types used everywhere.
 
-#ifndef COMMON_H
-#define COMMON_H
+#pragma once
 
 #include <stdbool.h>
 #include <SDL2/SDL.h>
@@ -36,7 +35,3 @@ Way wayFromHeading(Way heading, Dir dir);
 
 bool oddSecond();
 bool oddMoment();
-
-
-
-#endif // COMMON_H

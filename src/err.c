@@ -1,12 +1,12 @@
 // @file
 // @brief This file is marvelous.
 
-#ifndef ERR_C
-#define ERR_C
-
 #include <stdlib.h>
 #include <stdio.h>
+#include <string>
 #include "err.h"
+
+using namespace std;
 
 static ErrorStack *_estack = NULL;
 
@@ -22,16 +22,15 @@ void
 dumpStack() {
     if (_estack) printf(" -- ERROR STACK --\n");
     while (_estack) {
-        printf(" %s (%s, %d)\n", _estack->e.msg, _estack->e.file, _estack->e.line );
+        //printf(" %s (%s, %d)\n", _estack->e.msg, _estack->e.file, _estack->e.line );
+        cerr << _estack->e.msg << endl;
         ErrorStack *tmp = _estack;
         _estack = _estack->next;
         free(tmp);
     }
 }
 
-const char*
+string
 errTopMsg() {
     return _estack->e.msg;
 }
-
-#endif // ERR_C

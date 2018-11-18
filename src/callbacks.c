@@ -104,7 +104,7 @@ lSelectCell(lua_State *L)
     Grid *grid = lGetGrid(L);    
     Cell *cell = gridGetCell(grid, x, y);
     if (cell==NULL) {        
-        luaL_error(L, errTopMsg()); 
+        luaL_error(L, errTopMsg().c_str()); 
         return 1;
     }
     

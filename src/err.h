@@ -1,16 +1,17 @@
-#ifndef ERR_H
-#define ERR_H
+#pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
+#include <string>
+#include <iostream>
+
+using namespace std;
 
 // global error stack.
 
 typedef struct Err {
-    const char *msg;
-    char *file;
+    string msg;
+    string file;
     int line;    
-    const char *func;
+    string func;
 } Err;
 
 typedef struct ErrorStack {
@@ -36,7 +37,7 @@ typedef struct ErrorStack {
 
 void pushErr(Err e);
 void dumpStack();
-const char* errTopMsg();
+string errTopMsg();
 
 
-#endif // ERR_H
+

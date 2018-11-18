@@ -1,17 +1,15 @@
 // @file
 // @brief This file is marvelous.
 
-#ifndef BBOX_H
-#define BBOX_H
+#pragma once
 
 #include <stdbool.h> 
 
-typedef struct {
+class BBox {
+ public:
     int top, left, height, width;
-} BBox;
 
-bool bboxContains(BBox bb, int x, int y);
-
-
-#endif // BBOX
-
+    BBox();
+    BBox(int, int, int, int);
+    bool containsPx(int, int);    
+};
