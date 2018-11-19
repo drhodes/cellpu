@@ -94,11 +94,10 @@ int main (void) {
     
     // terminal ------------------------------------------------------------------------------------
     Atlas *termAtlas = newAtlas(renderer, "./media/Terminus.ttf", 16);
-    Term *term = newTerm(window, termAtlas, 5, 750, 80, 17);
-    nullDie(term);
+    Term term(window, termAtlas, 5, 750, 80, 17);
 
-    termPut(term, "-- PUNC   Distributed Processing Unit Simulator, the repl is Lua.");
-    termPut(term, "--  UNCPU -------------------------------------------------------");
+    term.put("-- PUNC   Distributed Processing Unit Simulator, the repl is Lua.");
+    term.put("--  UNCPU -------------------------------------------------------");
     
     SDL_Event event;
     while( true ) {
@@ -110,7 +109,7 @@ int main (void) {
             // each cell could own a state machine.
         
             gridEditorProcessEvent(ge, &event);
-            termProcessEvent(term, &event);
+            term.processEvent(&event);
             gridProcessEvent(grid, &event);
             
             if (event.type == SDL_KEYDOWN) {            
@@ -118,10 +117,10 @@ int main (void) {
                     goto done;
                 }
             }
-        }        
-        termRender(term, renderer);
-        gridRender(grid, renderer);
+        }
         
+        term.render(renderer);
+        gridRender(grid, renderer);
         SDL_RenderPresent(renderer);
         Uint64 loopTimeStop = SDL_GetTicks();
         Uint64 delta = loopTimeStop - loopTimeStart;
@@ -132,7 +131,6 @@ int main (void) {
     printf("SDL: %s\n", SDL_GetError());
     
  done:
-    freeTerm(term);
     freeAtlas(termAtlas);
     freeAtlas(gridAtlas);
     

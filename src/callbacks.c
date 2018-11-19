@@ -112,6 +112,14 @@ lSelectCell(lua_State *L)
     return 0;
 }
 
+int
+lDump(lua_State *L)
+{
+    _estack.dump();
+    return 0;
+}
+
+
 void
 register_callbacks(lua_State *L) {
     // clear the renderer
@@ -132,6 +140,10 @@ register_callbacks(lua_State *L) {
 
     lua_pushcfunction(L, lSelectCell);
     lua_setglobal(L, "selectCell");
+
+    lua_pushcfunction(L, lDump);
+    lua_setglobal(L, "dump");
+
     
-    lua_pop(L, 6);
+    lua_pop(L, 7);
 }

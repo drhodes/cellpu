@@ -2,10 +2,10 @@
 
 CFLAGS= -O0 -g -std=c++17 \
 	-Wall \
-	-Werror \
 	-Wno-deprecated-declarations \
 	-Wno-switch \
 	-fsanitize=address \
+	#-Werror \
 
 LDFLAGS=-lSDL2 -llua5.3 -lSDL2_ttf -ljson-c
 TESTFLAGS=-Wall -g -std=c11
@@ -57,7 +57,7 @@ bbox.o:
 	${CC} -c ${CFLAGS} src/bbox.cpp -o $@
 
 term.o:
-	${CC} -c ${CFLAGS} src/term.c -o $@
+	${CC} -c ${CFLAGS} src/term.cpp -o $@
 
 opcode.o:
 	${CC} -c ${CFLAGS} src/opcode.c -o $@
@@ -82,7 +82,7 @@ test-optical-ctl: optical-ctl FORCE ## test
 	./${TESTEXE}
 
 work: ## open all files in editor
-	emacs -nw src/*.c src/*.h lua/*.lua Makefile
+	emacs -nw src/*.c src/*.cpp src/*.h lua/*.lua Makefile
 
 add: clean ## add files to the git repo
 	git add -A :/
