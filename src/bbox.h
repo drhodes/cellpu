@@ -11,5 +11,5 @@ class BBox {
 
     BBox();
     BBox(int, int, int, int);
-    bool containsPx(int, int);    
+    bool containsPx(int, int);
 };

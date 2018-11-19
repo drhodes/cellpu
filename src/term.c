@@ -29,7 +29,7 @@ newTerm(SDL_Window* window, Atlas* atlas, int left, int top, int columns, int ro
     term->left = left;
 
     for (int i=0; i<TERM_MAX_LINES; i++) {
-        term->lines[i] = calloc(term->numCols, sizeof(char));
+        term->lines[i] = (char*)calloc(term->numCols, sizeof(char));
     }
     
     return term;
@@ -210,8 +210,9 @@ termDoReturn(Term *term) {
     int err = luaL_loadbuffer(_LS, line, strlen(line), "line") || lua_pcall(_LS, 0, 0, 0);
     
     if (err) {
+        string errStr(lua_tostring(_LS, -1));
         fprintf(stderr, "%s\n", lua_tostring(_LS, -1));
-        perr(lua_tostring(_LS, -1));
+        perr(errStr);
         lua_pop(_LS, 1);
     }    
     termPut(term, line);
@@ -224,7 +225,7 @@ termGetCurLine(Term *term) {
 
 static bool
 curLineFull(Term *term) {
-    return strlen(termGetCurLine(term)) >= term->numCols - 1;
+    return (int)strlen(termGetCurLine(term)) >= term->numCols - 1;
 }
 
 /// returns false when can't append char to current line.
@@ -251,7 +252,6 @@ termPopChar(Term *term) {
     }
     return false;
 }
-
 
 /*
 void termDoLineInput(Term *term) {

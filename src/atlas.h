@@ -14,7 +14,7 @@ typedef struct {
     int surfWidth, surfHeight;
 } Atlas;
 
-Atlas *newAtlas();
+Atlas *newAtlas(SDL_Renderer *renderer, const char *fontFilename, int size);
 SDL_Texture *atlasGetGlyph(Atlas*, char);
 
 void freeAtlas(Atlas*);

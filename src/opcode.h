@@ -1,7 +1,9 @@
-#ifndef OPCODE_H
-#define OPCODE_H
+#pragma once
 
 #include <json-c/json.h>
+#include <string>
+
+using namespace std;
 
 // {type: Opcode, val: int}
 typedef enum Opcode {     
@@ -10,9 +12,5 @@ typedef enum Opcode {
                      SWAP = 2
 } Opcode;
 
-
-
 json_object *opcodeToJson(Opcode);
-Opcode jsonToOpcode();
-
-#endif // OPCODE_H
+Opcode jsonToOpcode(string str);

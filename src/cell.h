@@ -1,7 +1,6 @@
 // @file
 // @brief something something doughnuts
-#ifndef CELL_H
-#define CELL_H
+#pragma once
 
 #include <stdbool.h>
 #include <SDL2/SDL.h>
@@ -48,8 +47,6 @@ typedef struct Cell {
     struct Instruction *inst;
 } Cell;
 
-
-
 Cell* newCell(int x, int y);
 
 void cellSetColReg(Cell* cell, int n);
@@ -77,4 +74,3 @@ Way cellGetArgWay2(struct Cell* cell);
 void borderBox(SDL_Renderer *renderer, int x, int y, int w, int h, SDL_Color border, SDL_Color fill);
 void drawText(SDL_Renderer *renderer, Atlas *atlas, int x, int y, const char* txt);
 
-#endif // CELL_H

@@ -154,31 +154,31 @@ cellRender(Cell *cell, Atlas *atlas, SDL_Renderer *renderer) {
 
 Way
 cellGetArgWay1(struct Cell* cell) {
-    Way w;
+    Dir d;
     switch(cell->cfg.inputPorts.type) {
         // this is nasty, must be changed.
     case ONE_PORT_CFG: {
-        w = cell->cfg.inputPorts.value.inputOnePort.input;
+        d = cell->cfg.inputPorts.value.inputOnePort.input;
         break;
     }
     case TWO_PORT_CFG: {
-        w = cell->cfg.inputPorts.value.inputTwoPort.leftInput;
+        d = cell->cfg.inputPorts.value.inputTwoPort.leftInput;
         break;  // just in case another port configuration is introduced.
     }}
-    return wayFromHeading(cell->cfg.heading, w);
+    return wayFromHeading(cell->cfg.heading, d);
 }
 
 Way
 cellGetArgWay2(struct Cell* cell) {
-    Way w;
+    Dir d;
     switch(cell->cfg.inputPorts.type) {
     case ONE_PORT_CFG:
         die("This cell doesn't not support a second input argument");
     case TWO_PORT_CFG:
-        w = cell->cfg.inputPorts.value.inputTwoPort.rightInput;
+        d = cell->cfg.inputPorts.value.inputTwoPort.rightInput;
         break; // just in case another port configuration is introduced.
     }
-    return wayFromHeading(cell->cfg.heading, w);
+    return wayFromHeading(cell->cfg.heading, d);
 }
 
 // DONT need to validate cell config yet, check for bit errors, this isn't a bitlevel

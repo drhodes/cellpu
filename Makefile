@@ -1,6 +1,12 @@
 ## c-json is crying about deprecated functions that have since been undeprecated.
 
-CFLAGS=-Wall -O0 -g -std=c++17 -Wno-deprecated-declarations -fsanitize=address -Wno-switch
+CFLAGS= -O0 -g -std=c++17 \
+	-Wall \
+	-Werror \
+	-Wno-deprecated-declarations \
+	-Wno-switch \
+	-fsanitize=address \
+
 LDFLAGS=-lSDL2 -llua5.3 -lSDL2_ttf -ljson-c
 TESTFLAGS=-Wall -g -std=c11
 TESTLIBS= -lSDL2 -llua5.3 -lcheck -lsubunit -pthread -lrt -lm -lsubunit
@@ -18,7 +24,7 @@ profile: clean main ## start cachegrind after some use
 	cachegrind callgrind.out*
 
 watch: ## setup a watch for the source directory to rebuild on change
-	when-changed -r Makefile src/*.c src/*.h -c "clear && make clean && make main"
+	when-changed -r Makefile src/*.c src/*.cpp src/*.h -c "clear && make clean && make -j8 main"
 
 common.o: 
 	${CC} -c ${CFLAGS} src/common.c -o $@
@@ -42,13 +48,13 @@ display-state.o:
 	${CC} -c ${CFLAGS} src/display-state.c -o $@
 
 err.o:
-	${CC} -c ${CFLAGS} src/err.c -o $@
+	${CC} -c ${CFLAGS} src/err.cpp -o $@
 
 callbacks.o:
 	${CC} -c ${CFLAGS} src/callbacks.c -o $@
 
 bbox.o:
-	${CC} -c ${CFLAGS} src/bbox.c -o $@
+	${CC} -c ${CFLAGS} src/bbox.cpp -o $@
 
 term.o:
 	${CC} -c ${CFLAGS} src/term.c -o $@

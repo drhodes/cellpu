@@ -51,7 +51,7 @@ gridContainsPoint(Grid *grid, Sint32 x, Sint32 y) {
     nullDie(grid);
     BBox bb;
     gridBBox(grid, &bb);
-    return bboxContains(bb, x, y);
+    return bb.containsPx(x, y);
 }
 
 Cell*

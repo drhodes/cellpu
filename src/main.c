@@ -141,7 +141,7 @@ int main (void) {
     
     SDL_Quit();
     TTF_Quit();
-    dumpStack();
+    _estack.dump();
     lua_close(_LS);
     return 0;
 }

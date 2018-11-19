@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <string.h>
+#include <string>
 #include <json-c/json.h>
 #include "opcode.h"
 #include "err.h"
 
+using namespace std;
 
 
 // {type: Opcode, val: int}
@@ -24,7 +26,8 @@ json_object *opcodeToJson(Opcode opc) {
 }
 
 
-Opcode jsonToOpcode(char *str) {
+Opcode jsonToOpcode(string s) {
+    const char *str = s.c_str();
     struct json_object *obj = json_tokener_parse(str); 
     nullDieMsg(obj, "Could not parse Opcode from json");
     

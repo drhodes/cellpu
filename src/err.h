@@ -5,39 +5,42 @@
 
 using namespace std;
 
-// global error stack.
+class Err {
+public:
+  string msg;
+  string file;
+  int line;    
+  string func;
+};
 
-typedef struct Err {
-    string msg;
-    string file;
-    int line;    
-    string func;
-} Err;
-
-typedef struct ErrorStack {
-    Err e;
-    struct ErrorStack *next;
-} ErrorStack;
-
+class ErrorStack {  
+  static const int STACK_MAX = 512;
+private:  
+  Err items[STACK_MAX]; 
+  int stackIdx;
+  
+  Err* top();
+public:
+  ErrorStack();
+  void pushErr(Err e);
+  void dump();
+  string topMsg();
+};
 
 // -------------------------------------------------------------------------------------------------
 // GLOBAL error stack.
-
 // TODO improve perr to accept var args
-    
-#define perr(errmsg) {                                                                             \
-        Err e = { .msg = errmsg, .file = __FILE__, .line = __LINE__, .func = "__FUNCTION__" };     \
-        pushErr(e);                                                                                \
+
+extern ErrorStack _estack; // err.c
+
+#define perr(errmsg) { \
+        Err e = { .msg = errmsg, .file = __FILE__, .line = __LINE__, .func = __FUNCTION__ }; \
+        _estack.pushErr(e);                                                     \
     };
 
-#define nullDieMsg(ptr, msg) { if (ptr==NULL) { perr(msg); dumpStack(); } }
+#define nullDieMsg(ptr, msg) { if (ptr==NULL) { perr(msg); _estack.dump(); } }
 #define nullDie(ptr) { nullDieMsg(ptr, "got null pointer"); }
-
-#define die(msg) { perr(msg); dumpStack(); exit(1); }
-
-void pushErr(Err e);
-void dumpStack();
-string errTopMsg();
+#define die(msg) { perr(msg); _estack.dump(); exit(1); }
 
 
 
