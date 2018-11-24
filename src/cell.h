@@ -38,39 +38,39 @@ typedef struct CellConfig {
     // cell outputs
 } CellConfig;
 
-
-typedef struct Cell {
+class Cell {
+ public: 
     int x, y, value, size;
     bool selected, broadcasting, listening;
     byte dataReg, colReg, rowReg;
     CellConfig cfg;
     struct Instruction *inst;
-} Cell;
 
-Cell* newCell(int x, int y);
+    Cell(int, int);
 
-void cellSetColReg(Cell* cell, int n);
-void cellSetRowReg(Cell* cell, int n);
-void cellSetDataReg(Cell* cell, int n);
+    void setColReg(int n);
+    void setRowReg(int n);
+    void setDataReg(int n);
 
-void cellSetSelect(Cell *cell, bool b);
+    void setSelect(bool b);
+    void setBroadcast(bool b);
+    void setListen(bool b);
 
-void cellSetBroadcast(Cell *cell, bool b);
-void cellSetListen(Cell *cell, bool b);
-void cellSetListen(Cell *cell, bool b);
+    SDL_Color color();
 
-SDL_Color cellColor(Cell *cell);
+    void cycle(struct Grid *grid);
+    void render(Atlas *atlas, SDL_Renderer *renderer);
+    void cfgInputValidate();
 
-void cellCycle(Cell *cell, struct Grid *grid);
-void cellRender(Cell *cell, Atlas *atlas, SDL_Renderer *renderer);
-void cellCfgInputValidate(Cell *cell);
+    string instructionName();
+    
+    Way getArgWay1();
+    Way getArgWay2();
+};
 
-const char* cellInstructionName(Cell *cell);
-Way cellGetArgWay1(struct Cell* cell);
-Way cellGetArgWay2(struct Cell* cell);
 
 
 // move these to display.h or something.
 void borderBox(SDL_Renderer *renderer, int x, int y, int w, int h, SDL_Color border, SDL_Color fill);
-void drawText(SDL_Renderer *renderer, Atlas *atlas, int x, int y, const char* txt);
+void drawText(SDL_Renderer *renderer, Atlas *atlas, int x, int y, string);
 

@@ -96,8 +96,7 @@ int main (void) {
     Atlas *termAtlas = newAtlas(renderer, "./media/Terminus.ttf", 16);
     Term term(window, termAtlas, 5, 750, 80, 17);
 
-    term.put("-- PUNC   Distributed Processing Unit Simulator, the repl is Lua.");
-    term.put("--  UNCPU -------------------------------------------------------");
+    term.put("-- PUNC   Localized Distributed Processing Unit Simulator, the repl is Lua.");
     
     SDL_Event event;
     while( true ) {

@@ -18,7 +18,7 @@ newGrid(int size, int displaySize, Atlas *atlas) {
     for (int row=0; row<size; row++) {
         grid->cells[row] = (Cell**)calloc(sizeof(Cell**), size);
         for (int col=0; col<size; col++) {
-            grid->cells[row][col] = newCell(row, col);
+            grid->cells[row][col] = new Cell(row, col);
         }
     }
     return grid;
@@ -29,7 +29,7 @@ gridRender(Grid *grid, SDL_Renderer *renderer) {
     // render grid cells.
     for (int row=0; row < grid->displaySize; row++) {
         for (int col=0; col < grid->displaySize; col++) {
-            cellRender(grid->cells[row][col], grid->atlas, renderer);
+            grid->cells[row][col]->render(grid->atlas, renderer);
         }
     }
 }
@@ -91,7 +91,7 @@ gridGetCell(Grid *grid, int x, int y) {
 void
 gridCycleCell(Grid *grid, int x, int y) {
     Cell* c = gridGetCell(grid, x, y);
-    cellCycle(c, grid);
+    c->cycle(grid);
 }
 
 void gridSetSelectAllCells(Grid *grid, bool b) {
@@ -100,7 +100,7 @@ void gridSetSelectAllCells(Grid *grid, bool b) {
         for (int y = 0; y < grid->size; y++) {
             Cell *c = gridGetCell(grid, x, y);
             nullDie(c);
-            cellSetSelect(c, b);
+            c->setSelect(b);
         }
     }
 }

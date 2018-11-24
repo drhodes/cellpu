@@ -113,7 +113,7 @@ gridEditorUpdateSelectedCell(GridEditor *ge, SDL_Event *ev) {
     ge->selectedCell = ge->overCell;
     
     // select cell if deselected, deselect cell if already selected.
-    cellSetSelect(ge->selectedCell, !ge->selectedCell->selected);
+    ge->selectedCell->setSelect(!ge->selectedCell->selected);
     printf("updated selected cell @ (%d, %d)\n", ge->overCell->x, ge->overCell->y);
 }
 

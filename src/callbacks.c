@@ -108,7 +108,7 @@ lSelectCell(lua_State *L)
         return 1;
     }
     
-    cellSetSelect(cell, true);
+    cell->setSelect(true);
     return 0;
 }
 

@@ -39,7 +39,7 @@ grid-edit.o:
 	${CC} -c ${CFLAGS} src/grid-edit.c -o $@
 
 cell.o:
-	${CC} -c ${CFLAGS} src/cell.c -o $@
+	${CC} -c ${CFLAGS} src/cell.cpp -o $@
 
 atlas.o:
 	${CC} -c ${CFLAGS} src/atlas.c -o $@
