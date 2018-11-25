@@ -40,11 +40,11 @@ typedef struct CellConfig {
 
 class Cell {
  public: 
-    int x, y, value, size;
-    bool selected, broadcasting, listening;
-    byte dataReg, colReg, rowReg;
-    CellConfig cfg;
-    struct Instruction *inst;
+    int x_, y_, value_, size_;
+    bool selected_, broadcasting_, listening_;
+    byte dataReg_, colReg_, rowReg_;
+    CellConfig cfg_;
+    struct Instruction *inst_;
 
     Cell(int, int);
 
@@ -72,5 +72,5 @@ class Cell {
 
 // move these to display.h or something.
 void borderBox(SDL_Renderer *renderer, int x, int y, int w, int h, SDL_Color border, SDL_Color fill);
-void drawText(SDL_Renderer *renderer, Atlas *atlas, int x, int y, string);
+// void drawText(SDL_Renderer *renderer, Atlas *atlas, int x, int y, string);
 

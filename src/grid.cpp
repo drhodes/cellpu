@@ -38,7 +38,7 @@ void
 gridBBox(Grid *grid, BBox *bb) {
     nullDie(grid);
     nullDie(bb);
-    int cellSize = grid->cells[0][0]->size;
+    int cellSize = grid->cells[0][0]->size_;
 
     bb->top = 0;
     bb->left = 0;
@@ -59,7 +59,7 @@ gridCursorCell(Grid *grid, Sint32 pixelX, Sint32 pixelY) {
     nullDie(grid);
     if (!gridContainsPoint(grid, pixelX, pixelY)) return NULL;
     
-    int cellSize = grid->cells[0][0]->size;
+    int cellSize = grid->cells[0][0]->size_;
     int x = pixelX / cellSize;
     int y = pixelY / cellSize;    
     return grid->cells[x][y];
@@ -124,7 +124,7 @@ gridProcessEvent(Grid *grid, SDL_Event *ev) {
         Cell *c = gridCursorCell(grid, x, y);
         if (!c) break;
         
-        printf("OVER CELL: %d, %d\n", c->x, c->y);        
+        printf("OVER CELL: %d, %d\n", c->x_, c->y_);        
     }}
     
     return true;

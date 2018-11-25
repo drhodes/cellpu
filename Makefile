@@ -27,31 +27,34 @@ watch: ## setup a watch for the source directory to rebuild on change
 	when-changed -r Makefile src/*.c src/*.cpp src/*.h -c "clear && make clean && make -j8 main"
 
 common.o: 
-	${CC} -c ${CFLAGS} src/common.c -o $@
+	${CC} -c ${CFLAGS} src/common.cpp -o $@
 
 instruction.o: 
-	${CC} -c ${CFLAGS} src/instruction.c -o $@
+	${CC} -c ${CFLAGS} src/instruction.cpp -o $@
 
 grid.o: 
-	${CC} -c ${CFLAGS} src/grid.c -o $@
+	${CC} -c ${CFLAGS} src/grid.cpp -o $@
 
 grid-edit.o: 
-	${CC} -c ${CFLAGS} src/grid-edit.c -o $@
+	${CC} -c ${CFLAGS} src/grid-edit.cpp -o $@
 
 cell.o:
 	${CC} -c ${CFLAGS} src/cell.cpp -o $@
 
+draw.o:
+	${CC} -c ${CFLAGS} src/draw.cpp -o $@
+
 atlas.o:
-	${CC} -c ${CFLAGS} src/atlas.c -o $@
+	${CC} -c ${CFLAGS} src/atlas.cpp -o $@
 
 display-state.o:
-	${CC} -c ${CFLAGS} src/display-state.c -o $@
+	${CC} -c ${CFLAGS} src/display-state.cpp -o $@
 
 err.o:
 	${CC} -c ${CFLAGS} src/err.cpp -o $@
 
 callbacks.o:
-	${CC} -c ${CFLAGS} src/callbacks.c -o $@
+	${CC} -c ${CFLAGS} src/callbacks.cpp -o $@
 
 bbox.o:
 	${CC} -c ${CFLAGS} src/bbox.cpp -o $@
@@ -60,22 +63,23 @@ term.o:
 	${CC} -c ${CFLAGS} src/term.cpp -o $@
 
 opcode.o:
-	${CC} -c ${CFLAGS} src/opcode.c -o $@
+	${CC} -c ${CFLAGS} src/opcode.cpp -o $@
 
-OBJ	=	common.o\
-		display-state.o\
-		callbacks.o err.o\
-		term.o\
+OBJ	=	atlas.o\
 		bbox.o\
-		atlas.o\
+		callbacks.o err.o\
 		cell.o\
+		common.o\
+		display-state.o\
+		draw.o\
+		grid-edit.o\
 		grid.o\
 		instruction.o\
 		opcode.o\
-		grid-edit.o
+		term.o
 
 main: ${OBJ} ## 
-	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.c $?
+	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.cpp $?
 
 test-optical-ctl: optical-ctl FORCE ## test
 	${CC} ${TESTFLAGS} test/test-optical-ctl.c ${TESTLIBS} -o ${TESTEXE}

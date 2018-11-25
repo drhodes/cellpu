@@ -43,11 +43,11 @@ iNOP() {
 static void
 opAND(struct Grid *grid, struct Cell* cell) {
     nullDie(grid); nullDie(cell);
-    Cell* argCell1 = gridGetNbr(grid, cell->x, cell->y, cell->getArgWay1());
-    Cell* argCell2 = gridGetNbr(grid, cell->x, cell->y, cell->getArgWay2());
-    byte arg1 = argCell1->dataReg;
-    byte arg2 = argCell2->dataReg;    
-    cell->dataReg = arg1 & arg2;
+    Cell* argCell1 = gridGetNbr(grid, cell->x_, cell->y_, cell->getArgWay1());
+    Cell* argCell2 = gridGetNbr(grid, cell->x_, cell->y_, cell->getArgWay2());
+    byte arg1 = argCell1->dataReg_;
+    byte arg2 = argCell2->dataReg_;    
+    cell->dataReg_ = arg1 & arg2;
 }
 
 Instruction*

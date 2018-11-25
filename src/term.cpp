@@ -76,8 +76,8 @@ Term::boundingBox() {
   int promptSize = 2; // TODO consider custom prompt.
   bb->top = top;
   bb->left = left;
-  bb->height = atlas->surfHeight * (numRows + 1);
-  bb->width  = atlas->surfWidth * (promptSize + numCols);
+  bb->height = atlas->surfHeight_ * (numRows + 1);
+  bb->width  = atlas->surfWidth_ * (promptSize + numCols);
   return bb;
 }
 
@@ -87,17 +87,17 @@ Term::renderCursor(SDL_Renderer *renderer) {
   string line = getCurLine();
   int curCol = line.length();
   int promptSize = 2; // TODO consider custom prompt.
-  int x = left + ((promptSize + curCol) * atlas->surfWidth);
+  int x = left + ((promptSize + curCol) * atlas->surfWidth_);
   int y = top;
 
   if (curLine >= numRows) {
     // when the cursor hits the bottom of the terminal.
-    y += numRows * atlas->surfHeight;
+    y += numRows * atlas->surfHeight_;
   } else {
-    y += curLine * atlas->surfHeight;
+    y += curLine * atlas->surfHeight_;
   }
     
-  SDL_Rect rect = { x, y, atlas->surfWidth, atlas->surfHeight };
+  SDL_Rect rect = { x, y, atlas->surfWidth_, atlas->surfHeight_ };
   
   // Blink
   if (oddSecond()) SDL_RenderFillRect(renderer, &rect); 
@@ -142,14 +142,14 @@ Term::renderLine(SDL_Renderer *renderer, int lineNum, int rowNum) {
   //strncat(str, term->lines[lineNum], term->numCols-2);
         
   int curX = left;
-  int curY = top + rowNum * atlas->surfHeight;
+  int curY = top + rowNum * atlas->surfHeight_;
     
   for (int i=0; str[i]; i++) {
-      SDL_Rect msgRect = { curX, curY, atlas->surfWidth, atlas->surfHeight };
-      SDL_Texture* glyph = atlasGetGlyph(atlas, str[i]);
+      SDL_Rect msgRect = { curX, curY, atlas->surfWidth_, atlas->surfHeight_ };
+      SDL_Texture* glyph = atlas->getGlyph(str[i]);
       nullDieMsg(glyph, "failed to get a glyph in termRender");            
       SDL_RenderCopy(renderer, glyph, NULL, &msgRect);
-      curX += atlas->surfWidth;
+      curX += atlas->surfWidth_;
   }
 }
 
