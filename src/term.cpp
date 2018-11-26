@@ -12,10 +12,9 @@
 #include "atlas.h"
 #include "common.h"
 
-extern lua_State* _LS; // from main.c
+extern lua_State *_LS; // from main.c
 
-
-Term::Term(SDL_Window* window, Atlas* atlas, int left, int top, int columns, int rows) {
+Term::Term(SDL_Window *window, Atlas *atlas, int left, int top, int columns, int rows) {
   this->window = window;
   this->atlas = atlas;
   this->curLine = 0;
@@ -240,7 +239,8 @@ Term::pushChar(char c) {
 
 void
 Term::popChar() {
-  lines[curLine].pop_back();
+  if (getCurLine().length() > 0)
+    lines[curLine].pop_back();
 }
 
 /*

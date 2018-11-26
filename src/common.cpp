@@ -1,7 +1,6 @@
 #include "common.h"
 #include "err.h"
 
-
 bool
 oddSecond() {
     return SDL_GetTicks() % 2000 < 1000;
@@ -22,7 +21,6 @@ headingToChar(Way w) {
     default: return '?';
     }
 }
-
 
 // cells don't flip over, they only rotate.
 Way

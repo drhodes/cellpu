@@ -84,7 +84,7 @@ int main (void) {
   TTF_Init();
   TTF_Font* font = TTF_OpenFont("./media/FIXED_V0.TTF", 8);
   lPutFont(_LS, font);
-  register_callbacks(_LS);
+  callback::register_all(_LS);
 
   // grid ----------------------------------------------------------------------------------------
   Atlas *gridAtlas = new Atlas(renderer, "./media/FIXED_V0.TTF", 8);
