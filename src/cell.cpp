@@ -28,35 +28,9 @@ Cell::setSelect(bool b) {
 SDL_Color
 Cell::color() {
   // change this.
-  SDL_Color c = {0x56, 0x56, 0x56, 0xFF};
+  SDL_Color c = {0x56, 0x56, 0x56, 0xFF};  
   return c;
 }
-
-void
-borderBox(SDL_Renderer *renderer, int x, int y, int w, int h, SDL_Color border, SDL_Color fill) {
-  SDL_Rect rect = {x, y, h, w};
-  SDL_SetRenderDrawColor(renderer, border.r, border.g, border.b, border.a);
-  SDL_RenderFillRect(renderer, &rect);
-  rect.x += 2; // shrink the rect and redraw
-  rect.y += 2; // to make border of width 2
-  rect.h -= 2;
-  rect.w -= 2; 
-  SDL_SetRenderDrawColor(renderer, fill.r, fill.g, fill.b, fill.a);
-  SDL_RenderFillRect(renderer, &rect);
-}
-
-// void
-// drawText(SDL_Renderer *renderer, Atlas *atlas, int x, int y, string txt) {
-//   SDL_Rect msgRect = { x, y, atlas->surfWidth, atlas->surfHeight };
-
-//   for (int i=0; txt[i]; i++) {
-//     SDL_Texture* glyph = atlasGetGlyph(atlas, txt[i]);
-//     nullDieMsg(glyph, "failed to get a glyph in termRender");            
-//     SDL_RenderCopy(renderer, glyph, NULL, &msgRect);
-//     msgRect.x += atlas->surfWidth;
-//   }
-// }
-
 
 void
 Cell::cycle(struct Grid *grid) {
@@ -78,8 +52,8 @@ Cell::render(Atlas *atlas, SDL_Renderer *renderer) {
   SDL_Color cellBorderColor = {0x00, 0x00, 0x00, 0xFF};
 
   // background box.
-  borderBox( renderer, x_*sz, y_*sz,
-             sz, sz, cellBorderColor, color());
+  draw::borderBox( renderer, x_*sz, y_*sz,
+                   sz, sz, cellBorderColor, color());
     
   char str[255]; // plenty of space.
     
@@ -122,9 +96,9 @@ Cell::render(Atlas *atlas, SDL_Renderer *renderer) {
 
   // if the cell is selected then blink.
   if (selected_ && oddMoment()) {
-    borderBox( renderer, x_*sz, y_*sz,
-               sz, sz,
-               (SDL_Color){0, 0, 0, 0}, (SDL_Color){0, 0xff, 0, 0x44});
+    draw::borderBox( renderer, x_*sz, y_*sz,
+                     sz, sz,
+                     (SDL_Color){0, 0, 0, 0}, (SDL_Color){0, 0xff, 0, 0x44});
   }
 }
 
@@ -146,11 +120,11 @@ Cell::getArgWay1() {
   Dir d;
   switch(cfg_.inputPorts.type) {
     // this is nasty, must be changed.
-  case ONE_PORT_CFG: {
+  case PortCfgType::ONE_PORT: {
     d = cfg_.inputPorts.value.inputOnePort.input;
     break;
   }
-  case TWO_PORT_CFG: {
+  case PortCfgType::TWO_PORT: {
     d = cfg_.inputPorts.value.inputTwoPort.leftInput;
     break;  // just in case another port configuration is introduced.
   }}
@@ -161,9 +135,9 @@ Way
 Cell::getArgWay2() {
   Dir d;
   switch(cfg_.inputPorts.type) {
-  case ONE_PORT_CFG:
+  case PortCfgType::ONE_PORT:
     die("This cell doesn't not support a second input argument");
-  case TWO_PORT_CFG:
+  case PortCfgType::TWO_PORT:
     d = cfg_.inputPorts.value.inputTwoPort.rightInput;
     break; // just in case another port configuration is introduced.
   }

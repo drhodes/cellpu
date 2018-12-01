@@ -10,7 +10,8 @@
 
 struct Grid;
 
-typedef enum PortCfgType { TWO_PORT_CFG, ONE_PORT_CFG } PortCfgType;
+enum class PortCfgType { ONE_PORT,
+                         TWO_PORT };
 
 typedef struct TwoPortCfg {
     Dir leftInput, rightInput;
@@ -67,10 +68,4 @@ class Cell {
     Way getArgWay1();
     Way getArgWay2();
 };
-
-
-
-// move these to display.h or something.
-void borderBox(SDL_Renderer *renderer, int x, int y, int w, int h, SDL_Color border, SDL_Color fill);
-// void drawText(SDL_Renderer *renderer, Atlas *atlas, int x, int y, string);
 
