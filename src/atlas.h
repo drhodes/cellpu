@@ -12,7 +12,7 @@ public:
   int surfWidth_, surfHeight_;
     
   Atlas(SDL_Renderer *renderer, const char *fontFilename, int size);    
-  SDL_Texture *getGlyph(char);
+  SDL_Texture *getGlyph(char) throw() ;
   ~Atlas();
 };
 

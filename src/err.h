@@ -36,11 +36,13 @@ extern ErrorStack _estack; // err.c
 #define perr(errmsg) { \
         Err e = { .msg = errmsg, .file = __FILE__, .line = __LINE__, .func = __FUNCTION__ }; \
         _estack.pushErr(e);                                                     \
-    };
+  };
 
 #define nullDieMsg(ptr, msg) { if (ptr==NULL) { perr(msg); _estack.dump(); } }
 #define nullDie(ptr) { nullDieMsg(ptr, "got null pointer"); }
 #define die(msg) { perr(msg); _estack.dump(); exit(1); }
 
 
+#define eerr(e, msg) { throw runtime_error(string(e.what()) + string(msg)); }
+#define terr(msg) { throw runtime_error(msg); }
 

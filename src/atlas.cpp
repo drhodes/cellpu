@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL.h>
+#include <exception>
 
 #include "atlas.h"
 #include "err.h"
@@ -24,13 +25,15 @@ Atlas::Atlas(SDL_Renderer *renderer, const char *fontFilename, int size) {
   
   TTF_CloseFont(font);
 }
+    //sprintf(msg, "atlasGetGlyph got out of range char: %c, %d", c, c);    
+    //die(msg);
+    //sprintf(msg, "atlasGetGlyph got out of range char: %c, %d", c, c);    
+    //die(msg);
 
 SDL_Texture*
-Atlas::getGlyph(char c) {
+Atlas::getGlyph(char c) throw() {
   if (c < 0 || c >= ATLAS_SIZE) {
-    char msg[255];
-    sprintf(msg, "atlasGetGlyph got out of range char: %c, %d", c, c);
-    die(msg);
+    throw runtime_error("atlasGetGlyph got out of range char: " + c);
   }
   return table_[(int)c];
 }
