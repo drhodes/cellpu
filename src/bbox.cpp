@@ -1,7 +1,7 @@
 // @file
 // @brief This file is marvelous.
 
-#include "bbox.h"
+#include "bbox.hh"
 
 // bool
 // bboxContains(BBox bb, int x, int y) {

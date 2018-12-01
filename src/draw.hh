@@ -10,9 +10,9 @@
 // #include <stdlib.h>
 #include <string>
 
-#include "atlas.h"
+#include "atlas.hh"
 
 namespace draw {
   void borderBox(SDL_Renderer *renderer, int x, int y, int w, int h, SDL_Color border, SDL_Color fill);
-  void text(SDL_Renderer *renderer, Atlas *atlas, int x, int y, std::string txt) throw();
+  void text(SDL_Renderer *renderer, Atlas &atlas, int x, int y, std::string txt);
 }

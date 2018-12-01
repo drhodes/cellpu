@@ -1,5 +1,5 @@
-#include "draw.h"
-#include "err.h"
+#include "draw.hh"
+#include "err.hh"
 #include <string>
 #include <exception>
 
@@ -22,13 +22,13 @@ namespace draw {
 
   
   void
-  text(SDL_Renderer *renderer, Atlas *atlas, int x, int y, std::string txt) throw() {
-    SDL_Rect msgRect = { x, y, atlas->surfWidth_, atlas->surfHeight_ };  
+  text(SDL_Renderer *renderer, Atlas &atlas, int x, int y, std::string txt) {
+    SDL_Rect msgRect = { x, y, atlas.surfWidth_, atlas.surfHeight_ };  
     for (int i=0; txt[i]; i++) {
       try {
-        SDL_Texture* glyph = atlas->getGlyph(txt[i]);
-        SDL_RenderCopy(renderer, glyph, NULL, &msgRect);
-        msgRect.x += atlas->surfWidth_;
+        SDL_Texture* glyph = atlas.getGlyph(txt[i]);
+        SDL_RenderCopy(renderer, glyph, nullptr, &msgRect);
+        msgRect.x += atlas.surfWidth_;
       } catch(exception e) {
         ethrow(e, "failed to get a glyph in draw::text");
           //throw runtime_error(string(e.what()) + string("\n failed to get a glyph in termRender"));

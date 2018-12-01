@@ -1,6 +1,6 @@
-#include "err.h"
-#include "instruction.h"
-#include "common.h"
+#include "err.hh"
+#include "instruction.hh"
+#include "common.hh"
 
 // function NOP()
 //    local f = function(x)

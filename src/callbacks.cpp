@@ -14,10 +14,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "callbacks.h"
-#include "err.h"
-#include "grid.h"
-#include "cell.h"
+#include "callbacks.hh"
+#include "err.hh"
+#include "grid.hh"
+#include "cell.hh"
 
 
 namespace callback {

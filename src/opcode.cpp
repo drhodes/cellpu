@@ -2,8 +2,8 @@
 #include <string.h>
 #include <string>
 #include <json-c/json.h>
-#include "opcode.h"
-#include "err.h"
+#include "opcode.hh"
+#include "err.hh"
 
 using namespace std;
 

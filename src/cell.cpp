@@ -1,7 +1,7 @@
-#include "cell.h"
-#include "err.h"
-#include "instruction.h"
-#include "draw.h"
+#include "cell.hh"
+#include "err.hh"
+#include "instruction.hh"
+#include "draw.hh"
 
 using namespace std;
 
@@ -45,7 +45,7 @@ Cell::instructionName() {
 }
 
 void
-Cell::render(Atlas *atlas, SDL_Renderer *renderer) {
+Cell::render(Atlas& atlas, SDL_Renderer *renderer) {
   int sz = this->size_;
   int n = 0;
 

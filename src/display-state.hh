@@ -1,7 +1,7 @@
 #ifndef DISPLAY_STATE_H
 #define DISPLAY_STATE_H
 
-#include "grid.h"
+#include "grid.hh"
 
 void lPutRenderer(lua_State *L, SDL_Renderer* renderer);
 SDL_Renderer *lGetRenderer(lua_State *L);

@@ -1,8 +1,8 @@
 #ifndef OPTICAL_CTL_H
 #define OPTICAL_CTL_H
 
-#include "err.h"
-#include "dir.h"
+#include "err.hh"
+#include "dir.hh"
 #include <stdbool.h>
 
 /// \struct Optical output is asdf asd asdf asdf asdf asdf sdf asdf

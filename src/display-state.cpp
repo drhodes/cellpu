@@ -16,9 +16,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "err.h"
-#include "display-state.h"
-#include "grid.h"
+#include "err.hh"
+#include "display-state.hh"
+#include "grid.hh"
 
 // global state ------------------------------------------------------------------------------------
 

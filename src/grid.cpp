@@ -1,13 +1,12 @@
-#include "err.h"
-#include "grid.h"
-#include "common.h"
-#include "cell.h"
-#include "bbox.h"
+#include "err.hh"
+#include "grid.hh"
+#include "common.hh"
+#include "cell.hh"
+#include "bbox.hh"
 
-Grid::Grid(int size, int displaySize, Atlas *atlas) {
+Grid::Grid(int size, int displaySize, Atlas &atlas) : m_atlas(atlas) {
   if (size < 1) die("got bad size for new grid");
   
-  m_atlas = atlas;
   m_size = size;
   m_displaySize = displaySize;
   m_cells = (Cell***)calloc(sizeof(Cell***), size);

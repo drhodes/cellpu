@@ -2,10 +2,10 @@
 
 CFLAGS= -O0 -g -std=c++17 \
 	-Wall \
+	-Werror \
 	-Wno-deprecated-declarations \
 	-Wno-switch \
 	-fsanitize=address \
-	#-Werror \
 
 LDFLAGS=-lSDL2 -llua5.3 -lSDL2_ttf -ljson-c
 TESTFLAGS=-Wall -g -std=c11
@@ -24,7 +24,7 @@ profile: clean main ## start cachegrind after some use
 	cachegrind callgrind.out*
 
 watch: ## setup a watch for the source directory to rebuild on change
-	when-changed -r Makefile src/*.c src/*.cpp src/*.h -c "clear && make clean && make -j8 main"
+	when-changed -r Makefile src/*.c src/*.cpp src/*.hh -c "clear && make clean && make -j8 main"
 
 common.o: 
 	${CC} -c ${CFLAGS} src/common.cpp -o $@
@@ -86,7 +86,7 @@ test-optical-ctl: optical-ctl FORCE ## test
 	./${TESTEXE}
 
 work: ## open all files in editor
-	emacs -nw src/*.c src/*.cpp src/*.h lua/*.lua Makefile
+	emacs -nw src/*.c src/*.cpp src/*.hh lua/*.lua Makefile
 
 add: clean ## add files to the git repo
 	git add -A :/

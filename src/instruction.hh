@@ -3,10 +3,10 @@
 
 #include <SDL2/SDL.h>
 
-#include "common.h"
-#include "grid.h"
-#include "cell.h"
-#include "opcode.h"
+#include "common.hh"
+#include "grid.hh"
+#include "cell.hh"
+#include "opcode.hh"
 
 // -- Instructions. -----------------------------------------------------------------------------------
 

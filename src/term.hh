@@ -12,8 +12,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "atlas.h"
-#include "bbox.h"
+#include "atlas.hh"
+#include "bbox.hh"
 
 // TODO introduce cursor position.
 // TODO introduce cmd line apart from other lines. nb. only the cmd line is editable.
@@ -22,8 +22,8 @@ class Term {
   static const int TERM_MAX_LINES = 10000;
         
 public:
-  SDL_Window* window; // for updated dimensions
-  Atlas* atlas;
+  SDL_Window *window; // for updated dimensions
+  Atlas &m_atlas;
   string lines[TERM_MAX_LINES];
   int curLine;
   int numCols, numRows;
@@ -31,7 +31,7 @@ public:
   int top, left;
   bool focus;
     
-  Term(SDL_Window* window, Atlas* atlas, int left, int top, int columns, int rows);
+  Term(SDL_Window* window, Atlas &atlas, int left, int top, int columns, int rows);
   ~Term(); //freeTerm(Term *term);
 
   void setNumRows(int linesShown);

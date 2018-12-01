@@ -1,5 +1,5 @@
-#include "common.h"
-#include "err.h"
+#include "common.hh"
+#include "err.hh"
 
 bool
 oddSecond() {

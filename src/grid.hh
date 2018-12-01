@@ -4,19 +4,19 @@
 
 #include <stdbool.h>
 
-#include "atlas.h"
-#include "common.h"
-#include "cell.h"
-#include "bbox.h"
+#include "atlas.hh"
+#include "common.hh"
+#include "cell.hh"
+#include "bbox.hh"
 
 class  Grid {
  public:
-    Atlas *m_atlas;
+    Atlas &m_atlas;
     int m_size;
     int m_displaySize; // number of cells shown.
     struct Cell ***m_cells;
 
-    Grid(int size, int displaySize, Atlas *atlas);
+    Grid(int size, int displaySize, Atlas &atlas);
     void render(SDL_Renderer *renderer);
     bool processEvent(SDL_Event&);
     void cycleCell(int x, int y);

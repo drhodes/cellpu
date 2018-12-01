@@ -1,7 +1,7 @@
 #ifndef DIR_C
 #define DIR_C
 
-#include "dir.h"
+#include "dir.hh"
 
 Dir dir_invert(Dir d) {
     if (d == N) return S;

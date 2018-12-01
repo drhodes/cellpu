@@ -3,8 +3,8 @@
 #include <SDL2/SDL.h>
 #include <exception>
 
-#include "atlas.h"
-#include "err.h"
+#include "atlas.hh"
+#include "err.hh"
 
 // TODO table should be a hash table to hand unicode
 Atlas::Atlas(SDL_Renderer *renderer, const char *fontFilename, int size) {

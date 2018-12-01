@@ -1,7 +1,7 @@
 #ifndef OPTICAL_CTL_C
 #define OPTICAL_CTL_C
 
-#include "optical-ctl.h"
+#include "optical-ctl.hh"
 
 
 OpticalPort opticalPortOutput(Dir src) {    

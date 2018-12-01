@@ -12,36 +12,36 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "err.h"
-#include "display-state.h"
-#include "callbacks.h"
-#include "term.h"
-#include "grid.h"
-#include "instruction.h"
-#include "opcode.h"
-#include "grid-edit.h"
+#include "err.hh"
+#include "display-state.hh"
+#include "callbacks.hh"
+#include "term.hh"
+#include "grid.hh"
+#include "instruction.hh"
+#include "opcode.hh"
+#include "grid-edit.hh"
 
 lua_State *_LS = NULL; 
 
 void doFile(const char *filename) {
-    int err = luaL_dofile(_LS, filename);
-    if (err) {
-        fprintf(stderr, "%s\n", lua_tostring(_LS, -1));
-        perr(lua_tostring(_LS, -1));
-        lua_pop(_LS, 1);  // pop error message from the stack 
-    }
+  int err = luaL_dofile(_LS, filename);
+  if (err) {
+    fprintf(stderr, "%s\n", lua_tostring(_LS, -1));
+    perr(lua_tostring(_LS, -1));
+    lua_pop(_LS, 1);  // pop error message from the stack 
+  }
 }
 
 void initLua() {
-    // init global state.
-    _LS = luaL_newstate();
-    nullDie(_LS);
-    luaL_openlibs(_LS);          // opens Lua 
-    luaopen_base(_LS);           // opens the basic library
-    luaopen_table(_LS);          // opens the table library 
-    luaopen_io(_LS);             // opens the I/O library 
-    luaopen_string(_LS);         // opens the string lib. 
-    luaopen_math(_LS);           // opens the math lib. 
+  // init global state.
+  _LS = luaL_newstate();
+  nullDie(_LS);
+  luaL_openlibs(_LS);          // opens Lua 
+  luaopen_base(_LS);           // opens the basic library
+  luaopen_table(_LS);          // opens the table library 
+  luaopen_io(_LS);             // opens the I/O library 
+  luaopen_string(_LS);         // opens the string lib. 
+  luaopen_math(_LS);           // opens the math lib. 
 }
 
 int main (void) {
@@ -75,7 +75,7 @@ int main (void) {
 
   // Opcode opc = NOP;
   // opcodeToJson(opc);
-
+  
   // move this to test code.
   Opcode opc = jsonToOpcode("{\"type\": \"Opcode\", \"value\": 0}");
   printf("opcode :%d\n", opc);
@@ -87,13 +87,13 @@ int main (void) {
   callback::register_all(_LS);
 
   // grid ----------------------------------------------------------------------------------------
-  Atlas *gridAtlas = new Atlas(renderer, "./media/FIXED_V0.TTF", 8);
+  Atlas gridAtlas(renderer, "./media/FIXED_V0.TTF", 8);
   Grid grid(100, 12, gridAtlas);
   lPutGrid(_LS, &grid);
   GridEditor *ge = newGridEditor(&grid);
     
   // terminal ------------------------------------------------------------------------------------
-  Atlas *termAtlas = new Atlas(renderer, "./media/Terminus.ttf", 16);
+  Atlas termAtlas(renderer, "./media/Terminus.ttf", 16);
   Term term(window, termAtlas, 5, 750, 80, 17);
 
   term.put("-- Localized Processing Unit, the repl is Lua.");
@@ -107,7 +107,7 @@ int main (void) {
       // the terminal should own one?
       // each cell could own a state machine.
         
-      gridEditorProcessEvent(ge, &event);
+      gridEditorProcessEvent(ge, event);
       term.processEvent(&event);
       grid.processEvent(event);
             
@@ -130,8 +130,6 @@ int main (void) {
   printf("SDL: %s\n", SDL_GetError());
     
  done:
-  delete termAtlas;
-  delete gridAtlas;
   SDL_DestroyWindow(window);
   // TTF_CloseFont(font);
     
