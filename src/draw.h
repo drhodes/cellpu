@@ -13,6 +13,6 @@
 #include "atlas.h"
 
 namespace draw {
-    void borderBox(SDL_Renderer *renderer, int x, int y, int w, int h, SDL_Color border, SDL_Color fill);
-    void text(SDL_Renderer *renderer, Atlas *atlas, int x, int y, std::string txt);
+  void borderBox(SDL_Renderer *renderer, int x, int y, int w, int h, SDL_Color border, SDL_Color fill);
+  void text(SDL_Renderer *renderer, Atlas *atlas, int x, int y, std::string txt) throw();
 }

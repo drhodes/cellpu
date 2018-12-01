@@ -88,9 +88,9 @@ int main (void) {
 
   // grid ----------------------------------------------------------------------------------------
   Atlas *gridAtlas = new Atlas(renderer, "./media/FIXED_V0.TTF", 8);
-  Grid *grid = newGrid(100, 12, gridAtlas);
-  lPutGrid(_LS, grid);
-  GridEditor *ge = newGridEditor(grid);
+  Grid grid(100, 12, gridAtlas);
+  lPutGrid(_LS, &grid);
+  GridEditor *ge = newGridEditor(&grid);
     
   // terminal ------------------------------------------------------------------------------------
   Atlas *termAtlas = new Atlas(renderer, "./media/Terminus.ttf", 16);
@@ -109,7 +109,7 @@ int main (void) {
         
       gridEditorProcessEvent(ge, &event);
       term.processEvent(&event);
-      gridProcessEvent(grid, &event);
+      grid.processEvent(event);
             
       if (event.type == SDL_KEYDOWN) {            
         if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
@@ -119,7 +119,7 @@ int main (void) {
     }
         
     term.render(renderer);
-    gridRender(grid, renderer);
+    grid.render(renderer);
     SDL_RenderPresent(renderer);
     Uint64 loopTimeStop = SDL_GetTicks();
     Uint64 delta = loopTimeStop - loopTimeStart;
@@ -132,7 +132,6 @@ int main (void) {
  done:
   delete termAtlas;
   delete gridAtlas;
-    
   SDL_DestroyWindow(window);
   // TTF_CloseFont(font);
     

@@ -1,32 +1,33 @@
 // @file
 // @brief This file is marvelous.
-
-#ifndef GRID_H
-#define GRID_H
+#pragma once
 
 #include <stdbool.h>
 
 #include "atlas.h"
 #include "common.h"
 #include "cell.h"
+#include "bbox.h"
 
-typedef struct Grid {
-    Atlas *atlas;
-    int size;
-    int displaySize; // number of cells shown.
-    struct Cell ***cells;
-} Grid;
+class  Grid {
+ public:
+    Atlas *m_atlas;
+    int m_size;
+    int m_displaySize; // number of cells shown.
+    struct Cell ***m_cells;
 
-Grid* newGrid(int size, int displaySize, Atlas *atlas);
-void gridRender(Grid *grid, SDL_Renderer *renderer);
-bool gridProcessEvent(Grid*, SDL_Event*);
-void gridCycleCell(Grid *grid, int x, int y);
-bool gridContainsPoint(Grid *grid, Sint32 x, Sint32 y);
-void gridSetSelectAllCells(Grid *grid, bool b);
-    
-struct Cell* gridGetCell(Grid *grid, int x, int y);
-struct Cell* gridCursorCell(Grid *grid, int pixelX, int pixelY);
-struct Cell *gridGetNbr(Grid *grid, int x, int y, Way w);
+    Grid(int size, int displaySize, Atlas *atlas);
+    void render(SDL_Renderer *renderer);
+    bool processEvent(SDL_Event&);
+    void cycleCell(int x, int y);
+    bool containsPoint(Sint32 x, Sint32 y);
+    void setSelectAllCells(bool b);
+    void bbox(BBox&);
+
+    struct Cell *getCell(int x, int y) const;
+    struct Cell *cursorCell(int pixelX, int pixelY);
+    struct Cell *getNbr(int x, int y, Way w);
+};
 
 
 
@@ -308,4 +309,3 @@ print("loaded grid")
    
    
 */
-#endif // GRID_H

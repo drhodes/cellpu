@@ -19,7 +19,7 @@ void
 gridEditorUpdateFocus(GridEditor *ge, SDL_Event *ev) {
     nullDie(ge); nullDie(ev);
     if (ev->type == SDL_MOUSEMOTION) {
-        ge->hasFocus = gridContainsPoint(ge->grid, ev->motion.x, ev->motion.y);
+        ge->hasFocus = ge->grid->containsPoint(ev->motion.x, ev->motion.y);
     } else {
         ge->hasFocus = false;
     }    
@@ -37,7 +37,7 @@ gridEditorHandleTextInput(GridEditor *ge, SDL_Event *ev) {
         break;
     }
     case 'a': {
-        gridSetSelectAllCells(ge->grid, true);
+        ge->grid->setSelectAllCells(true);
         break;
     }
     default: {        
@@ -77,7 +77,7 @@ gridEditorProcessEvent(GridEditor *ge, SDL_Event *ev) {
         
         switch (ev->key.keysym.scancode) {
         case SDL_SCANCODE_ESCAPE: {
-            gridSetSelectAllCells(ge->grid, false);
+          ge->grid->setSelectAllCells(false);
         }}
         
         
@@ -92,7 +92,7 @@ void
 gridEditorUpdateOverCell(GridEditor *ge, SDL_Event *ev) {
     Sint32 x = ev->motion.x;
     Sint32 y = ev->motion.y;
-    ge->overCell = gridCursorCell(ge->grid, x, y);
+    ge->overCell = ge->grid->cursorCell(x, y);
     gridEditorShowArguments(ge);
     printf("Got curCell @ (%d, %d)\n", x, y);
 }

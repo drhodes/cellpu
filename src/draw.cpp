@@ -1,8 +1,10 @@
 #include "draw.h"
 #include "err.h"
 #include <string>
+#include <exception>
 
 using namespace std;
+#define ethrow(e, msg) throw runtime_error(string(e.what()) + string(msg) + " " + string(__FILE__));
 
 namespace draw {
   void
@@ -18,15 +20,19 @@ namespace draw {
     SDL_RenderFillRect(renderer, &rect);
   }
 
-  void
-  text(SDL_Renderer *renderer, Atlas *atlas, int x, int y, std::string txt) {
-    SDL_Rect msgRect = { x, y, atlas->surfWidth_, atlas->surfHeight_ };
   
+  void
+  text(SDL_Renderer *renderer, Atlas *atlas, int x, int y, std::string txt) throw() {
+    SDL_Rect msgRect = { x, y, atlas->surfWidth_, atlas->surfHeight_ };  
     for (int i=0; txt[i]; i++) {
-      SDL_Texture* glyph = atlas->getGlyph(txt[i]);
-      nullDieMsg(glyph, "failed to get a glyph in termRender");            
-      SDL_RenderCopy(renderer, glyph, NULL, &msgRect);
-      msgRect.x += atlas->surfWidth_;
+      try {
+        SDL_Texture* glyph = atlas->getGlyph(txt[i]);
+        SDL_RenderCopy(renderer, glyph, NULL, &msgRect);
+        msgRect.x += atlas->surfWidth_;
+      } catch(exception e) {
+        ethrow(e, "failed to get a glyph in draw::text");
+          //throw runtime_error(string(e.what()) + string("\n failed to get a glyph in termRender"));
+      }
     }
   }
 }

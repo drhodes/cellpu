@@ -13,7 +13,7 @@ void lPutFont(lua_State *L, TTF_Font* font);
 TTF_Font *lGetFont(lua_State *L);
 
 void lPutGrid(lua_State *L, Grid *grid);
-Grid* lGetGrid(lua_State *L);
+const Grid& lGetGrid(lua_State *L);
 
 
 #endif // DISPLAY_STATE_H

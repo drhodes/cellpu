@@ -73,15 +73,16 @@ lPutGrid(lua_State *L, Grid *grid) {
     lua_setglobal(L, "grid");
 }
 
-Grid*
+const Grid&
 lGetGrid(lua_State *L) {
-    // fetch the pointer to grid and place at top of stack.
-    lua_getglobal(L, "grid"); 
-    
-    // get top of stack and coerce to pointer type.    
-    uintptr_t ptr2 = (uintptr_t)lua_tointeger(L, -1);
-    lua_pop(L, 1);
-    return (Grid*)ptr2;
+  // fetch the pointer to grid and place at top of stack.
+  lua_getglobal(L, "grid"); 
+  
+  // get top of stack and coerce to pointer type.    
+  uintptr_t *ptr2 = new uintptr_t;
+  *ptr2 = (uintptr_t)lua_tointeger(L, -1);
+  lua_pop(L, 1);
+  return reinterpret_cast<const Grid&>(*ptr2);
 }
 
 

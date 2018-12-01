@@ -72,12 +72,8 @@ namespace callback {
     int y = lua_tonumber(L, 2);
     lua_pop(L, 2);
     
-    Grid *grid = lGetGrid(L);    
-    Cell *cell = gridGetCell(grid, x, y);
-    if (cell==NULL) {        
-      luaL_error(L, _estack.topMsg().c_str()); 
-      return 1;
-    }
+    const Grid &grid = lGetGrid(L);    
+    Cell *cell = grid.getCell(x, y); // should be a ref to Cell here.
     
     cell->setSelect(true);
     return 0;

@@ -1,5 +1,4 @@
-#ifndef GRID_EDITOR_H
-#define GRID_EDITOR_H
+#pragma once
 
 #include "grid.h"
 #include "cell.h"
@@ -25,4 +24,3 @@ void gridEditorShowArguments(GridEditor *ge);
 void gridEditShowKeys();
 void gridEditHideKeys();
 
-#endif // GRID_EDITOR_H
