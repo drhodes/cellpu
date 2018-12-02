@@ -119,16 +119,15 @@ Way
 Cell::getArgWay1() {
   Dir d;
   switch(cfg_.inputPorts.type) {
-    // this is nasty, must be changed.
   case PortCfgType::ONE_PORT: {
     d = cfg_.inputPorts.value.inputOnePort.input;
-    break;
+    return wayFromHeading(cfg_.heading, d);
   }
   case PortCfgType::TWO_PORT: {
     d = cfg_.inputPorts.value.inputTwoPort.leftInput;
-    break;  // just in case another port configuration is introduced.
+    return wayFromHeading(cfg_.heading, d);
   }}
-  return wayFromHeading(cfg_.heading, d);
+  die("unreachable code reached");
 }
 
 Way
@@ -136,12 +135,12 @@ Cell::getArgWay2() {
   Dir d;
   switch(cfg_.inputPorts.type) {
   case PortCfgType::ONE_PORT:
-    die("This cell doesn't not support a second input argument");
+    die("This cell doesn't not support a second input argument");    
   case PortCfgType::TWO_PORT:
     d = cfg_.inputPorts.value.inputTwoPort.rightInput;
-    break; // just in case another port configuration is introduced.
+    return wayFromHeading(cfg_.heading, d);
   }
-  return wayFromHeading(cfg_.heading, d);
+  die("unreachable code reached");
 }
 
 // DONT need to validate cell config yet, check for bit errors, this isn't a bitlevel
