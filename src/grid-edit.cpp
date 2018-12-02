@@ -1,6 +1,3 @@
-#ifndef GRID_EDITOR_C
-#define GRID_EDITOR_C
-
 #include "err.hh"
 #include "grid.hh"
 #include "grid-edit.hh"
@@ -104,7 +101,6 @@ gridEditorShowArguments(GridEditor *ge) {
     // draw this cell info.    
 }
 
-
 void
 gridEditorUpdateSelectedCell(GridEditor *ge, SDL_Event &ev) {
     // if over cell is not null then use that
@@ -118,5 +114,3 @@ gridEditorUpdateSelectedCell(GridEditor *ge, SDL_Event &ev) {
 }
 
 
-
-#endif // GRID_EDITOR_C
