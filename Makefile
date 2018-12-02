@@ -19,6 +19,9 @@ all: clean main ## build
 docs: FORCE ## create documentation with doxygen
 	doxygen doxygen.cfg
 
+see-docs: docs ## open docs in web browser.
+	sensible-browser ./dox/html/index.html 
+
 profile: clean main ## start cachegrind after some use
 	valgrind --tool=callgrind --dump-instr=yes ./${EXE}
 	cachegrind callgrind.out*
@@ -87,12 +90,6 @@ test-optical-ctl: optical-ctl FORCE ## test
 
 work: ## open all files in editor
 	emacs -nw src/*.c src/*.cpp src/*.hh lua/*.lua Makefile
-
-add: clean ## add files to the git repo
-	git add -A :/
-
-commit: ## git commit -a
-	git commit -a
 
 # http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 .PHONY: help clean docs
