@@ -123,16 +123,15 @@ int main (void) {
     SDL_RenderPresent(renderer);
     Uint64 loopTimeStop = SDL_GetTicks();
     Uint64 delta = loopTimeStop - loopTimeStart;
-    //double ddelta = ((double)delta*1000) / (double)SDL_GetPerformanceFrequency();
     int wait = delta > 32 ? 0 : 32 - delta;
     SDL_Delay(wait);
-  }    
-  printf("SDL: %s\n", SDL_GetError());
+  }
+  
+  printf("SDL Error?: %s\n", SDL_GetError());
     
  done:
+  
   SDL_DestroyWindow(window);
-  // TTF_CloseFont(font);
-    
   SDL_Quit();
   TTF_Quit();
   _estack.dump();
