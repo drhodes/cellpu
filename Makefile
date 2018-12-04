@@ -1,4 +1,4 @@
-## c-json is crying about deprecated functions that have since been undeprecated.
+ ## c-json is crying about deprecated functions that have since been undeprecated.
 
 CFLAGS= -O0 -g -std=c++17 \
 	-Wall \

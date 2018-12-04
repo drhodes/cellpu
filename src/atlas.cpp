@@ -7,6 +7,7 @@
 #include "atlas.hh"
 #include "err.hh"
 
+
 // TODO table should be a hash table to hand unicode
 Atlas::Atlas(SDL_Renderer *renderer, const char *fontFilename, int size) {
   TTF_Font* font = TTF_OpenFont(fontFilename, size);
@@ -22,9 +23,9 @@ Atlas::Atlas(SDL_Renderer *renderer, const char *fontFilename, int size) {
     m_table.insert(std::pair<char, SDL_Texture*>(c, tex));
     SDL_FreeSurface(surfaceTxt);
   }
-  
   TTF_CloseFont(font);
 }
+
 
 SDL_Texture*
 Atlas::getGlyph(char c) throw() {
@@ -34,6 +35,7 @@ Atlas::getGlyph(char c) throw() {
   }
   return tup->second;
 }
+
 
 Atlas::~Atlas() {
   for (auto p : m_table) {
