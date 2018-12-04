@@ -84,9 +84,6 @@ OBJ	=	atlas.o\
 main: ${OBJ} ## 
 	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.cpp $?
 
-test-optical-ctl: optical-ctl FORCE ## test
-	${CC} ${TESTFLAGS} test/test-optical-ctl.c ${TESTLIBS} -o ${TESTEXE}
-	./${TESTEXE}
 
 work: ## open all files in editor
 	emacs -nw src/*.c src/*.cpp src/*.hh lua/*.lua Makefile
