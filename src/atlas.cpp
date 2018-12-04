@@ -2,6 +2,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL.h>
 #include <exception>
+#include <map>
 
 #include "atlas.hh"
 #include "err.hh"
@@ -13,35 +14,42 @@ Atlas::Atlas(SDL_Renderer *renderer, const char *fontFilename, int size) {
   TTF_SetFontHinting(font, TTF_HINTING_NONE); //TTF_HINTING_LIGHT);
     
   SDL_Color white = {255, 255, 255, 255};
-    
-  for (int i=0; i<ATLAS_SIZE; i++) {
-    SDL_Surface* surfaceTxt = TTF_RenderGlyph_Blended(font, i, white);
-    table_[i] = SDL_CreateTextureFromSurface(renderer, surfaceTxt);
-    SDL_QueryTexture( table_[i], NULL, NULL,
-                      &surfWidth_,
-                      &surfHeight_);
+  
+  // for (int i=0; i<ATLAS_SIZE; i++) {
+  //   SDL_Surface* surfaceTxt = TTF_RenderGlyph_Blended(font, i, white);
+  //   table_[i] = SDL_CreateTextureFromSurface(renderer, surfaceTxt);
+  //   SDL_QueryTexture( table_[i], NULL, NULL,
+  //                     &surfWidth_,
+  //                     &surfHeight_);
+  //   SDL_FreeSurface(surfaceTxt);
+  // }
+
+  for (char c = 0; c<ATLAS_SIZE; c++) {
+    SDL_Surface* surfaceTxt = TTF_RenderGlyph_Blended(font, c, white);
+    SDL_Texture* tex = SDL_CreateTextureFromSurface(renderer, surfaceTxt);
+    SDL_QueryTexture( tex, NULL, NULL, &surfWidth_, &surfHeight_);
+    m_table.insert(std::pair<char, SDL_Texture*>(c, tex));
     SDL_FreeSurface(surfaceTxt);
   }
+
   
   TTF_CloseFont(font);
 }
-    //sprintf(msg, "atlasGetGlyph got out of range char: %c, %d", c, c);    
-    //die(msg);
-    //sprintf(msg, "atlasGetGlyph got out of range char: %c, %d", c, c);    
-    //die(msg);
 
 SDL_Texture*
 Atlas::getGlyph(char c) throw() {
-  if (c < 0 || c >= ATLAS_SIZE) {
-    throw runtime_error("atlasGetGlyph got out of range char: " + c);
+  std::map<char, SDL_Texture*>::iterator tup = m_table.find(c);
+  if (tup == std::end(m_table)) {
+    throw runtime_error("atlasGetGlyph got unknown character: " + c);
   }
-  return table_[(int)c];
+  return tup->second;
 }
 
 Atlas::~Atlas() {
-    for (int i=0; i<ATLAS_SIZE; i++) {
-        if (table_[i]) {
-            SDL_DestroyTexture(table_[i]);
-        }
-    }
+    // for (int i=0; i<ATLAS_SIZE; i++) {
+    //     if (table_[i]) {
+    //         SDL_DestroyTexture(table_[i]);
+    //     }
+    // }
+  
 }
