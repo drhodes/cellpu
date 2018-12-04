@@ -14,15 +14,6 @@ Atlas::Atlas(SDL_Renderer *renderer, const char *fontFilename, int size) {
   TTF_SetFontHinting(font, TTF_HINTING_NONE); //TTF_HINTING_LIGHT);
     
   SDL_Color white = {255, 255, 255, 255};
-  
-  // for (int i=0; i<ATLAS_SIZE; i++) {
-  //   SDL_Surface* surfaceTxt = TTF_RenderGlyph_Blended(font, i, white);
-  //   table_[i] = SDL_CreateTextureFromSurface(renderer, surfaceTxt);
-  //   SDL_QueryTexture( table_[i], NULL, NULL,
-  //                     &surfWidth_,
-  //                     &surfHeight_);
-  //   SDL_FreeSurface(surfaceTxt);
-  // }
 
   for (char c = 0; c<ATLAS_SIZE; c++) {
     SDL_Surface* surfaceTxt = TTF_RenderGlyph_Blended(font, c, white);
@@ -31,7 +22,6 @@ Atlas::Atlas(SDL_Renderer *renderer, const char *fontFilename, int size) {
     m_table.insert(std::pair<char, SDL_Texture*>(c, tex));
     SDL_FreeSurface(surfaceTxt);
   }
-
   
   TTF_CloseFont(font);
 }
@@ -46,10 +36,7 @@ Atlas::getGlyph(char c) throw() {
 }
 
 Atlas::~Atlas() {
-    // for (int i=0; i<ATLAS_SIZE; i++) {
-    //     if (table_[i]) {
-    //         SDL_DestroyTexture(table_[i]);
-    //     }
-    // }
-  
+  for (auto p : m_table) {
+    SDL_DestroyTexture(p.second);
+  }
 }
