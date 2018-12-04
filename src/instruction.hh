@@ -1,5 +1,4 @@
-#ifndef INSTRUCTION_H
-#define INSTRUCTION_H
+#pragma once
 
 #include <SDL2/SDL.h>
 
@@ -7,6 +6,10 @@
 #include "grid.hh"
 #include "cell.hh"
 #include "opcode.hh"
+
+
+class Grid; // fwd decls
+class Cell;
 
 // -- Instructions. -----------------------------------------------------------------------------------
 
@@ -20,29 +23,55 @@
 //       color = color,
 //    }
 
-struct Grid;
-struct Cell;
+// struct Grid;
+// struct Cell;
 
-typedef struct Instruction {
-    char name[8];
-    SDL_Color color;    
-    void (*op)(struct Grid*, struct Cell*);
-} Instruction;
+class Instruction {
+public:
+  string m_name;
+  SDL_Color m_color;    
+
+  Instruction(string, SDL_Color);
+  virtual void apply(Grid &grid, Cell &cell);
+};
 
 
-// Broadcast instructions --------------------------------------------------------------------------
+class NOOP : public Instruction {
+public:
+  NOOP();
+  void apply(Grid &grid, Cell &cell);
+};
 
-Instruction* iNOP();
-Instruction* iCMPLE();
 
-Instruction* iDATA(); // instruction as data.
-Instruction* iPROC(); // data as instruction.
 
-// bitwise AND of two cells.
-Instruction* iAND();
-Instruction* iOR();
+class AND : public Instruction {
+public:
+  AND();
+  void apply(Grid &grid, Cell &cell);
+};
 
-void freeInstruction(Instruction* inst);
+
+/*
+class CMPLE : public Instruction {};
+
+class DATA : public Instruction {}; // cell instruction as data
+class PROC : public Instruction {}; // cell instruction as instruction??
+
+
+class AND : public Instruction {};
+class OR : public Instruction {};
+*/
+
+// Instruction &iNOP();
+// Instruction &iCMPLE();
+
+// Instruction &iDATA(); // instruction as data.
+// Instruction &iPROC(); // data as instruction.
+
+// // bitwise AND of two cells.
+// Instruction &iAND();
+// Instruction &iOR();
+
 
 
 
@@ -117,4 +146,6 @@ void freeInstruction(Instruction* inst);
 
 
 
-#endif // INSTRUCTION_H
+
+
+

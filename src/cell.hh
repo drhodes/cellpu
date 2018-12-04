@@ -8,7 +8,8 @@
 #include "opcode.hh"
 #include "instruction.hh"
 
-struct Grid;
+class Grid;
+class Instruction;
 
 enum class PortCfgType { ONE_PORT ,
                          TWO_PORT };
@@ -49,7 +50,7 @@ public:
   bool selected_, broadcasting_, listening_;
   byte dataReg_, colReg_, rowReg_;
   CellConfig cfg_;
-  struct Instruction *inst_;
+  Instruction *inst_;
   
   Cell(int, int);
 

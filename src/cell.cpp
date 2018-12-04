@@ -1,9 +1,10 @@
 #include "cell.hh"
 #include "err.hh"
-#include "instruction.hh"
 #include "draw.hh"
+#include "instruction.hh"
 
 using namespace std;
+
 
 Cell::Cell(int x, int y) {
   x_ = x;
@@ -12,7 +13,7 @@ Cell::Cell(int x, int y) {
   selected_ = false;
   broadcasting_ = false;
   listening_ = false;
-  inst_ = iNOP();
+  inst_ = new NOOP(); 
   rowReg_ = 0;
   colReg_ = 0;
   dataReg_ = 0;
@@ -41,7 +42,7 @@ Cell::cycle(struct Grid *grid) {
 
 string
 Cell::instructionName() {
-  return inst_->name;
+  return inst_->m_name;
 }
 
 void
