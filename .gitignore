@@ -81,3 +81,5 @@ flycheck_*.el
 *.su
 sim
 dreamcell.html
+tags
+TAGS
