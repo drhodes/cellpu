@@ -11,8 +11,9 @@
 #include "term.hh"
 #include "atlas.hh"
 #include "common.hh"
+#include "lua.hh"
 
-extern lua_State *_LS; // from main.c
+extern LuaMgr lman;
 
 Term::Term(SDL_Window *window, Atlas &atlas, int left, int top, int columns, int rows)
   : m_atlas(atlas){
@@ -27,40 +28,6 @@ Term::Term(SDL_Window *window, Atlas &atlas, int left, int top, int columns, int
 Term::~Term() {
   cerr << "Term is indeed being destroyed" << endl;
 }
-
-
-// void
-// termSetNumRows(int numRows) {
-//     nullDie(term);
-//     term->numRows = numRows;
-// }
-
-// void
-// freeTerm(Term *term) {
-//     if (term != NULL) {
-//         free(term);
-//         for (int i=0; i<TERM_MAX_LINES; i++) {
-//             free(term->lines[i]);
-//         }
-//         // TODO free SDL surfaces. Which surfaces? 
-//     }
-//     term = NULL;    
-// }
-
-// void
-// termPut(const char *str) {
-//     nullDie(term);
-//     // ring buffer
-//     // TODO fix mod calculation, why was it failing?
-//     assert(term->curLine < TERM_MAX_LINES);
-//     char *line = termGetCurLine(term);
-
-//     if (str != line) {
-//         // if these are the same strings, then nothing need be copied.
-//         strncpy(line, str, term->numCols);
-//     }
-//     term->curLine += 1;
-// }
 
 void
 Term::put(string str) {
@@ -204,15 +171,7 @@ Term::processEvent(SDL_Event* ev) {
 void
 Term::doReturn() {
   string line = getCurLine();
-  int err = luaL_loadbuffer(_LS, line.c_str(), line.length(), "line") || lua_pcall(_LS, 0, 0, 0);
-  
-  if (err) {
-    string errStr(lua_tostring(_LS, -1));
-    fprintf(stderr, "%s\n", lua_tostring(_LS, -1));
-    perr(errStr);
-    lua_pop(_LS, 1);
-  }
-  
+  lman.doLine(line);
   put(line);
 }
 
@@ -242,39 +201,3 @@ Term::popChar() {
   if (getCurLine().length() > 0)
     lines[curLine].pop_back();
 }
-
-/*
-  void termDoLineInput(Term *term) {
-          
-  if (eof == NULL) break;
-    
-  // directives.
-  if (strncmp(buff, "quit", 4) == 0) {
-  //     break;
-  //  }
-          
-  // if (strncmp(buff, "reload", 6) == 0) { 
-  //     doFile(L, "lua/cell.lua");
-  //     doFile(L, "lua/display.lua");            
-  //     doFile(L, "lua/grid.lua");
-  //     doFile(L, "lua/instructions.lua");
-  //     doFile(L, "lua/startup.lua");
-  //     continue;
-  //  }
-        
-  // if (strncmp(buff, "help", 4) == 0 || strncmp(buff, "h\n", 2) == 0) {
-  //     doFile(L, "lua/help.lua");            
-  //     continue;
-  //  }
-        
-  // int err = luaL_loadbuffer(L, buff, strlen(buff), "line") || lua_pcall(L, 0, 0, 0);        
-  // if (err) {
-  //     fprintf(stderr, "%s\n", lua_tostring(L, -1));
-  //     perr(lua_tostring(L, -1));
-  //     lua_pop(L, 1);
-  //  }
-  }
-*/
-
-
-

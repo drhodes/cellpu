@@ -18,13 +18,16 @@
 #include "err.hh"
 #include "grid.hh"
 #include "cell.hh"
+#include "lua.hh"
 
+extern LuaMgr& lman;  
 
 namespace callback {
+  
   int
   lClear(lua_State *L) {
     // get the renderer pointer from lua.
-    SDL_Renderer *renderer = lGetRenderer(L);
+    SDL_Renderer *renderer = lman.getRenderer();
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
     return 0;
@@ -38,11 +41,10 @@ namespace callback {
     int a = lua_tonumber(L, 4);
     lua_pop(L, 4);
     
-    SDL_Renderer *renderer = lGetRenderer(L);
+    SDL_Renderer *renderer = lman.getRenderer();
     SDL_SetRenderDrawColor(renderer, r, g, b, a);
     return 0;
   }
-
 
   int
   lDrawBox(lua_State *L) {
@@ -52,8 +54,8 @@ namespace callback {
     int w = lua_tonumber(L, 4);
     lua_pop(L, 4);
     
-    SDL_Renderer *renderer = lGetRenderer(L);
-    SDL_Rect rect = { x, y, h, w};
+    SDL_Renderer *renderer = lman.getRenderer();
+    SDL_Rect rect = { x, y, h, w };
     SDL_RenderFillRect(renderer, &rect);
     return 0;
   }
@@ -61,7 +63,7 @@ namespace callback {
   int
   lUpdate(lua_State *L) {
     //get the renderer pointer from lua.
-    SDL_Renderer *renderer = lGetRenderer(L);
+    SDL_Renderer *renderer = lman.getRenderer();
     SDL_RenderPresent(renderer);
     return 0;
   }
@@ -72,13 +74,13 @@ namespace callback {
     int y = lua_tonumber(L, 2);
     lua_pop(L, 2);
     
-    const Grid &grid = lGetGrid(L);    
+    const Grid &grid = lman.getGrid();    
     Cell *cell = grid.getCell(x, y); // should be a ref to Cell here.
     
     cell->setSelect(true);
     return 0;
   }
-
+  
   int
   lDump(lua_State *L) {
     _estack.dump();
@@ -86,28 +88,28 @@ namespace callback {
   }
 
 
-  void
-  register_all(lua_State *L) {
-    // clear the renderer
-    lua_pushcfunction(L, lClear);
-    lua_setglobal(L, "clear");
+  // void
+  // register_all(lua_State *L) {
+  //   // clear the renderer
+  //   lua_pushcfunction(L, lClear);
+  //   lua_setglobal(L, "clear");
 
-    lua_pushcfunction(L, lSetColor);
-    lua_setglobal(L, "setColor");
+  //   lua_pushcfunction(L, lSetColor);
+  //   lua_setglobal(L, "setColor");
 
-    lua_pushcfunction(L, lDrawBox);
-    lua_setglobal(L, "drawBox");
+  //   lua_pushcfunction(L, lDrawBox);
+  //   lua_setglobal(L, "drawBox");
 
-    lua_pushcfunction(L, lUpdate);
-    lua_setglobal(L, "update");
+  //   lua_pushcfunction(L, lUpdate);
+  //   lua_setglobal(L, "update");
     
-    lua_pushcfunction(L, lSelectCell);
-    lua_setglobal(L, "selectCell");
+  //   lua_pushcfunction(L, lSelectCell);
+  //   lua_setglobal(L, "selectCell");
 
-    lua_pushcfunction(L, lDump);
-    lua_setglobal(L, "dump");
+  //   lua_pushcfunction(L, lDump);
+  //   lua_setglobal(L, "dump");
 
     
-    lua_pop(L, 6);
-  }
+  //   lua_pop(L, 6);
+  // }
 }

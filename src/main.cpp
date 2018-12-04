@@ -13,39 +13,19 @@
 #include <string.h>
 
 #include "err.hh"
-#include "display-state.hh"
+//#include "display-state.hh"
 #include "callbacks.hh"
 #include "term.hh"
 #include "grid.hh"
 #include "instruction.hh"
 #include "opcode.hh"
 #include "grid-edit.hh"
+#include "lua.hh"
 
-lua_State *_LS = NULL; 
 
-void doFile(const char *filename) {
-  int err = luaL_dofile(_LS, filename);
-  if (err) {
-    fprintf(stderr, "%s\n", lua_tostring(_LS, -1));
-    perr(lua_tostring(_LS, -1));
-    lua_pop(_LS, 1);  // pop error message from the stack 
-  }
-}
-
-void initLua() {
-  // init global state.
-  _LS = luaL_newstate();
-  nullDie(_LS);
-  luaL_openlibs(_LS);          // opens Lua 
-  luaopen_base(_LS);           // opens the basic library
-  luaopen_table(_LS);          // opens the table library 
-  luaopen_io(_LS);             // opens the I/O library 
-  luaopen_string(_LS);         // opens the string lib. 
-  luaopen_math(_LS);           // opens the math lib. 
-}
+LuaMgr lman;
 
 int main (void) {
-  initLua();
     
   // SDL -----------------------------------------------------------------------------------------
   SDL_Window *window = NULL;
@@ -63,7 +43,7 @@ int main (void) {
                              );
     
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); //SDL_RENDERER_PRESENTVSYNC );
-  lPutRenderer(_LS, renderer);
+  lman.putRenderer(renderer);
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
   // Check that the window was successfully created
@@ -72,7 +52,7 @@ int main (void) {
     perr("Could not create window"); perr(SDL_GetError());
     return 1;
   }
-
+  
   // Opcode opc = NOP;
   // opcodeToJson(opc);
   
@@ -83,20 +63,20 @@ int main (void) {
   // font ----------------------------------------------------------------------------------------
   TTF_Init();
   TTF_Font* font = TTF_OpenFont("./media/FIXED_V0.TTF", 8);
-  lPutFont(_LS, font);
-  callback::register_all(_LS);
+  lman.putFont(font);
+  lman.register_callbacks();
 
   // grid ----------------------------------------------------------------------------------------
   Atlas gridAtlas(renderer, "./media/FIXED_V0.TTF", 8);
   Grid grid(100, 12, gridAtlas);
-  lPutGrid(_LS, &grid);
+  lman.putGrid(&grid);
   GridEditor *ge = newGridEditor(&grid);
     
   // terminal ------------------------------------------------------------------------------------
   Atlas termAtlas(renderer, "./media/Terminus.ttf", 16);
   Term term(window, termAtlas, 5, 750, 80, 17);
 
-  term.put("-- Localized Processing Unit, the repl is Lua.");
+  term.put("-- Localized Processing Unit, the repl is lua.");
     
   SDL_Event event;
   while( true ) {
@@ -135,6 +115,5 @@ int main (void) {
   SDL_Quit();
   TTF_Quit();
   _estack.dump();
-  lua_close(_LS);
   return 0;
 }
