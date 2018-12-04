@@ -68,6 +68,10 @@ term.o:
 opcode.o:
 	${CC} -c ${CFLAGS} src/opcode.cpp -o $@
 
+lua.o:
+	${CC} -c ${CFLAGS} src/lua.cpp -o $@
+
+
 OBJ	=	atlas.o\
 		bbox.o\
 		callbacks.o err.o\
@@ -78,6 +82,7 @@ OBJ	=	atlas.o\
 		grid-edit.o\
 		grid.o\
 		instruction.o\
+		lua.o\
 		opcode.o\
 		term.o
 
