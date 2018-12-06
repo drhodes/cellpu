@@ -13,7 +13,7 @@
 #include "common.hh"
 #include "lua.hh"
 
-extern LuaMgr lman;
+extern LuaMgr lman; // main.c
 
 Term::Term(SDL_Window *window, Atlas &atlas, int left, int top, int columns, int rows)
   : m_atlas(atlas){
@@ -83,6 +83,24 @@ Term::renderBackground(SDL_Renderer *renderer) {
 }
 
 void
+Term::renderLine(SDL_Renderer *renderer, int lineNum, int rowNum) {
+  string str("> ");
+  str.append(lines[lineNum]);
+  //strncat(str, term->lines[lineNum], term->numCols-2);
+        
+  int curX = left;
+  int curY = top + rowNum * m_atlas.surfHeight_;
+    
+  for (int i=0; str[i]; i++) {
+      SDL_Rect msgRect = { curX, curY, m_atlas.surfWidth_, m_atlas.surfHeight_ };
+      SDL_Texture* glyph = m_atlas.getGlyph(str[i]);
+      nullDieMsg(glyph, "failed to get a glyph in termRender");            
+      SDL_RenderCopy(renderer, glyph, NULL, &msgRect);
+      curX += m_atlas.surfWidth_;
+  }
+}
+
+void
 Term::render(SDL_Renderer *renderer) {
   renderBackground(renderer);
   if (focus) renderCursor(renderer);
@@ -98,24 +116,6 @@ Term::render(SDL_Renderer *renderer) {
   for (int lineNum=topLine; lineNum <= bottomLine; lineNum++) {
     renderLine(renderer, lineNum, rowNum);
     rowNum += 1;
-  }
-}
-
-void
-Term::renderLine(SDL_Renderer *renderer, int lineNum, int rowNum) {
-  string str("> ");
-  str.append(lines[lineNum]);
-  //strncat(str, term->lines[lineNum], term->numCols-2);
-        
-  int curX = left;
-  int curY = top + rowNum * m_atlas.surfHeight_;
-    
-  for (int i=0; str[i]; i++) {
-      SDL_Rect msgRect = { curX, curY, m_atlas.surfWidth_, m_atlas.surfHeight_ };
-      SDL_Texture* glyph = m_atlas.getGlyph(str[i]);
-      nullDieMsg(glyph, "failed to get a glyph in termRender");            
-      SDL_RenderCopy(renderer, glyph, NULL, &msgRect);
-      curX += m_atlas.surfWidth_;
   }
 }
 
