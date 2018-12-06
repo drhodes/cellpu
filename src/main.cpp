@@ -70,7 +70,7 @@ int main (void) {
   Atlas gridAtlas(renderer, "./media/FIXED_V0.TTF", 8);
   Grid grid(100, 12, gridAtlas);
   lman.putGrid(&grid);
-  GridEditor *ge = newGridEditor(&grid);
+  GridEditor ge(grid);
     
   // terminal ------------------------------------------------------------------------------------
   Atlas termAtlas(renderer, "./media/Terminus.ttf", 16);
@@ -87,7 +87,7 @@ int main (void) {
       // the terminal should own one?
       // each cell could own a state machine.
         
-      gridEditorProcessEvent(ge, event);
+      ge.processEvent(event);
       term.processEvent(&event);
       grid.processEvent(event);
             
