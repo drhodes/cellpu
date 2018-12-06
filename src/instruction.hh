@@ -7,24 +7,12 @@
 #include "cell.hh"
 #include "opcode.hh"
 
-
-class Grid; // fwd decls
+class Grid; 
 class Cell;
 
 // -- Instructions. -----------------------------------------------------------------------------------
-
 // -- GridInstruction
 // -- CellInstruction
-
-// function Instruction(name, oper, color)   
-//    local self = {
-//       name = name,
-//       oper = oper,
-//       color = color,
-//    }
-
-// struct Grid;
-// struct Cell;
 
 class Instruction {
 public:
@@ -32,23 +20,42 @@ public:
   SDL_Color m_color;    
 
   Instruction(string, SDL_Color);
-  virtual void apply(Grid &grid, Cell &cell);
-};
-
-
-class NOOP : public Instruction {
-public:
-  NOOP();
+  ~Instruction();
+  
   void apply(Grid &grid, Cell &cell);
 };
 
+// -------------------------------------------------------------------------------------------------
+
+#define INSTRUCTION(INAME)            \
+class INAME : public Instruction {    \
+public:                               \
+ INAME();                             \
+ void apply(Grid &grid, Cell &cell);  \
+};                                    \
 
 
-class AND : public Instruction {
-public:
-  AND();
-  void apply(Grid &grid, Cell &cell);
-};
+INSTRUCTION(NOOP)
+INSTRUCTION(AND)
+
+
+
+// class NOOP : public Instruction {
+// public:
+//   NOOP();
+//   void apply(Grid &grid, Cell &cell);
+// };
+
+// class AND : public Instruction {
+// public:
+//   AND();
+//   void apply(Grid &grid, Cell &cell);
+// };
+
+
+
+
+
 
 
 /*

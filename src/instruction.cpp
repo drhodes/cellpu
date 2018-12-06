@@ -11,6 +11,10 @@ Instruction::Instruction(string name, SDL_Color c) {
   m_color = c;
 }
 
+Instruction::~Instruction() {
+  cerr << "destroying instruction: " << m_name << endl;
+}
+
 void
 Instruction::apply(Grid &grid, Cell &cell) { }
 
@@ -18,16 +22,15 @@ Instruction::apply(Grid &grid, Cell &cell) { }
 NOOP::NOOP() : Instruction("NOOP", {0x30, 0x30, 0x30, 0xFF}) {}
 
 void 
-NOOP::apply(Grid &grid, Cell &cell) {
-}
+NOOP::apply(Grid &grid, Cell &cell) { }
 
 // -------------------------------------------------------------------------------------------------
 AND::AND() : Instruction("AND", {0xFF, 0x30, 0x30, 0xFF}) {}
 
 void
 AND::apply(Grid &grid, Cell &cell) {  
-  Cell* argCell1 = grid.getNbr(cell.x_, cell.y_, cell.getArgWay1());
-  Cell* argCell2 = grid.getNbr(cell.x_, cell.y_, cell.getArgWay2());
+  auto argCell1 = grid.getNbr(cell.x_, cell.y_, cell.getArgWay1());
+  auto argCell2 = grid.getNbr(cell.x_, cell.y_, cell.getArgWay2());
   byte arg1 = argCell1->dataReg_;
   byte arg2 = argCell2->dataReg_;    
   cell.dataReg_ = arg1 & arg2;
