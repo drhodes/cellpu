@@ -26,10 +26,6 @@ typedef enum { L = 1, // left
                B = 8, // backward
 } Dir;
 
-
-
-
-
 char headingToChar(Way w);
 Way wayFromHeading(Way heading, Dir dir);
 
