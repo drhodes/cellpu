@@ -8,11 +8,10 @@
 #include "err.hh"
 
 
-// TODO table should be a hash table to hand unicode
 Atlas::Atlas(SDL_Renderer *renderer, const char *fontFilename, int size) {
   TTF_Font* font = TTF_OpenFont(fontFilename, size);
   nullDie(font);
-  TTF_SetFontHinting(font, TTF_HINTING_NONE); //TTF_HINTING_LIGHT);
+  TTF_SetFontHinting(font, TTF_HINTING_NONE); 
     
   SDL_Color white = {255, 255, 255, 255};
 
@@ -26,7 +25,6 @@ Atlas::Atlas(SDL_Renderer *renderer, const char *fontFilename, int size) {
   TTF_CloseFont(font);
 }
 
-
 SDL_Texture*
 Atlas::getGlyph(char c) throw() {
   std::map<char, SDL_Texture*>::iterator tup = m_table.find(c);
@@ -36,8 +34,8 @@ Atlas::getGlyph(char c) throw() {
   return tup->second;
 }
 
-
 Atlas::~Atlas() {
+  cerr << "Atlas destroyed" << endl;
   for (auto p : m_table) {
     SDL_DestroyTexture(p.second);
   }

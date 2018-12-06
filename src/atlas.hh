@@ -9,7 +9,6 @@
 
 class Atlas {
 public:
-  // SDL_Texture* table_[ATLAS_SIZE];
   int surfWidth_, surfHeight_;
   std::map<char, SDL_Texture*> m_table;
 
