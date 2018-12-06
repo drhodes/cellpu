@@ -42,21 +42,17 @@ LuaMgr::doLine(std::string line) {
     perr(errStr);
     lua_pop(_LS, 1);
   }
-
 }
 
 
-
 void
-LuaMgr::putRenderer(SDL_Renderer *renderer)
-{
+LuaMgr::putRenderer(SDL_Renderer *renderer) {
     lua_pushinteger(_LS, (uintptr_t)renderer);
     lua_setglobal(_LS, "renderer");
 }
 
 SDL_Renderer*
-LuaMgr::getRenderer()
-{
+LuaMgr::getRenderer() {
     // fetch the pointer to renderer and place at top of stack.
     lua_getglobal(_LS, "renderer");
     // get top of stack and coerce to pointer type.
@@ -75,8 +71,7 @@ LuaMgr::putFont(TTF_Font *font)
 }
 
 TTF_Font*
-LuaMgr::getFont()
-{
+LuaMgr::getFont() {
     // fetch the pointer to font and place at top of stack.
     lua_getglobal(_LS, "font");
     // get top of stack and coerce to pointer type.
