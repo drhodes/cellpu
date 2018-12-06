@@ -3,24 +3,26 @@
 #include "grid.hh"
 #include "cell.hh"
 
-typedef struct GridEditor {
-    Grid *grid;
-    Cell *overCell;
-    Cell *selectedCell;
-    bool hasFocus;
-} GridEditor;
+class GridEditor {
+public:
+  Grid &m_grid;
+  shared_ptr<Cell> m_overCell;
+  shared_ptr<Cell> m_selectedCell;
+  bool m_hasFocus;
 
+  GridEditor(Grid&);
+  ~GridEditor();
 
-GridEditor *newGridEditor(Grid*);
+  void processEvent(SDL_Event&);
+  void updateOverCell(SDL_Event &ev);
+  void updateSelectedCell(SDL_Event &ev);
+  void updateFocus(SDL_Event &ev);
+  void handleTextInput(SDL_Event &ev);
+  void showArguments();
 
-void gridEditorProcessEvent(GridEditor*, SDL_Event&);
-void gridEditorUpdateOverCell(GridEditor *ge, SDL_Event &ev);
-void gridEditorUpdateSelectedCell(GridEditor *ge, SDL_Event &ev);
-void gridEditorUpdateFocus(GridEditor *ge, SDL_Event &ev);
-void gridEditorHandleTextInput(GridEditor *ge, SDL_Event &ev);
-void gridEditorShowArguments(GridEditor *ge);
+  // these may be used to display help for user.
+  void showKeys();
+  void hideKeys();
+};
 
-// these may be used to display help for user.
-void gridEditShowKeys();
-void gridEditHideKeys();
 
