@@ -1,21 +1,26 @@
+#include <array>
+
 #include "err.hh"
 #include "grid.hh"
 #include "common.hh"
 #include "cell.hh"
 #include "bbox.hh"
 
+
+using namespace std;
+
 Grid::Grid(int size, int displaySize, Atlas &atlas) : m_atlas(atlas) {
   if (size < 1) die("got bad size for new grid");
-  
   m_size = size;
   m_displaySize = displaySize;
-  m_cells = (Cell***)calloc(sizeof(Cell***), size);
   
-  for (int row=0; row<size; row++) {
-    m_cells[row] = (Cell**)calloc(sizeof(Cell**), size);
+  for (int row=0; row<size; row++) { 
+    vector<shared_ptr<Cell>> curRow;
     for (int col=0; col<size; col++) {
-      m_cells[row][col] = new Cell(row, col);
+      auto c = make_shared<Cell>(row, col);
+      curRow.push_back(c);
     }
+    m_cells.push_back(curRow);
   }
 }
 
@@ -46,17 +51,17 @@ Grid::containsPoint(Sint32 x, Sint32 y) {
   return bb.containsPx(x, y);
 }
 
-Cell*
+shared_ptr<Cell>
 Grid::cursorCell(Sint32 pixelX, Sint32 pixelY) {
-  if (!containsPoint(pixelX, pixelY)) return nullptr;
-    
+  if (!containsPoint(pixelX, pixelY)) die("cursorCell is confused");
+  cerr << "cursorCell: x=" << pixelX << ", y=" << pixelY << endl;
   int cellSize = m_cells[0][0]->size_;
   int x = pixelX / cellSize;
   int y = pixelY / cellSize;    
   return m_cells[x][y];
 }
 
-Cell*
+shared_ptr<Cell>
 Grid::getCell(int x, int y) const {
   if (x < 0) terr("x must be greater than 0");
   if (y < 0) terr("y must be greater than 0");
@@ -75,9 +80,7 @@ void
 Grid::setSelectAllCells(bool b) {
   for (int x = 0; x < m_size; x++) {
     for (int y = 0; y < m_size; y++) {
-      Cell *c = getCell(x, y);
-      nullDie(c);
-      c->setSelect(b);
+      getCell(x, y)->setSelect(b);
     }
   }
 }
@@ -96,16 +99,14 @@ Grid::processEvent(SDL_Event &ev) {
   case SDL_MOUSEMOTION: {
     Sint32 x = ev.motion.x;
     Sint32 y = ev.motion.y;
-    Cell *c = cursorCell(x, y);
-    if (!c) break;
-        
+    auto c = cursorCell(x, y);
     printf("OVER CELL: %d, %d\n", c->x_, c->y_);        
   }}
     
   return true;
 }
 
-struct Cell*
+shared_ptr<Cell>
 Grid::getNbr(int x, int y, Way w) {
   try {
     switch (w) {

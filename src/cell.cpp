@@ -2,29 +2,40 @@
 #include "err.hh"
 #include "draw.hh"
 #include "instruction.hh"
+#include "state-machine.hh"
 
 using namespace std;
 
-
-Cell::Cell(int x, int y) {
+Cell::Cell(int x, int y) { 
   x_ = x;
   y_ = y;
   size_ = 60;
   selected_ = false;
   broadcasting_ = false;
   listening_ = false;
-  inst_ = new NOOP(); 
   rowReg_ = 0;
   colReg_ = 0;
   dataReg_ = 0;
   value_ = 0;
+  inst_ = make_shared<NOOP>();
+  
+  smach = make_shared<StateMachine<CellState, CellTrans>>();
+  smach->startAt(CellState::Resting);
 }
+
+Cell::~Cell() {
+  cerr << "Destroying Cell: x=" << x_ << ", y=" << y_ << endl;
+}
+
+
 
 void
 Cell::setSelect(bool b) {
   selected_ = b;
-  //printf("cell->selected: %d\n", cell->selected);
 }
+
+
+
 
 SDL_Color
 Cell::color() {

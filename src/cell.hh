@@ -2,11 +2,13 @@
 // @brief something something doughnuts
 #pragma once
 
-#include <stdbool.h>
+#include <memory>
+
 #include <SDL2/SDL.h>
 
 #include "opcode.hh"
 #include "instruction.hh"
+#include "state-machine.hh"
 
 class Grid;
 class Instruction;
@@ -44,15 +46,32 @@ typedef struct CellConfig {
 } CellConfig;
 
 
+enum class CellState {
+                      Resting,
+                      Highlighted,
+                      Blinking,
+                      Processing,
+                      Listening,
+};
+
+enum class CellTrans {
+                      MouseOver,
+                      MouseExit,
+                      MouseClick,                      
+};
+
+
 class Cell {
 public: 
   int x_, y_, value_, size_;
   bool selected_, broadcasting_, listening_;
   byte dataReg_, colReg_, rowReg_;
   CellConfig cfg_;
-  Instruction *inst_;
+  shared_ptr<Instruction> inst_; // this has to be a pointer because of an import cycle.
+  shared_ptr<StateMachine<CellState, CellTrans>> smach;
   
   Cell(int, int);
+  ~Cell();
 
   void setColReg(int n);
   void setRowReg(int n);

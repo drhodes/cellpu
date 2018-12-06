@@ -2,31 +2,33 @@
 // @brief This file is marvelous.
 #pragma once
 
-#include <stdbool.h>
+#include <vector>
 
 #include "atlas.hh"
 #include "common.hh"
 #include "cell.hh"
 #include "bbox.hh"
 
+class Cell;
+
 class  Grid {
- public:
-    Atlas &m_atlas;
-    int m_size;
-    int m_displaySize; // number of cells shown.
-    struct Cell ***m_cells;
+public:
+  Atlas &m_atlas;
+  int m_size;
+  int m_displaySize; // number of cells shown.
+  std::vector<std::vector<shared_ptr<Cell>>> m_cells;
+  
+  Grid(int size, int displaySize, Atlas &atlas);
+  void render(SDL_Renderer *renderer);
+  bool processEvent(SDL_Event&);
+  void cycleCell(int x, int y);
+  bool containsPoint(Sint32 x, Sint32 y);
+  void setSelectAllCells(bool b);
+  void bbox(BBox&);
 
-    Grid(int size, int displaySize, Atlas &atlas);
-    void render(SDL_Renderer *renderer);
-    bool processEvent(SDL_Event&);
-    void cycleCell(int x, int y);
-    bool containsPoint(Sint32 x, Sint32 y);
-    void setSelectAllCells(bool b);
-    void bbox(BBox&);
-
-    struct Cell *getCell(int x, int y) const;
-    struct Cell *cursorCell(int pixelX, int pixelY);
-    struct Cell *getNbr(int x, int y, Way w);
+  shared_ptr<Cell> getCell(int x, int y) const;
+  shared_ptr<Cell> cursorCell(int pixelX, int pixelY);
+  shared_ptr<Cell> getNbr(int x, int y, Way w);
 };
 
 

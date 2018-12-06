@@ -75,8 +75,7 @@ namespace callback {
     lua_pop(L, 2);
     
     const Grid &grid = lman.getGrid();    
-    Cell *cell = grid.getCell(x, y); // should be a ref to Cell here.
-    
+    auto cell = grid.getCell(x, y);
     cell->setSelect(true);
     return 0;
   }
