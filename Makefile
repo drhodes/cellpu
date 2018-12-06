@@ -1,4 +1,4 @@
- ## c-json is crying about deprecated functions that have since been undeprecated.
+## c-json is crying about deprecated functions that have since been undeprecated.
 
 CFLAGS= -O0 -g -std=c++17 \
 	-Wall \
@@ -50,9 +50,6 @@ draw.o:
 atlas.o:
 	${CC} -c ${CFLAGS} src/atlas.cpp -o $@
 
-display-state.o:
-	${CC} -c ${CFLAGS} src/display-state.cpp -o $@
-
 err.o:
 	${CC} -c ${CFLAGS} src/err.cpp -o $@
 
@@ -64,6 +61,9 @@ bbox.o:
 
 term.o:
 	${CC} -c ${CFLAGS} src/term.cpp -o $@
+
+state-machine.o:
+	${CC} -c ${CFLAGS} src/state-machine.cpp -o $@
 
 opcode.o:
 	${CC} -c ${CFLAGS} src/opcode.cpp -o $@
@@ -77,12 +77,12 @@ OBJ	=	atlas.o\
 		callbacks.o err.o\
 		cell.o\
 		common.o\
-		display-state.o\
 		draw.o\
 		grid-edit.o\
 		grid.o\
 		instruction.o\
 		lua.o\
+		state-machine.o\
 		opcode.o\
 		term.o
 
