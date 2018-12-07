@@ -53,7 +53,7 @@ Grid::containsPoint(Sint32 x, Sint32 y) {
 
 shared_ptr<Cell>
 Grid::cursorCell(Sint32 pixelX, Sint32 pixelY) {
-  if (!containsPoint(pixelX, pixelY)) die("cursorCell is confused");
+  if (!containsPoint(pixelX, pixelY)) return nullptr;
   cerr << "cursorCell: x=" << pixelX << ", y=" << pixelY << endl;
   int cellSize = m_cells[0][0]->size_;
   int x = pixelX / cellSize;
@@ -99,8 +99,11 @@ Grid::processEvent(SDL_Event &ev) {
   case SDL_MOUSEMOTION: {
     Sint32 x = ev.motion.x;
     Sint32 y = ev.motion.y;
-    auto c = cursorCell(x, y);
-    printf("OVER CELL: %d, %d\n", c->x_, c->y_);        
+    if (containsPoint(x, y)) {
+      auto c = cursorCell(x, y);
+      if (!c) die("cell not found in grid, that's impossible")
+      printf("OVER CELL: %d, %d\n", c->x_, c->y_);
+    }
   }}
     
   return true;
