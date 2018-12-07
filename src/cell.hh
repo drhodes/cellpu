@@ -45,7 +45,6 @@ typedef struct CellConfig {
   // cell outputs
 } CellConfig;
 
-
 enum class CellState {
                       Resting,
                       Highlighted,
@@ -59,7 +58,6 @@ enum class CellTrans {
                       MouseExit,
                       MouseClick,                      
 };
-
 
 class Cell {
 public: 
