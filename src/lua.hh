@@ -7,13 +7,15 @@
 
 #include <string>
 
-class Grid;
+using namespace std;
 
+class Grid;
 
 class LuaMgr {
 private:
-  lua_State *_LS = nullptr;
-
+  lua_State *_LS = nullptr;  
+  
+  
 public:  
   LuaMgr();
   ~LuaMgr();
@@ -21,7 +23,10 @@ public:
   void doFile(const char *filename);
   void doLine(std::string);
 
-  
+  lua_State* getLuaState(); // this is unfortunate.
+
+  int putL(lua_State *L);
+
   void putRenderer(SDL_Renderer*);
   SDL_Renderer* getRenderer();
   
@@ -32,4 +37,20 @@ public:
   const Grid& getGrid();
 
   void register_callbacks();
+
+  
+  
+  
+  
+  // void registerLambda(String, [
+  // lman.registerLambda("hey", [this] (lua_State *L) -> int
+  //                            {
+  //                              this->put("Hey!");
+  //                              return 0;
+  //                            });
+
+  
+  // void registerLambda(std::string, std::function<
+
+  
 };

@@ -22,6 +22,11 @@ LuaMgr::~LuaMgr() {
   lua_close(_LS);
 }
 
+lua_State*
+LuaMgr::getLuaState() {
+  return _LS;
+}
+
 void
 LuaMgr::doFile(const char *filename) {  
   int err = luaL_dofile(_LS, filename);
@@ -43,7 +48,6 @@ LuaMgr::doLine(std::string line) {
     lua_pop(_LS, 1);
   }
 }
-
 
 void
 LuaMgr::putRenderer(SDL_Renderer *renderer) {
@@ -85,7 +89,7 @@ LuaMgr::getFont() {
 void
 LuaMgr::putGrid(Grid *grid) {
   lua_pushinteger(_LS, (uintptr_t)grid);
-    lua_setglobal(_LS, "grid");
+  lua_setglobal(_LS, "grid");
 }
 
 const Grid&
@@ -99,6 +103,10 @@ LuaMgr::getGrid() {
   lua_pop(_LS, 1);
   return reinterpret_cast<const Grid&>(*ptr2);
 }
+
+
+// void
+// LuaMgr::register_callback(std::string s, ) {
 
 void
 LuaMgr::register_callbacks() {
@@ -120,6 +128,23 @@ LuaMgr::register_callbacks() {
 
   lua_pushcfunction(_LS, callback::lDump);
   lua_setglobal(_LS, "dump");
+
+  
+  // SDL_Renderer *renderer = lman.getRenderer();
+  // SDL_Rect rect = { x, y, h, w };
+  // SDL_RenderFillRect(renderer, &rect);
+  // return 0;
+  
+  
+  auto sum = [] (lua_State *L) {
+               cout << "Hey!" << endl;
+               return 0;
+             };
+  
+  lua_pushcfunction(_LS, sum);
+  lua_setglobal(_LS, "sum");
+  
+
   
   lua_pop(_LS, 6);
 }
