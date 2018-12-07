@@ -1,5 +1,3 @@
-#include <stdbool.h>
-
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL.h>
 #include <lua5.3/lauxlib.h>
@@ -15,8 +13,9 @@
 
 extern LuaMgr lman; // main.c
 
-Term::Term(SDL_Window *window, Atlas &atlas, int left, int top, int columns, int rows)
-  : m_atlas(atlas){
+Term::Term(SDL_Window *window, Atlas &atlas, int left, int top, int columns, int rows) :
+  m_atlas(atlas)
+{
   this->window = window;
   this->curLine = 0;
   this->numCols = columns;
@@ -92,11 +91,11 @@ Term::renderLine(SDL_Renderer *renderer, int lineNum, int rowNum) {
   int curY = top + rowNum * m_atlas.surfHeight_;
     
   for (int i=0; str[i]; i++) {
-      SDL_Rect msgRect = { curX, curY, m_atlas.surfWidth_, m_atlas.surfHeight_ };
-      SDL_Texture* glyph = m_atlas.getGlyph(str[i]);
-      nullDieMsg(glyph, "failed to get a glyph in termRender");            
-      SDL_RenderCopy(renderer, glyph, NULL, &msgRect);
-      curX += m_atlas.surfWidth_;
+    SDL_Rect msgRect = { curX, curY, m_atlas.surfWidth_, m_atlas.surfHeight_ };
+    SDL_Texture* glyph = m_atlas.getGlyph(str[i]);
+    nullDieMsg(glyph, "failed to get a glyph in termRender");            
+    SDL_RenderCopy(renderer, glyph, NULL, &msgRect);
+    curX += m_atlas.surfWidth_;
   }
 }
 
