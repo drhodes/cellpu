@@ -1,3 +1,0 @@
-[submodule "libs/json.lua"]
-	path = libs/json.lua
-	url = git@github.com:drhodes/json.lua.git
