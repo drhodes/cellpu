@@ -48,7 +48,7 @@ public:
   void renderLine(SDL_Renderer *renderer, int lineNum, int rowNum);
   void renderBackground(SDL_Renderer *renderer);
   void renderCursor(SDL_Renderer *renderer);
-  BBox *boundingBox();
+  void boundingBox(BBox&);
   string getCurLine();
 };
 

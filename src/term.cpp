@@ -36,15 +36,13 @@ Term::put(string str) {
   curLine += 1;
 }
 
-BBox*
-Term::boundingBox() {
-  BBox *bb = new BBox;
+void
+Term::boundingBox(BBox &bb) {
   int promptSize = 2; // TODO consider custom prompt.
-  bb->top = top;
-  bb->left = left;
-  bb->height = m_atlas->surfHeight_ * (numRows + 1);
-  bb->width  = m_atlas->surfWidth_ * (promptSize + numCols);
-  return bb;
+  bb.top = top;
+  bb.left = left;
+  bb.height = m_atlas->surfHeight_ * (numRows + 1);
+  bb.width  = m_atlas->surfWidth_ * (promptSize + numCols);
 }
 
 void
@@ -71,9 +69,9 @@ Term::renderCursor(SDL_Renderer *renderer) {
 
 void
 Term::renderBackground(SDL_Renderer *renderer) {
-  BBox *bb = boundingBox();
-  SDL_Rect rect = {bb->left, bb->top, bb->width, bb->height};
-  delete bb;
+  BBox bb;
+  boundingBox(bb);
+  SDL_Rect rect = {bb.left, bb.top, bb.width, bb.height};
   
   if (focus) {
     SDL_SetRenderDrawColor(renderer, 0x60, 0x35, 0x6A, 0x70);
@@ -122,16 +120,13 @@ Term::render(SDL_Renderer *renderer) {
 
 bool
 Term::containsPx(Sint32 x, Sint32 y) {    
-  BBox *bb = this->boundingBox();
-  bool hasPx = bb->containsPx(x, y);
-  delete bb;
-  return hasPx;
+  BBox bb;
+  boundingBox(bb);
+  return bb.containsPx(x, y);
 }
 
 bool
 Term::processEvent(SDL_Event* ev) {
-  // hack together some spaghetti state handling and then build a
-  // state machine. Either the terminal has focus or it doesn't. 
   switch (ev->type) {
   case SDL_MOUSEMOTION: {
     Sint32 x = ev->motion.x;
