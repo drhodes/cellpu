@@ -5,12 +5,12 @@
 
 class GridEditor {
 public:
-  Grid &m_grid;
+  shared_ptr<Grid> m_grid;
   shared_ptr<Cell> m_overCell;
   shared_ptr<Cell> m_selectedCell;
   bool m_hasFocus;
 
-  GridEditor(Grid&);
+  GridEditor(shared_ptr<Grid>);
   ~GridEditor();
 
   void processEvent(SDL_Event&);

@@ -1,13 +1,13 @@
+#include <memory>
+
 #include "err.hh"
 #include "grid.hh"
 #include "grid-edit.hh"
 
-
-GridEditor::GridEditor(Grid &grid) :
-  m_grid(grid),
-  m_overCell(grid.getCell(0, 0)),
-  m_selectedCell(grid.getCell(0, 0))
-{
+GridEditor::GridEditor(shared_ptr<Grid> grid) {
+  m_grid = grid;
+  m_overCell = grid->getCell(0, 0);
+  m_selectedCell = grid->getCell(0, 0);
   m_hasFocus = false;
 }
 
@@ -45,19 +45,18 @@ GridEditor::processEvent(SDL_Event &ev) {
         
     switch (ev.key.keysym.scancode) {
     case SDL_SCANCODE_ESCAPE: {
-      m_grid.setSelectAllCells(false);
+      m_grid->setSelectAllCells(false);
     }}
         
     default: {
       printf("unhandled event in gridEditorProcessEvent, type: %d\n", ev.type);        
     }
-      //     } 
   }}
 }
 
 void
 GridEditor::updateOverCell(SDL_Event &ev) {
-  m_overCell = m_grid.cursorCell(ev.motion.x, ev.motion.y);
+  m_overCell = m_grid->cursorCell(ev.motion.x, ev.motion.y);
   showArguments();
 }
 
@@ -73,7 +72,7 @@ GridEditor::updateSelectedCell(SDL_Event &ev) {
 void
 GridEditor::updateFocus(SDL_Event &ev) {
   if (ev.type == SDL_MOUSEMOTION) {
-    m_hasFocus = m_grid.containsPoint(ev.motion.x, ev.motion.y);
+    m_hasFocus = m_grid->containsPoint(ev.motion.x, ev.motion.y);
   } else {
     m_hasFocus = false;
   }    
@@ -93,7 +92,7 @@ GridEditor::handleTextInput(SDL_Event &ev) {
     break;
   }
   case 'a': {
-    m_grid.setSelectAllCells(true);
+    m_grid->setSelectAllCells(true);
     break;
   }
     
@@ -108,5 +107,3 @@ GridEditor::showArguments() {
   // clear info box.
   // draw this cell info.      
 }
-
-

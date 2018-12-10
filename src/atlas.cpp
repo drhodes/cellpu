@@ -5,10 +5,10 @@
 #include <map>
 
 #include "atlas.hh"
+#include "display.hh"
 #include "err.hh"
 
-
-Atlas::Atlas(SDL_Renderer *renderer, const char *fontFilename, int size) {
+Atlas::Atlas(const char *fontFilename, int size) {
   TTF_Font* font = TTF_OpenFont(fontFilename, size);
   nullDie(font);
   TTF_SetFontHinting(font, TTF_HINTING_NONE); 
@@ -17,7 +17,7 @@ Atlas::Atlas(SDL_Renderer *renderer, const char *fontFilename, int size) {
 
   for (char c = 0; c<ATLAS_SIZE; c++) {
     SDL_Surface* surfaceTxt = TTF_RenderGlyph_Blended(font, c, white);
-    SDL_Texture* tex = SDL_CreateTextureFromSurface(renderer, surfaceTxt);
+    SDL_Texture* tex = SDL_CreateTextureFromSurface(display::getRenderer(), surfaceTxt);
     SDL_QueryTexture( tex, NULL, NULL, &surfWidth_, &surfHeight_);
     m_table.insert(std::pair<char, SDL_Texture*>(c, tex));
     SDL_FreeSurface(surfaceTxt);

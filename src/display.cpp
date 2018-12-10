@@ -1,45 +1,45 @@
-// #include <stdio.h>
-// #include <string.h>
-// #include <lua5.3/lua.h>
-// #include <lua5.3/lauxlib.h>
-// #include <lua5.3/lualib.h>
-// #include <SDL2/SDL.h>
-// #include <SDL2/SDL.h>
-// #include <stdlib.h>
-// #include <stdbool.h> 
-// #include <stdint.h>
-// #include <assert.h>
-
-// // managing the SDL renderer state in lua. ---------------------------------------------------------
-
-// void lPutRenderer(lua_State *L, SDL_Renderer* renderer) {
-//     lua_pushinteger(L, (uintptr_t)renderer);
-//     lua_setglobal(L, "renderer");
-// }
-
-// SDL_Renderer* lGetRenderer(lua_State *L) {
-//     // fetch the pointer to renderer and place at top of stack.
-//     lua_getglobal(L, "renderer");
-//     // get top of stack and coerce to pointer type.
-//     uintptr_t ptr2 = (uintptr_t)lua_tointeger(L, -1);    
-//     return (SDL_Renderer*)ptr2;
-// }
-
-// // C callbacks for lua -----------------------------------------------------------------------------
-
-// static int l_clear(lua_State *L) {
-//     //get the renderer pointer from lua.
-//     SDL_Renderer *renderer = lGetRenderer(L);
-//     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-//     SDL_RenderClear(renderer);
-//     SDL_RenderPresent(renderer);
-//     return 0;
-// }
+#include "display.hh"
+#include "err.hh"
 
 
+namespace display {
+  SDL_Window *_window = NULL;
+  SDL_Renderer *_renderer = NULL;
 
-// }
+  inline SDL_Window *getWindow() { return _window; }
+  inline SDL_Renderer *getRenderer() { return _renderer; }
+
+}
+
+Display::Display() {
+  SDL_Init(SDL_INIT_VIDEO);
+  SDL_StartTextInput();
+  
+  display::_window =
+    SDL_CreateWindow ( "proc sim",                // window title
+                       SDL_WINDOWPOS_UNDEFINED,   // initial x position
+                       SDL_WINDOWPOS_UNDEFINED,   // initial y position
+                       1150,                      // width, in pixels                               
+                       1150,                      // height, in pixels
+                       SDL_WINDOW_OPENGL
+                       );
+  
+  display::_renderer = SDL_CreateRenderer(display::getWindow(), -1, SDL_RENDERER_ACCELERATED);
+  SDL_SetRenderDrawBlendMode(display::getRenderer(), SDL_BLENDMODE_BLEND);
+  TTF_Init();
 
 
+  
+  // Check that the window was successfully created
+  if (display::getWindow() == NULL) {
+    // In the case that the window could not be made...
+    perr("Could not create window"); perr(SDL_GetError());
+    return;
+  }
+}
 
-
+Display::~Display() {
+  SDL_DestroyWindow(display::getWindow());
+  SDL_Quit();
+  TTF_Quit();
+}

@@ -3,6 +3,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include "atlas.hh"
 #include "common.hh"
@@ -13,13 +14,13 @@ class Cell;
 
 class  Grid {
 public:
-  Atlas &m_atlas;
+  shared_ptr<Atlas> m_atlas;
   int m_size;
   int m_displaySize; // number of cells shown.
   std::vector<std::vector<shared_ptr<Cell>>> m_cells;
   
-  Grid(int size, int displaySize, Atlas &atlas);
-  void render(SDL_Renderer *renderer);
+  Grid(int size, int displaySize, shared_ptr<Atlas>);
+  void render();
   bool processEvent(SDL_Event&);
   void cycleCell(int x, int y);
   bool containsPoint(Sint32 x, Sint32 y);

@@ -11,9 +11,8 @@ class Atlas {
 public:
   int surfWidth_, surfHeight_;
   std::map<char, SDL_Texture*> m_table;
-
   
-  Atlas(SDL_Renderer *renderer, const char *fontFilename, int size);    
+  Atlas(const char *fontFilename, int size);    
   SDL_Texture *getGlyph(char) throw() ;
   ~Atlas();
 };

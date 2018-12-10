@@ -1,3 +1,5 @@
+#include <memory>
+
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL.h>
 #include <lua5.3/lauxlib.h>
@@ -10,16 +12,15 @@
 #include "atlas.hh"
 #include "common.hh"
 #include "lua.hh"
+#include "display.hh"
 
 extern LuaMgr lman; // main.c
 
-Term::Term(SDL_Window *window, Atlas &atlas, int left, int top, int columns, int rows) :
-  m_atlas(atlas)
-{
-  this->window = window;
-  this->curLine = 0;
-  this->numCols = columns;
-  this->numRows = rows;
+Term::Term(shared_ptr<Atlas> atlas, int left, int top, int columns, int rows) {
+  m_atlas = atlas;
+  curLine = 0;
+  numCols = columns;
+  numRows = rows;
   this->top = top;
   this->left = left;
 }
@@ -41,8 +42,8 @@ Term::boundingBox() {
   int promptSize = 2; // TODO consider custom prompt.
   bb->top = top;
   bb->left = left;
-  bb->height = m_atlas.surfHeight_ * (numRows + 1);
-  bb->width  = m_atlas.surfWidth_ * (promptSize + numCols);
+  bb->height = m_atlas->surfHeight_ * (numRows + 1);
+  bb->width  = m_atlas->surfWidth_ * (promptSize + numCols);
   return bb;
 }
 
@@ -52,17 +53,17 @@ Term::renderCursor(SDL_Renderer *renderer) {
   string line = getCurLine();
   int curCol = line.length();
   int promptSize = 2; // TODO consider custom prompt.
-  int x = left + ((promptSize + curCol) * m_atlas.surfWidth_);
+  int x = left + ((promptSize + curCol) * m_atlas->surfWidth_);
   int y = top;
 
   if (curLine >= numRows) {
     // when the cursor hits the bottom of the terminal.
-    y += numRows * m_atlas.surfHeight_;
+    y += numRows * m_atlas->surfHeight_;
   } else {
-    y += curLine * m_atlas.surfHeight_;
+    y += curLine * m_atlas->surfHeight_;
   }
     
-  SDL_Rect rect = { x, y, m_atlas.surfWidth_, m_atlas.surfHeight_ };
+  SDL_Rect rect = { x, y, m_atlas->surfWidth_, m_atlas->surfHeight_ };
   
   // Blink
   if (oddSecond()) SDL_RenderFillRect(renderer, &rect); 
@@ -72,6 +73,7 @@ void
 Term::renderBackground(SDL_Renderer *renderer) {
   BBox *bb = boundingBox();
   SDL_Rect rect = {bb->left, bb->top, bb->width, bb->height};
+  delete bb;
   
   if (focus) {
     SDL_SetRenderDrawColor(renderer, 0x60, 0x35, 0x6A, 0x70);
@@ -88,14 +90,14 @@ Term::renderLine(SDL_Renderer *renderer, int lineNum, int rowNum) {
   //strncat(str, term->lines[lineNum], term->numCols-2);
         
   int curX = left;
-  int curY = top + rowNum * m_atlas.surfHeight_;
+  int curY = top + rowNum * m_atlas->surfHeight_;
     
   for (int i=0; str[i]; i++) {
-    SDL_Rect msgRect = { curX, curY, m_atlas.surfWidth_, m_atlas.surfHeight_ };
-    SDL_Texture* glyph = m_atlas.getGlyph(str[i]);
+    SDL_Rect msgRect = { curX, curY, m_atlas->surfWidth_, m_atlas->surfHeight_ };
+    SDL_Texture* glyph = m_atlas->getGlyph(str[i]);
     nullDieMsg(glyph, "failed to get a glyph in termRender");            
     SDL_RenderCopy(renderer, glyph, NULL, &msgRect);
-    curX += m_atlas.surfWidth_;
+    curX += m_atlas->surfWidth_;
   }
 }
 
@@ -105,7 +107,7 @@ Term::render(SDL_Renderer *renderer) {
   if (focus) renderCursor(renderer);
     
   int winW, winH;
-  SDL_GetWindowSize(window, &winW, &winH);
+  SDL_GetWindowSize(display::getWindow(), &winW, &winH);
 
   int bottomLine = curLine;
   int topLine = bottomLine - numRows;

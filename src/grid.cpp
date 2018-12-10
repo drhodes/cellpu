@@ -5,12 +5,13 @@
 #include "common.hh"
 #include "cell.hh"
 #include "bbox.hh"
-
+#include "display.hh"
 
 using namespace std;
 
-Grid::Grid(int size, int displaySize, Atlas &atlas) : m_atlas(atlas) {
+Grid::Grid(int size, int displaySize, shared_ptr<Atlas> atlas) {
   if (size < 1) die("got bad size for new grid");
+  m_atlas = atlas;
   m_size = size;
   m_displaySize = displaySize;
   
@@ -25,11 +26,11 @@ Grid::Grid(int size, int displaySize, Atlas &atlas) : m_atlas(atlas) {
 }
 
 void
-Grid::render(SDL_Renderer *renderer) {
+Grid::render() {
   // render grid cells.
   for (int row=0; row < m_displaySize; row++) {
     for (int col=0; col < m_displaySize; col++) {
-      m_cells[row][col]->render(m_atlas, renderer);
+      m_cells[row][col]->render(m_atlas, display::getRenderer());
     }
   }
 }

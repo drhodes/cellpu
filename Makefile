@@ -35,6 +35,12 @@ common.o:
 instruction.o: 
 	${CC} -c ${CFLAGS} src/instruction.cpp -o $@
 
+app.o: 
+	${CC} -c ${CFLAGS} src/app.cpp -o $@
+
+display.o: 
+	${CC} -c ${CFLAGS} src/display.cpp -o $@
+
 grid.o: 
 	${CC} -c ${CFLAGS} src/grid.cpp -o $@
 
@@ -72,11 +78,13 @@ lua.o:
 	${CC} -c ${CFLAGS} src/lua.cpp -o $@
 
 
-OBJ	=	atlas.o\
+OBJ	=	app.o\
+		atlas.o\
 		bbox.o\
 		callbacks.o err.o\
 		cell.o\
 		common.o\
+		display.o\
 		draw.o\
 		grid-edit.o\
 		grid.o\
@@ -84,7 +92,7 @@ OBJ	=	atlas.o\
 		lua.o\
 		state-machine.o\
 		opcode.o\
-		term.o
+		term.o\
 
 main: ${OBJ} ## 
 	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.cpp $?

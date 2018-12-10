@@ -57,58 +57,57 @@ Cell::instructionName() {
 }
 
 void
-Cell::render(Atlas& atlas, SDL_Renderer *renderer) {
+Cell::render(shared_ptr<Atlas> atlas, SDL_Renderer *renderer) {
   int sz = this->size_;
   int n = 0;
 
   SDL_Color cellBorderColor = {0x00, 0x00, 0x00, 0xFF};
 
   // background box.
-  draw::borderBox( renderer, x_*sz, y_*sz,
-                   sz, sz, cellBorderColor, color());
+  draw::borderBox( x_*sz, y_*sz, sz, sz, cellBorderColor, color());
     
   char str[255]; // plenty of space.
     
   memset(str, '\0', 255);
   n = sprintf(str, "[%d %d]", this->x_, this->y_);
-  draw::text(renderer, atlas, x_ * sz + 4, y_ * sz + 4, str);
+  draw::text(atlas, x_ * sz + 4, y_ * sz + 4, str);
     
   memset(str, '\0', n);
   n = sprintf(str, "%s", instructionName().c_str());
-  draw::text(renderer, atlas,
+  draw::text(atlas,
              x_ * sz + 4,
              y_ * sz + 16, str);
     
   // render the value of the data register
   memset(str, '\0', n);
   n = sprintf(str, "%d", dataReg_);
-  draw::text(renderer, atlas, x_ * sz + sz/2, y_ * sz + sz/2, str);
+  draw::text(atlas, x_ * sz + sz/2, y_ * sz + sz/2, str);
       
   // render the text value of the optical row register.
   memset(str, '\0', n);
   n = sprintf(str, "%d", rowReg_);
-  draw::text(renderer, atlas,
+  draw::text(atlas,
              x_ * sz + sz/2 + sz/4,
              y_ * sz + sz/2, str);
 
   // render the text value of the optical column register.
   memset(str, '\0', n);
   n = sprintf(str, "%d", colReg_); 
-  draw::text(renderer, atlas,
+  draw::text(atlas,
              x_ * sz + sz/2,
              y_ * sz + sz/2 + sz/4, str);
 
   // draw an arrow in the direction of the heading, upper right.
   memset(str, '\0', n);
   n = sprintf(str, "%c", headingToChar(cfg_.heading)); 
-  draw::text(renderer, atlas,
+  draw::text(atlas,
              x_ * sz + sz - 8,
              y_ * sz + 4,
              str );
 
   // if the cell is selected then blink.
   if (selected_ && oddMoment()) {
-    draw::borderBox( renderer, x_*sz, y_*sz,
+    draw::borderBox( x_*sz, y_*sz,
                      sz, sz,
                      (SDL_Color){0, 0, 0, 0}, (SDL_Color){0, 0xff, 0, 0x44});
   }

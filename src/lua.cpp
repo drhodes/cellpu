@@ -49,7 +49,6 @@ LuaMgr::doLine(std::string line) {
   }
 }
 
-
 // managing the SDL font state in lua. ---------------------------------------------------------
 
 void
