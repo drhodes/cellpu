@@ -55,7 +55,7 @@ Grid::containsPoint(Sint32 x, Sint32 y) {
 shared_ptr<Cell>
 Grid::cursorCell(Sint32 pixelX, Sint32 pixelY) {
   if (!containsPoint(pixelX, pixelY)) return nullptr;
-  cerr << "cursorCell: x=" << pixelX << ", y=" << pixelY << endl;
+  //cerr << "cursorCell: x=" << pixelX << ", y=" << pixelY << endl;
   int cellSize = m_cells[0][0]->size_;
   int x = pixelX / cellSize;
   int y = pixelY / cellSize;    
@@ -102,11 +102,9 @@ Grid::processEvent(SDL_Event &ev) {
     Sint32 y = ev.motion.y;
     if (containsPoint(x, y)) {
       auto c = cursorCell(x, y);
-      if (!c) die("cell not found in grid, that's impossible")
-      printf("OVER CELL: %d, %d\n", c->x_, c->y_);
+      if (!c) die("cell not found in grid, that's impossible");
     }
   }}
-    
   return true;
 }
 
@@ -120,8 +118,9 @@ Grid::getNbr(int x, int y, Way w) {
     case W: return getCell(x-1, y);
     default: terr("recieved an impossible Way argument");
     }
+  } catch(exception e) {
+    eerr(e, "bad code path");
   }
-  catch(exception e) eerr(e, "bad code path");
 }
 
 
