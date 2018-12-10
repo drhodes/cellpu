@@ -49,21 +49,6 @@ LuaMgr::doLine(std::string line) {
   }
 }
 
-void
-LuaMgr::putRenderer(SDL_Renderer *renderer) {
-    lua_pushinteger(_LS, (uintptr_t)renderer);
-    lua_setglobal(_LS, "renderer");
-}
-
-SDL_Renderer*
-LuaMgr::getRenderer() {
-    // fetch the pointer to renderer and place at top of stack.
-    lua_getglobal(_LS, "renderer");
-    // get top of stack and coerce to pointer type.
-    uintptr_t ptr2 = (uintptr_t)lua_tointeger(_LS, -1);
-    lua_pop(_LS, 1);
-    return (SDL_Renderer*)ptr2;
-}
 
 // managing the SDL font state in lua. ---------------------------------------------------------
 
@@ -105,36 +90,14 @@ LuaMgr::getGrid() {
 }
 
 
-// void
-// LuaMgr::register_callback(std::string s, ) {
-
 void
 LuaMgr::register_callbacks() {
-  // clear the renderer
-  lua_pushcfunction(_LS, callback::lClear);
-  lua_setglobal(_LS, "clear");
-
-  lua_pushcfunction(_LS, callback::lSetColor);
-  lua_setglobal(_LS, "setColor");
-
-  lua_pushcfunction(_LS, callback::lDrawBox);
-  lua_setglobal(_LS, "drawBox");
-
-  lua_pushcfunction(_LS, callback::lUpdate);
-  lua_setglobal(_LS, "update");
     
   lua_pushcfunction(_LS, callback::lSelectCell);
   lua_setglobal(_LS, "selectCell");
 
   lua_pushcfunction(_LS, callback::lDump);
   lua_setglobal(_LS, "dump");
-
-  
-  // SDL_Renderer *renderer = lman.getRenderer();
-  // SDL_Rect rect = { x, y, h, w };
-  // SDL_RenderFillRect(renderer, &rect);
-  // return 0;
-  
   
   auto sum = [] (lua_State *L) {
                cout << "Hey!" << endl;
