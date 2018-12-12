@@ -19,6 +19,10 @@ all: clean main ## build
 docs: FORCE ## create documentation with doxygen
 	doxygen doxygen.cfg
 
+tags: FORCE ## create tags
+	ctags src/*
+	etags src/*
+
 see-docs: docs ## open docs in web browser.
 	sensible-browser ./dox/html/index.html 
 
