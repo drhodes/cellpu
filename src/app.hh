@@ -15,7 +15,7 @@ class App {
   Display dsys;
 
   Atlas &m_gridAtlas;
-  shared_ptr<Grid> m_grid;
+  Grid &m_grid;
   shared_ptr<GridEditor> m_ge;
     
   shared_ptr<Atlas> m_termAtlas;

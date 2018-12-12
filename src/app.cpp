@@ -3,7 +3,8 @@
 #include "app.hh"
 
 App::App() :
-  m_gridAtlas(*new Atlas("./media/FIXED_V0.TTF", 8))
+  m_gridAtlas(*new Atlas("./media/FIXED_V0.TTF", 8)),
+  m_grid(*new Grid(100, 12, m_gridAtlas))
 {
   // commander
   
@@ -15,7 +16,6 @@ App::App() :
 
   
   // grid ----------------------------------------------------------------------------------------
-  m_grid = make_shared<Grid>(100, 12, m_gridAtlas);
   m_ge = make_shared<GridEditor>(m_grid);
   
   // // terminal ------------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ App::eventLoop() {
     while(SDL_PollEvent(&event)) {           
       m_ge->processEvent(event);
       m_term->processEvent(&event);
-      m_grid->processEvent(event);
+      m_grid.processEvent(event);
            
       if (event.type == SDL_KEYDOWN) {            
         if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
@@ -50,7 +50,7 @@ App::eventLoop() {
     }
 
     m_term->render(display::getRenderer());
-    m_grid->render();
+    m_grid.render();
     SDL_RenderPresent(display::getRenderer());
     Uint64 loopTimeStop = SDL_GetTicks();
     Uint64 delta = loopTimeStop - loopTimeStart;
