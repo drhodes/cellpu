@@ -2,9 +2,19 @@
 
 #include "app.hh"
 
-App::App() {  
+App::App() :
+  m_gridAtlas(*new Atlas("./media/FIXED_V0.TTF", 8))
+{
+  // commander
+  
+
+  // lua thing
+  
+
+  // app state
+
+  
   // grid ----------------------------------------------------------------------------------------
-  m_gridAtlas = make_shared<Atlas>("./media/FIXED_V0.TTF", 8);
   m_grid = make_shared<Grid>(100, 12, m_gridAtlas);
   m_ge = make_shared<GridEditor>(m_grid);
   
@@ -19,6 +29,12 @@ App::eventLoop() {
   SDL_Event event;
   
   while( true ) {
+    // send app events to lua queue.
+    // lua consumes events
+    // lua sends messages
+    // app recvs messages and acts.
+    // needs to be a commander that delegates messages.
+    
     Uint64 loopTimeStart = SDL_GetTicks();
         
     while(SDL_PollEvent(&event)) {           

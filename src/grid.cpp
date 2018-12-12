@@ -9,7 +9,9 @@
 
 using namespace std;
 
-Grid::Grid(int size, int displaySize, shared_ptr<Atlas> atlas) {
+Grid::Grid(int size, int displaySize, Atlas &atlas) :
+  m_atlas(atlas)
+{
   if (size < 1) die("got bad size for new grid");
   m_atlas = atlas;
   m_size = size;

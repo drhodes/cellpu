@@ -6,8 +6,8 @@ namespace display {
   SDL_Window *_window = NULL;
   SDL_Renderer *_renderer = NULL;
 
-  inline SDL_Window *getWindow() { return _window; }
-  inline SDL_Renderer *getRenderer() { return _renderer; }
+  SDL_Window *getWindow() { return _window; }
+  SDL_Renderer *getRenderer() { return _renderer; }
 
 }
 

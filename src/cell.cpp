@@ -57,7 +57,7 @@ Cell::instructionName() {
 }
 
 void
-Cell::render(shared_ptr<Atlas> atlas, SDL_Renderer *renderer) {
+Cell::render(Atlas& atlas, SDL_Renderer *renderer) {
   int sz = this->size_;
   int n = 0;
 

@@ -82,7 +82,7 @@ public:
   SDL_Color color();
 
   void cycle(struct Grid *grid);
-  void render(shared_ptr<Atlas> atlas, SDL_Renderer *renderer);
+  void render(Atlas& atlas, SDL_Renderer *renderer);
   void cfgInputValidate();
 
   string instructionName();

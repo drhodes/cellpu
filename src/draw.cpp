@@ -26,13 +26,13 @@ namespace draw {
 
   
   void
-  text(shared_ptr<Atlas> atlas, int x, int y, std::string txt) {
-    SDL_Rect msgRect = { x, y, atlas->surfWidth_, atlas->surfHeight_ };  
+  text(Atlas& atlas, int x, int y, std::string txt) {
+    SDL_Rect msgRect = { x, y, atlas.surfWidth_, atlas.surfHeight_ };  
     for (int i=0; txt[i]; i++) {
       try {
-        SDL_Texture* glyph = atlas->getGlyph(txt[i]);
+        SDL_Texture* glyph = atlas.getGlyph(txt[i]);
         SDL_RenderCopy(display::getRenderer(), glyph, nullptr, &msgRect);
-        msgRect.x += atlas->surfWidth_;
+        msgRect.x += atlas.surfWidth_;
       } catch(exception e) {
         ethrow(e, "failed to get a glyph in draw::text");
           //throw runtime_error(string(e.what()) + string("\n failed to get a glyph in termRender"));

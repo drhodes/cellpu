@@ -10,5 +10,5 @@
 
 namespace draw {
   void borderBox(int x, int y, int w, int h, SDL_Color border, SDL_Color fill);
-  void text(std::shared_ptr<Atlas> atlas, int x, int y, std::string txt);
+  void text(Atlas& atlas, int x, int y, std::string txt);
 }

@@ -13,8 +13,8 @@ using namespace std;
 
 class App {  
   Display dsys;
-  
-  shared_ptr<Atlas> m_gridAtlas;
+
+  Atlas &m_gridAtlas;
   shared_ptr<Grid> m_grid;
   shared_ptr<GridEditor> m_ge;
     

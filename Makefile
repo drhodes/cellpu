@@ -1,6 +1,6 @@
 ## c-json is crying about deprecated functions that have since been undeprecated.
 
-CFLAGS= -O0 -g -std=c++17 \
+CFLAGS= -O2 -g -std=c++17 \
 	-Wall \
 	-Werror \
 	-Wno-deprecated-declarations \
