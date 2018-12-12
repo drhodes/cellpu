@@ -49,25 +49,6 @@ LuaMgr::doLine(std::string line) {
   }
 }
 
-// managing the SDL font state in lua. ---------------------------------------------------------
-
-void
-LuaMgr::putFont(TTF_Font *font)
-{
-    lua_pushinteger(_LS, (uintptr_t)font);
-    lua_setglobal(_LS, "font");
-}
-
-TTF_Font*
-LuaMgr::getFont() {
-    // fetch the pointer to font and place at top of stack.
-    lua_getglobal(_LS, "font");
-    // get top of stack and coerce to pointer type.
-    uintptr_t ptr2 = (uintptr_t)lua_tointeger(_LS, -1);
-    lua_pop(_LS, 1);
-    return (TTF_Font*)ptr2;
-}
-
 // managing the grid -------------------------------------------------------------------------------
 
 void
