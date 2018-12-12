@@ -7,7 +7,8 @@ App::App() :
   m_grid(*new Grid(100, 12, m_gridAtlas)),
   m_ge(*new GridEditor(m_grid)),
 
-  m_termAtlas(*new Atlas("./media/Terminus.ttf", 16))
+  m_termAtlas(*new Atlas("./media/Terminus.ttf", 16)),
+  m_term(*new Term(m_termAtlas, 5, 750, 80, 17))
 
 {
   // commander
@@ -22,8 +23,7 @@ App::App() :
   // grid ----------------------------------------------------------------------------------------
   
   // // terminal ------------------------------------------------------------------------------------
-  m_term = make_shared<Term>(m_termAtlas, 5, 750, 80, 17);
-  m_term->put("-- Localized Processing Unit, the repl is lua.");  
+  m_term.put("-- Localized Processing Unit, the repl is lua.");  
 }
 
 void
@@ -41,7 +41,7 @@ App::eventLoop() {
         
     while(SDL_PollEvent(&event)) {           
       m_ge.processEvent(event);
-      m_term->processEvent(&event);
+      m_term.processEvent(&event);
       m_grid.processEvent(event);
            
       if (event.type == SDL_KEYDOWN) {            
@@ -51,7 +51,7 @@ App::eventLoop() {
       }
     }
 
-    m_term->render(display::getRenderer());
+    m_term.render(display::getRenderer());
     m_grid.render();
     SDL_RenderPresent(display::getRenderer());
     Uint64 loopTimeStop = SDL_GetTicks();

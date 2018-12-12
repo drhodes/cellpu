@@ -19,7 +19,7 @@ class App {
   GridEditor& m_ge;
     
   Atlas& m_termAtlas;
-  shared_ptr<Term> m_term;
+  Term& m_term;
 
 public:
   App();
