@@ -16,9 +16,9 @@ class App {
 
   Atlas &m_gridAtlas;
   Grid &m_grid;
-  shared_ptr<GridEditor> m_ge;
+  GridEditor& m_ge;
     
-  shared_ptr<Atlas> m_termAtlas;
+  Atlas& m_termAtlas;
   shared_ptr<Term> m_term;
 
 public:

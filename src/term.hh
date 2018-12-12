@@ -24,7 +24,7 @@ class Term {
   static const int TERM_MAX_LINES = 10000;
         
 public:
-  shared_ptr<Atlas> m_atlas;
+  Atlas& m_atlas;
   string lines[TERM_MAX_LINES];
   int curLine;
   int numCols, numRows;
@@ -32,7 +32,7 @@ public:
   int top, left;
   bool focus;
     
-  Term(shared_ptr<Atlas> atlas, int left, int top, int columns, int rows);
+  Term(Atlas& atlas, int left, int top, int columns, int rows);
   ~Term(); //freeTerm(Term *term);
 
   void setNumRows(int linesShown);

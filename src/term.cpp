@@ -16,8 +16,9 @@
 
 extern LuaMgr lman; // main.c
 
-Term::Term(shared_ptr<Atlas> atlas, int left, int top, int columns, int rows) {
-  m_atlas = atlas;
+Term::Term(Atlas& atlas, int left, int top, int columns, int rows) :
+  m_atlas(atlas)
+{
   curLine = 0;
   numCols = columns;
   numRows = rows;
@@ -41,8 +42,8 @@ Term::boundingBox(BBox &bb) {
   int promptSize = 2; // TODO consider custom prompt.
   bb.top = top;
   bb.left = left;
-  bb.height = m_atlas->surfHeight_ * (numRows + 1);
-  bb.width  = m_atlas->surfWidth_ * (promptSize + numCols);
+  bb.height = m_atlas.surfHeight_ * (numRows + 1);
+  bb.width  = m_atlas.surfWidth_ * (promptSize + numCols);
 }
 
 void
@@ -51,17 +52,17 @@ Term::renderCursor(SDL_Renderer *renderer) {
   string line = getCurLine();
   int curCol = line.length();
   int promptSize = 2; // TODO consider custom prompt.
-  int x = left + ((promptSize + curCol) * m_atlas->surfWidth_);
+  int x = left + ((promptSize + curCol) * m_atlas.surfWidth_);
   int y = top;
 
   if (curLine >= numRows) {
     // when the cursor hits the bottom of the terminal.
-    y += numRows * m_atlas->surfHeight_;
+    y += numRows * m_atlas.surfHeight_;
   } else {
-    y += curLine * m_atlas->surfHeight_;
+    y += curLine * m_atlas.surfHeight_;
   }
     
-  SDL_Rect rect = { x, y, m_atlas->surfWidth_, m_atlas->surfHeight_ };
+  SDL_Rect rect = { x, y, m_atlas.surfWidth_, m_atlas.surfHeight_ };
   
   // Blink
   if (oddSecond()) SDL_RenderFillRect(renderer, &rect); 
@@ -87,14 +88,14 @@ Term::renderLine(SDL_Renderer *renderer, int lineNum, int rowNum) {
   str.append(lines[lineNum]);
         
   int curX = left;
-  int curY = top + rowNum * m_atlas->surfHeight_;
+  int curY = top + rowNum * m_atlas.surfHeight_;
     
   for (int i=0; str[i]; i++) {
-    SDL_Rect msgRect = { curX, curY, m_atlas->surfWidth_, m_atlas->surfHeight_ };
-    SDL_Texture* glyph = m_atlas->getGlyph(str[i]);
+    SDL_Rect msgRect = { curX, curY, m_atlas.surfWidth_, m_atlas.surfHeight_ };
+    SDL_Texture* glyph = m_atlas.getGlyph(str[i]);
     nullDieMsg(glyph, "failed to get a glyph in termRender");            
     SDL_RenderCopy(renderer, glyph, NULL, &msgRect);
-    curX += m_atlas->surfWidth_;
+    curX += m_atlas.surfWidth_;
   }
 }
 

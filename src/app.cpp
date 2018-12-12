@@ -4,7 +4,11 @@
 
 App::App() :
   m_gridAtlas(*new Atlas("./media/FIXED_V0.TTF", 8)),
-  m_grid(*new Grid(100, 12, m_gridAtlas))
+  m_grid(*new Grid(100, 12, m_gridAtlas)),
+  m_ge(*new GridEditor(m_grid)),
+
+  m_termAtlas(*new Atlas("./media/Terminus.ttf", 16))
+
 {
   // commander
   
@@ -16,10 +20,8 @@ App::App() :
 
   
   // grid ----------------------------------------------------------------------------------------
-  m_ge = make_shared<GridEditor>(m_grid);
   
   // // terminal ------------------------------------------------------------------------------------
-  m_termAtlas = make_shared<Atlas>("./media/Terminus.ttf", 16);
   m_term = make_shared<Term>(m_termAtlas, 5, 750, 80, 17);
   m_term->put("-- Localized Processing Unit, the repl is lua.");  
 }
@@ -38,7 +40,7 @@ App::eventLoop() {
     Uint64 loopTimeStart = SDL_GetTicks();
         
     while(SDL_PollEvent(&event)) {           
-      m_ge->processEvent(event);
+      m_ge.processEvent(event);
       m_term->processEvent(&event);
       m_grid.processEvent(event);
            
