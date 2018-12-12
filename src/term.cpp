@@ -85,7 +85,6 @@ void
 Term::renderLine(SDL_Renderer *renderer, int lineNum, int rowNum) {
   string str("> ");
   str.append(lines[lineNum]);
-  //strncat(str, term->lines[lineNum], term->numCols-2);
         
   int curX = left;
   int curY = top + rowNum * m_atlas->surfHeight_;
