@@ -7,22 +7,14 @@ App::App() :
   m_grid(*new Grid(100, 12, m_gridAtlas)),
   m_ge(*new GridEditor(m_grid)),
 
+  // term
   m_termAtlas(*new Atlas("./media/Terminus.ttf", 16)),
   m_term(*new Term(m_termAtlas, 5, 750, 80, 17))
-
 {
   // commander
-  
-
   // lua thing
-  
-
   // app state
-
-  
-  // grid ----------------------------------------------------------------------------------------
-  
-  // // terminal ------------------------------------------------------------------------------------
+  // terminal ------------------------------------------------------------------------------------
   m_term.put("-- Localized Processing Unit, the repl is lua.");  
 }
 

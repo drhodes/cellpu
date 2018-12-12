@@ -73,12 +73,6 @@ Grid::getCell(int x, int y) const {
   return m_cells[x][y];
 }
 
-// void
-// gridCycleCell(const Grid &grid, int x, int y) {
-//     Cell* c = gridGetCell(grid, x, y);
-//     c->cycle(grid);
-// }
-
 void
 Grid::setSelectAllCells(bool b) {
   for (int x = 0; x < m_size; x++) {
