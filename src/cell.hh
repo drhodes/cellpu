@@ -66,7 +66,7 @@ public:
   byte dataReg_, colReg_, rowReg_;
   CellConfig cfg_;
   shared_ptr<Instruction> inst_; // this has to be a pointer because of an import cycle.
-  shared_ptr<StateMachine<CellState, CellTrans>> smach;
+  // shared_ptr<StateMachine<CellState, CellTrans>> smach;
   
   Cell(int, int);
   ~Cell();

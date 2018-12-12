@@ -19,8 +19,8 @@ Cell::Cell(int x, int y) {
   value_ = 0;
   inst_ = make_shared<NOOP>();
   
-  smach = make_shared<StateMachine<CellState, CellTrans>>();
-  smach->startAt(CellState::Resting);
+  // smach = make_shared<StateMachine<CellState, CellTrans>>();
+  // smach->startAt(CellState::Resting);
 }
 
 Cell::~Cell() {

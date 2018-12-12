@@ -14,7 +14,7 @@ using namespace std;
 // template <class T>
 // string show(const T &obj);
 
-
+/*
 template <class S, class T>
 class Transition {
 private:
@@ -26,27 +26,22 @@ public:
   Transition(T trigger, S src, S tgt) :
     m_src(src), m_trigger(trigger), m_tgt(tgt) {}
   
-  const S getTarget() const {
-    return m_tgt;
-  }
-
-  const T getTrigger() const {
-    return m_trigger;
-  }
-
-  const S getSource() const {
-    return m_src;
-  }
+  const S getTarget() const { return m_tgt; }
+  const T getTrigger() const { return m_trigger; }
+  const S getSource() const { return m_src; }
 };
 
 template <class S, class T>
 class StateMachine {
 private:
   S m_curState;
+  std::string m_name;
   std::vector<Transition<S, T>> m_transitions;
-
+  
 public:
-  StateMachine<S, T>() { }
+  StateMachine<S, T>(string name) {
+    m_name = name;
+  }
   
   ~StateMachine<S, T>() {
     cerr << "Destroying state machine." << std::endl;
@@ -62,7 +57,7 @@ public:
   }
 
   void fire(T trigger) {
-    for (auto t : m_transitions) {
+    for (auto t : m_transitions) { 
       if (t.getSource() == m_curState && t.getTrigger == trigger) {
         m_curState = t.getTarget();
         return;
@@ -74,3 +69,4 @@ public:
 };
 
 
+*/
