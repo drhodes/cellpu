@@ -15,13 +15,14 @@
 
 #include "atlas.hh"
 #include "bbox.hh"
+#include "event-handler.hh"
 
 // TODO introduce cursor position.
 // TODO introduce cmd line apart from other lines. nb. only the cmd line is editable.
 
 using namespace std;
 
-class Term {
+class Term : public EventHandler {
   static const int TERM_MAX_LINES = 10000;
         
 public:
@@ -32,7 +33,7 @@ public:
   int lineHeight, colWidth;
   int top, left;
   bool focus;
-  std::unordered_map<SDL_EventType, std::function<void(SDL_Event&)>> eventTable;
+  //std::unordered_map<SDL_EventType, std::function<void(SDL_Event&)>> eventTable;
   
   Term(Atlas& atlas, int left, int top, int columns, int rows);
   ~Term(); //freeTerm(Term *term);
@@ -51,8 +52,8 @@ public:
   void renderCursor(SDL_Renderer *renderer);
   void boundingBox(BBox&);
   void moveToBottom();
-  void registerEventHandler(SDL_EventType et, auto f);
-  void handleEvent(SDL_Event &ev);
+  //void registerEventHandler(SDL_EventType et, auto f);
+  //void handleEvent(SDL_Event &ev);
   void setupEvents();
 
   string getCurLine();

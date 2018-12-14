@@ -13,10 +13,12 @@
 #include "common.hh"
 #include "lua.hh"
 #include "display.hh"
+#include "event-handler.hh"
 
 extern LuaMgr lman; // main.c
 
 Term::Term(Atlas& atlas, int left, int top, int columns, int rows) :
+  EventHandler(),
   m_atlas(atlas)
 {
   m_curLine = 0;
@@ -143,13 +145,13 @@ Term::containsPx(Sint32 x, Sint32 y) {
 
 void
 Term::setupEvents() {
-  registerEventHandler(SDL_MOUSEMOTION,
+  registerEventHandler(SDL_MOUSEMOTION,                       
                        [&](SDL_Event &ev) {
                          Sint32 x = ev.motion.x;
                          Sint32 y = ev.motion.y;        
                          this->focus = containsPx(x, y);
                        });
-    
+  
   registerEventHandler(SDL_TEXTINPUT, 
                        [&](SDL_Event &ev) {
                          if (this->focus) {
@@ -176,24 +178,6 @@ Term::setupEvents() {
                          }
                        });
 }
-
-
-void
-Term::registerEventHandler(SDL_EventType et, auto f) {
-  cerr << "Register event: " << et << endl;
-  eventTable[et] = f;
-}
-
-void
-Term::handleEvent(SDL_Event &ev) {
-  auto tup = eventTable.find((SDL_EventType)(ev.type));
-  if (tup == std::end(eventTable)) {
-    cerr << "unhandled event in Term." << endl;
-  } else {
-    tup->second(ev);
-  }
-}
-
 
 void
 Term::doReturn() {

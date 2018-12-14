@@ -43,6 +43,9 @@ instruction.o:
 app.o: 
 	${CC} -c ${CFLAGS} src/app.cpp -o $@
 
+event-handler.o: 
+	${CC} -c ${CFLAGS} src/event-handler.cpp -o $@
+
 display.o: 
 	${CC} -c ${CFLAGS} src/display.cpp -o $@
 
@@ -91,6 +94,7 @@ OBJ	=	app.o\
 		common.o\
 		display.o\
 		draw.o\
+		event-handler.o\
 		grid-edit.o\
 		grid.o\
 		instruction.o\
