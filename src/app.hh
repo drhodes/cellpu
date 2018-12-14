@@ -14,14 +14,16 @@ using namespace std;
 class App {  
   Display dsys;
 
-  Atlas &m_gridAtlas;
+  // Atlas &m_gridAtlas;
   Grid &m_grid;
-  GridEditor& m_ge;
+  GridEditor &m_ge;
     
-  Atlas& m_termAtlas;
-  Term& m_term;
+  Atlas &m_termAtlas;
+  Term &m_term;
 
 public:
   App();
+  ~App();
+  
   void eventLoop();
 };

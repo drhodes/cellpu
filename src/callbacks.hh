@@ -6,7 +6,6 @@
 
 // C callbacks for lua -----------------------------------------------------------------------------
 #include <lua5.3/lua.h>
-//#include "display-state.hh"
 
 namespace callback {
     int lClear(lua_State *L);

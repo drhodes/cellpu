@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <unordered_map>
 
 #include "atlas.hh"
 #include "bbox.hh"
@@ -26,12 +27,13 @@ class Term {
 public:
   Atlas& m_atlas;
   string lines[TERM_MAX_LINES];
-  int curLine;
+  int m_curLine;
   int numCols, numRows;
   int lineHeight, colWidth;
   int top, left;
   bool focus;
-    
+  std::unordered_map<SDL_EventType, std::function<void(SDL_Event&)>> eventTable;
+  
   Term(Atlas& atlas, int left, int top, int columns, int rows);
   ~Term(); //freeTerm(Term *term);
 
@@ -40,7 +42,6 @@ public:
   void render(SDL_Renderer *renderer);
   int  getLineHeight();
   bool containsPx(Sint32 x, Sint32 y);
-  bool processEvent(SDL_Event*);
   bool pushChar(char c);  
   bool curLineFull();
   void popChar();  
@@ -49,6 +50,11 @@ public:
   void renderBackground(SDL_Renderer *renderer);
   void renderCursor(SDL_Renderer *renderer);
   void boundingBox(BBox&);
+  void moveToBottom();
+  void registerEventHandler(SDL_EventType et, auto f);
+  void handleEvent(SDL_Event &ev);
+  void setupEvents();
+
   string getCurLine();
 };
 

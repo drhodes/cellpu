@@ -40,6 +40,7 @@ Display::Display() {
 
 Display::~Display() {
   SDL_DestroyWindow(display::getWindow());
+  SDL_DestroyRenderer(display::getRenderer());
   SDL_Quit();
   TTF_Quit();
 }

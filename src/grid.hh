@@ -12,14 +12,15 @@
 
 class Cell;
 
-class  Grid {
+class Grid {
 public:
   Atlas& m_atlas;
   int m_size;
-  int m_displaySize; // number of cells shown.
   std::vector<std::vector<shared_ptr<Cell>>> m_cells;
   
-  Grid(int size, int displaySize, Atlas&);
+  Grid(int size);
+  ~Grid();
+  
   void render();
   bool processEvent(SDL_Event&);
   void cycleCell(int x, int y);

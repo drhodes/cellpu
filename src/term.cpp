@@ -19,11 +19,14 @@ extern LuaMgr lman; // main.c
 Term::Term(Atlas& atlas, int left, int top, int columns, int rows) :
   m_atlas(atlas)
 {
-  curLine = 0;
+  m_curLine = 0;
   numCols = columns;
   numRows = rows;
   this->top = top;
   this->left = left;
+
+  setupEvents();
+  moveToBottom();
 }
 
 Term::~Term() {
@@ -31,10 +34,22 @@ Term::~Term() {
 }
 
 void
+Term::moveToBottom() {
+  auto win = display::getWindow();
+  int w, winHeight;
+  SDL_GetWindowSize(win,&w,&winHeight);
+  BBox bb;
+  boundingBox(bb);
+  
+  this->top = winHeight - bb.height;
+}
+
+
+void
 Term::put(string str) {
-  assert(curLine < TERM_MAX_LINES);
-  lines[curLine] = str;
-  curLine += 1;
+  assert(m_curLine < TERM_MAX_LINES);
+  lines[m_curLine] = str;
+  m_curLine += 1;
 }
 
 void
@@ -55,11 +70,11 @@ Term::renderCursor(SDL_Renderer *renderer) {
   int x = left + ((promptSize + curCol) * m_atlas.surfWidth_);
   int y = top;
 
-  if (curLine >= numRows) {
+  if (m_curLine >= numRows) {
     // when the cursor hits the bottom of the terminal.
     y += numRows * m_atlas.surfHeight_;
   } else {
-    y += curLine * m_atlas.surfHeight_;
+    y += m_curLine * m_atlas.surfHeight_;
   }
     
   SDL_Rect rect = { x, y, m_atlas.surfWidth_, m_atlas.surfHeight_ };
@@ -107,7 +122,7 @@ Term::render(SDL_Renderer *renderer) {
   int winW, winH;
   SDL_GetWindowSize(display::getWindow(), &winW, &winH);
 
-  int bottomLine = curLine;
+  int bottomLine = m_curLine;
   int topLine = bottomLine - numRows;
   if (topLine < 0) topLine = 0;
     
@@ -125,44 +140,60 @@ Term::containsPx(Sint32 x, Sint32 y) {
   return bb.containsPx(x, y);
 }
 
-bool
-Term::processEvent(SDL_Event* ev) {
-  switch (ev->type) {
-  case SDL_MOUSEMOTION: {
-    Sint32 x = ev->motion.x;
-    Sint32 y = ev->motion.y;        
-    this->focus = containsPx(x, y);
-    break;
-  }
+
+void
+Term::setupEvents() {
+  registerEventHandler(SDL_MOUSEMOTION,
+                       [&](SDL_Event &ev) {
+                         Sint32 x = ev.motion.x;
+                         Sint32 y = ev.motion.y;        
+                         this->focus = containsPx(x, y);
+                       });
     
-  case SDL_TEXTINPUT: {
-    if (this->focus) pushChar(ev->window.event);
-    break;
-  }
-        
-  case SDL_KEYDOWN: {
-    if (!this->focus) break;
-        
-    switch (ev->key.keysym.scancode) {
-    case SDL_SCANCODE_BACKSPACE:
-      popChar();
-      break;
-    case SDL_SCANCODE_RETURN:
-    case SDL_SCANCODE_RETURN2: {
-      doReturn();
-      break;
-    }
-    default:
-      printf("unhandled scan code\n");
-      break;
-    }
-  }
-        
-  default: {
-    //die("Unhandled event in termProcessEvent");
-  }}
-  return true;
+  registerEventHandler(SDL_TEXTINPUT, 
+                       [&](SDL_Event &ev) {
+                         if (this->focus) {
+                           pushChar(ev.window.event);
+                         }
+                       });
+
+  registerEventHandler(SDL_KEYDOWN, 
+                       [&](SDL_Event &ev) {
+                         if (!this->focus) return;                         
+                         switch (ev.key.keysym.scancode) {
+                           
+                         case SDL_SCANCODE_BACKSPACE:
+                           popChar();
+                           break;
+                         case SDL_SCANCODE_RETURN:
+                         case SDL_SCANCODE_RETURN2: {
+                           doReturn();
+                           break;
+                         }
+                         default:
+                           printf("unhandled scan code\n");
+                           break;
+                         }
+                       });
 }
+
+
+void
+Term::registerEventHandler(SDL_EventType et, auto f) {
+  cerr << "Register event: " << et << endl;
+  eventTable[et] = f;
+}
+
+void
+Term::handleEvent(SDL_Event &ev) {
+  auto tup = eventTable.find((SDL_EventType)(ev.type));
+  if (tup == std::end(eventTable)) {
+    cerr << "unhandled event in Term." << endl;
+  } else {
+    tup->second(ev);
+  }
+}
+
 
 void
 Term::doReturn() {
@@ -173,7 +204,7 @@ Term::doReturn() {
 
 inline string
 Term::getCurLine() {
-  return lines[curLine];
+  return lines[m_curLine];
 }
 
 bool
@@ -186,7 +217,7 @@ bool
 Term::pushChar(char c) {
   // if line full return false
   if (!curLineFull()) {
-    lines[curLine].push_back(c);
+    lines[m_curLine].push_back(c);
     return true;
   }
   return false;
@@ -195,5 +226,5 @@ Term::pushChar(char c) {
 void
 Term::popChar() {
   if (getCurLine().length() > 0)
-    lines[curLine].pop_back();
+    lines[m_curLine].pop_back();
 }

@@ -3,18 +3,12 @@
 #include "app.hh"
 
 App::App() :
-  m_gridAtlas(*new Atlas("./media/FIXED_V0.TTF", 8)),
-  m_grid(*new Grid(100, 12, m_gridAtlas)),
+  m_grid(*new Grid(12)),
   m_ge(*new GridEditor(m_grid)),
 
-  // term
   m_termAtlas(*new Atlas("./media/Terminus.ttf", 16)),
   m_term(*new Term(m_termAtlas, 5, 750, 80, 17))
 {
-  // commander
-  // lua thing
-  // app state
-  // terminal ------------------------------------------------------------------------------------
   m_term.put("-- Localized Processing Unit, the repl is lua.");  
 }
 
@@ -33,7 +27,7 @@ App::eventLoop() {
         
     while(SDL_PollEvent(&event)) {           
       m_ge.processEvent(event);
-      m_term.processEvent(&event);
+      m_term.handleEvent(event);
       m_grid.processEvent(event);
            
       if (event.type == SDL_KEYDOWN) {            
@@ -51,4 +45,11 @@ App::eventLoop() {
     int wait = delta > 32 ? 0 : 32 - delta;
     SDL_Delay(wait);
   }
+}
+
+App::~App() {
+  delete &m_grid;
+  delete &m_ge;
+  delete &m_termAtlas;
+  delete &m_term;
 }

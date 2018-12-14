@@ -6,5 +6,6 @@ LuaMgr lman;
 int main (void) {
   App app;
   app.eventLoop();
+  
   return 0;
 }

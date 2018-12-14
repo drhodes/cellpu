@@ -9,17 +9,15 @@
 
 using namespace std;
 
-Grid::Grid(int size, int displaySize, Atlas &atlas) :
-  m_atlas(atlas)
+Grid::Grid(int size) :
+  m_atlas(*new Atlas("./media/FIXED_V0.TTF", 8))
 {
   if (size < 1) die("got bad size for new grid");
-  m_atlas = atlas;
   m_size = size;
-  m_displaySize = displaySize;
   
-  for (int row=0; row<size; row++) { 
+  for (int row=0; row < m_size; row++) { 
     vector<shared_ptr<Cell>> curRow;
-    for (int col=0; col<size; col++) {
+    for (int col=0; col < m_size; col++) {
       auto c = make_shared<Cell>(row, col);
       curRow.push_back(c);
     }
@@ -27,11 +25,15 @@ Grid::Grid(int size, int displaySize, Atlas &atlas) :
   }
 }
 
+Grid::~Grid() {
+  delete &m_atlas;
+}
+
 void
 Grid::render() {
   // render grid cells.
-  for (int row=0; row < m_displaySize; row++) {
-    for (int col=0; col < m_displaySize; col++) {
+  for (int row=0; row < m_size; row++) {
+    for (int col=0; col < m_size; col++) {
       m_cells[row][col]->render(m_atlas, display::getRenderer());
     }
   }
@@ -43,8 +45,8 @@ Grid::bbox(BBox& bb) {
   
   bb.top = 0;
   bb.left = 0;
-  bb.height = cellSize * m_displaySize;
-  bb.width  = cellSize * m_displaySize;    
+  bb.height = cellSize * m_size;
+  bb.width  = cellSize * m_size;    
 }
 
 bool
