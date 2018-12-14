@@ -22,6 +22,7 @@ docs: FORCE ## create documentation with doxygen
 tags: FORCE ## create tags
 	ctags src/*
 	etags src/*
+	etags /usr/include/SDL2/*
 
 see-docs: docs ## open docs in web browser.
 	sensible-browser ./dox/html/index.html 
