@@ -2,8 +2,9 @@
 
 #include "grid.hh"
 #include "cell.hh"
+#include "event-handler.hh"
 
-class GridEditor {
+class GridEditor : public EventHandler {
 public:
   Grid& m_grid;
   shared_ptr<Cell> m_overCell;
@@ -13,12 +14,13 @@ public:
   GridEditor(Grid&);
   ~GridEditor();
 
-  void processEvent(SDL_Event&);
+  // void processEvent(SDL_Event&);
   void updateOverCell(SDL_Event &ev);
   void updateSelectedCell(SDL_Event &ev);
   void updateFocus(SDL_Event &ev);
   void handleTextInput(SDL_Event &ev);
   void showArguments();
+  void setupEvents();
 
   // these may be used to display help for user.
   void showKeys();

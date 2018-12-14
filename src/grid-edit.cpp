@@ -3,13 +3,16 @@
 #include "err.hh"
 #include "grid.hh"
 #include "grid-edit.hh"
+#include "event-handler.hh"
 
 GridEditor::GridEditor(Grid &grid) :
+  EventHandler(),
   m_grid(grid)
 {
   m_overCell = grid.getCell(0, 0);
   m_selectedCell = grid.getCell(0, 0);
   m_hasFocus = false;
+  setupEvents();
 }
 
 GridEditor::~GridEditor() {
@@ -17,43 +20,60 @@ GridEditor::~GridEditor() {
 }
 
 void
-GridEditor::processEvent(SDL_Event &ev) {
-  // hack together some spaghetti state handling and then build a
-  // state machine. Either the gridedit has focus or it doesn't.
+GridEditor::setupEvents() {
+  registerEventHandler(SDL_MOUSEMOTION,                       
+                       [&](SDL_Event &ev) {
+                         updateFocus(ev);
+                         if (!m_hasFocus) return;
+                         updateOverCell(ev);
+                       });
   
-  switch (ev.type) {
-  case SDL_TEXTINPUT: {        
-    if (!m_hasFocus) return;
-    handleTextInput(ev);        
-    break;
-  }
+  registerEventHandler(SDL_TEXTINPUT, 
+                       [&](SDL_Event &ev) {
+                         if (!m_hasFocus) return;
+                         handleTextInput(ev);        
+                       });
+
+  registerEventHandler(SDL_MOUSEBUTTONDOWN,
+                       [&](SDL_Event &ev) {
+                         if (!m_hasFocus) return;
+                         updateSelectedCell(ev);
+                       });
+  
+  registerEventHandler(SDL_KEYDOWN, 
+                       [&](SDL_Event &ev) {
+                         if (!m_hasFocus) return;
+                         
+                         switch (ev.key.keysym.scancode) {
+                         case SDL_SCANCODE_ESCAPE: {
+                           m_grid.setSelectAllCells(false);
+                         }
+                         default: {
+                           printf("unhandled event in gridEditorProcessEvent, type: %d\n", ev.type);        
+                         }}                             
+                       });
+}  
+
+// void
+// GridEditor::processEvent(SDL_Event &ev) {
+//   // hack together some spaghetti state handling and then build a
+//   // state machine. Either the gridedit has focus or it doesn't.
+  
         
-  case SDL_MOUSEMOTION: {
-    updateFocus(ev);
-    if (!m_hasFocus) return;
-    updateOverCell(ev);
-    break;
-  }
+//   case SDL_MOUSEMOTION: {
+//     break;
+//   }
         
-  case SDL_MOUSEBUTTONDOWN: {
-    if (!m_hasFocus) return;
-    updateSelectedCell(ev);
-    break;
-  }
+//   case SDL_MOUSEBUTTONDOWN: {
+//     break;
+//   }
         
-  case SDL_KEYDOWN: {
-    if (!m_hasFocus) return;
+//   case SDL_KEYDOWN: {
+//     }}
         
-    switch (ev.key.keysym.scancode) {
-    case SDL_SCANCODE_ESCAPE: {
-      m_grid.setSelectAllCells(false);
-    }}
-        
-    default: {
-      printf("unhandled event in gridEditorProcessEvent, type: %d\n", ev.type);        
-    }
-  }}
-}
+//     }
+//   }}
+// }
 
 void
 GridEditor::updateOverCell(SDL_Event &ev) {

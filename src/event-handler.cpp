@@ -1,4 +1,3 @@
-
 #include <string>
 #include <iostream>
 
@@ -24,7 +23,3 @@ EventHandler::handleEvent(SDL_Event &ev) {
     tup->second(ev);
   }
 }
-
-  // EventHandler();
-  // void registerEventHandler(SDL_EventType et, auto f);
-  // void handleEvent(SDL_Event &ev);

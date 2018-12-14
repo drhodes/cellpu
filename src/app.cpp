@@ -26,7 +26,7 @@ App::eventLoop() {
     Uint64 loopTimeStart = SDL_GetTicks();
         
     while(SDL_PollEvent(&event)) {           
-      m_ge.processEvent(event);
+      m_ge.handleEvent(event);
       m_term.handleEvent(event);
       m_grid.processEvent(event);
            
