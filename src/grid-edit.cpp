@@ -21,7 +21,7 @@ GridEditor::~GridEditor() {
 
 void
 GridEditor::setupEvents() {
-  registerEventHandler(SDL_MOUSEMOTION,                       
+  registerEventHandler(SDL_MOUSEMOTION, 
                        [&](SDL_Event &ev) {
                          updateFocus(ev);
                          if (!m_hasFocus) return;
@@ -53,27 +53,6 @@ GridEditor::setupEvents() {
                          }}                             
                        });
 }  
-
-// void
-// GridEditor::processEvent(SDL_Event &ev) {
-//   // hack together some spaghetti state handling and then build a
-//   // state machine. Either the gridedit has focus or it doesn't.
-  
-        
-//   case SDL_MOUSEMOTION: {
-//     break;
-//   }
-        
-//   case SDL_MOUSEBUTTONDOWN: {
-//     break;
-//   }
-        
-//   case SDL_KEYDOWN: {
-//     }}
-        
-//     }
-//   }}
-// }
 
 void
 GridEditor::updateOverCell(SDL_Event &ev) {
