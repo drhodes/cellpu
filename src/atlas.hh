@@ -12,7 +12,9 @@ public:
   int surfWidth_, surfHeight_;
   std::map<char, SDL_Texture*> m_table;
   
-  Atlas(const char *fontFilename, int size);    
+  Atlas(const char *fontFilename, int size);
+  Atlas(const Atlas&) = delete;
+  
   SDL_Texture *getGlyph(char) throw() ;
   ~Atlas();
 };
