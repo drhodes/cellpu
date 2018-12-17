@@ -56,8 +56,10 @@ GridEditor::setupEvents() {
 
 void
 GridEditor::updateOverCell(SDL_Event &ev) {
-  m_overCell = m_grid.cursorCell(ev.motion.x, ev.motion.y);
-  showArguments();
+  if (m_grid.containsPoint(ev.motion.x, ev.motion.y)) {
+    m_overCell = m_grid.cursorCell(ev.motion.x, ev.motion.y);
+    showArguments();
+  }
 }
 
 void
