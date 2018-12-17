@@ -6,7 +6,7 @@
 #include "event-handler.hh"
 
 GridEditor::GridEditor(Grid &grid) :
-  EventHandler(),
+  EventHandler("GridEditor"),
   m_grid(grid)
 {
   m_overCell = grid.getCell(0, 0);
@@ -23,7 +23,7 @@ void
 GridEditor::setupEvents() {
   registerEventHandler(SDL_MOUSEMOTION, 
                        [&](SDL_Event &ev) {
-                         updateFocus(ev);
+                         updateFocus(ev); 
                          if (!m_hasFocus) return;
                          updateOverCell(ev);
                        });
