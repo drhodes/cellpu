@@ -28,7 +28,7 @@ App::eventLoop() {
     while(SDL_PollEvent(&event)) {           
       m_ge.handleEvent(event);
       m_term.handleEvent(event);
-      m_grid.processEvent(event);
+      //m_grid.processEvent(event);
            
       if (event.type == SDL_KEYDOWN) {            
         if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
