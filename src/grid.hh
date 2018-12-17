@@ -13,12 +13,15 @@
 class Cell;
 
 class Grid {
+private:
+  std::vector<std::vector<shared_ptr<Cell>>> m_cells;
+
 public:
   Atlas& m_atlas;
   int m_size;
-  std::vector<std::vector<shared_ptr<Cell>>> m_cells;
   
   Grid(int size);
+  Grid(const Grid&) = delete;
   ~Grid();
   
   void render();
@@ -32,8 +35,6 @@ public:
   shared_ptr<Cell> cursorCell(int pixelX, int pixelY);
   shared_ptr<Cell> getNbr(int x, int y, Way w);
 };
-
-
 
 
 
