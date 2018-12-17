@@ -69,6 +69,7 @@ public:
   // shared_ptr<StateMachine<CellState, CellTrans>> smach;
   
   Cell(int, int);
+  Cell(const Cell&) = delete;
   ~Cell();
 
   void setColReg(int n);
