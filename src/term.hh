@@ -33,30 +33,27 @@ public:
   int lineHeight, colWidth;
   int top, left;
   bool focus;
-  //std::unordered_map<SDL_EventType, std::function<void(SDL_Event&)>> eventTable;
   
   Term(Atlas& atlas, int left, int top, int columns, int rows);
   ~Term(); //freeTerm(Term *term);
 
-  void setNumRows(int linesShown);
+  bool containsPx(Sint32 x, Sint32 y);
+  bool curLineFull();
+  bool pushChar(char c);  
+  int  getLineHeight();
+  string getCurLine();
+  void boundingBox(BBox&);
+  void doReturn();
+  void moveToBottom();
+  void popChar();  
   void put(string line);
   void render(SDL_Renderer *renderer);
-  int  getLineHeight();
-  bool containsPx(Sint32 x, Sint32 y);
-  bool pushChar(char c);  
-  bool curLineFull();
-  void popChar();  
-  void doReturn();
-  void renderLine(SDL_Renderer *renderer, int lineNum, int rowNum);
   void renderBackground(SDL_Renderer *renderer);
   void renderCursor(SDL_Renderer *renderer);
-  void boundingBox(BBox&);
-  void moveToBottom();
-  //void registerEventHandler(SDL_EventType et, auto f);
-  //void handleEvent(SDL_Event &ev);
+  void renderLine(SDL_Renderer *renderer, int lineNum, int rowNum);
+  void setNumRows(int linesShown);
   void setupEvents();
 
-  string getCurLine();
 };
 
 
