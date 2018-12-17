@@ -18,7 +18,7 @@
 extern LuaMgr lman; // main.c
 
 Term::Term(Atlas& atlas, int left, int top, int columns, int rows) :
-  EventHandler(),
+  EventHandler("Term"),
   m_atlas(atlas)
 {
   m_curLine = 0;
@@ -145,6 +145,7 @@ Term::containsPx(Sint32 x, Sint32 y) {
 
 void
 Term::setupEvents() {
+  
   registerEventHandler(SDL_MOUSEMOTION,                       
                        [&](SDL_Event &ev) {
                          Sint32 x = ev.motion.x;
@@ -163,7 +164,6 @@ Term::setupEvents() {
                        [&](SDL_Event &ev) {
                          if (!this->focus) return;                         
                          switch (ev.key.keysym.scancode) {
-                           
                          case SDL_SCANCODE_BACKSPACE:
                            popChar();
                            break;
@@ -177,6 +177,7 @@ Term::setupEvents() {
                            break;
                          }
                        });
+  
 }
 
 void
