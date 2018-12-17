@@ -1,6 +1,7 @@
 #include <memory>
 
 #include "app.hh"
+#include "text-box.hh"
 
 App::App() :
   m_grid(*new Grid(12)),
@@ -15,6 +16,12 @@ App::App() :
 void
 App::eventLoop() {
   SDL_Event event;
+
+
+  Atlas atlas("./media/Terminus.ttf", 16);
+  TextBox tbox(atlas, 800, 10, 10, 10);
+  tbox.setRow(0, "Is there anybody out there?");
+  tbox.setRow(1, "hello?");
   
   while( true ) {
     // send app events to lua queue.
@@ -39,6 +46,7 @@ App::eventLoop() {
 
     m_term.render(display::getRenderer());
     m_grid.render();
+    tbox.render();
     SDL_RenderPresent(display::getRenderer());
     Uint64 loopTimeStop = SDL_GetTicks();
     Uint64 delta = loopTimeStop - loopTimeStart;
