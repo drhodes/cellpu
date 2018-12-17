@@ -12,7 +12,7 @@ TESTFLAGS=-Wall -g -std=c11
 TESTLIBS= -lSDL2 -llua5.3 -lcheck -lsubunit -pthread -lrt -lm -lsubunit
 EXE=sim
 TESTEXE=testbin
-CC=g++
+CC=ccache g++
 
 all: clean main ## build
 
@@ -42,6 +42,9 @@ instruction.o:
 
 app.o: 
 	${CC} -c ${CFLAGS} src/app.cpp -o $@
+
+text-box.o: 
+	${CC} -c ${CFLAGS} src/text-box.cpp -o $@
 
 event-handler.o: 
 	${CC} -c ${CFLAGS} src/event-handler.cpp -o $@
@@ -100,6 +103,7 @@ OBJ	=	app.o\
 		instruction.o\
 		lua.o\
 		state-machine.o\
+		text-box.o\
 		opcode.o\
 		term.o\
 
