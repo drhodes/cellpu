@@ -34,6 +34,9 @@ profile: clean main ## start cachegrind after some use
 watch: ## setup a watch for the source directory to rebuild on change
 	when-changed -r Makefile src/*.c src/*.cpp src/*.hh -c "clear && make clean && make -j8 main"
 
+expected.o:
+	${CC} -c ${CFLAGS} src/expected.cpp -o $@
+
 common.o: 
 	${CC} -c ${CFLAGS} src/common.cpp -o $@
 

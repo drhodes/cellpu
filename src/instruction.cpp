@@ -19,7 +19,10 @@ void
 Instruction::apply(Grid &grid, Cell &cell) { }
 
 // -------------------------------------------------------------------------------------------------
-NOOP::NOOP() : Instruction("NOOP", {0x30, 0x30, 0x30, 0xFF}) {}
+//NOOP::NOOP() : Instruction("NOOP", {0x30, 0x30, 0x30, 0xFF}) {}
+NOOP::NOOP() : Instruction("NOOP", {0x9d, 0x02, 0x33, 0xFF}) {}
+
+
 
 void 
 NOOP::apply(Grid &grid, Cell &cell) { }
@@ -31,7 +34,7 @@ void
 AND::apply(Grid &grid, Cell &cell) {  
   auto argCell1 = grid.getNbr(cell.x_, cell.y_, cell.getArgWay1());
   auto argCell2 = grid.getNbr(cell.x_, cell.y_, cell.getArgWay2());
-  byte arg1 = argCell1->dataReg_;
-  byte arg2 = argCell2->dataReg_;    
+  char arg1 = argCell1->dataReg_;
+  char arg2 = argCell2->dataReg_;    
   cell.dataReg_ = arg1 & arg2;
 }

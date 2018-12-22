@@ -15,7 +15,7 @@ public:
   Atlas(const char *fontFilename, int size);
   Atlas(const Atlas&) = delete;
   
-  SDL_Texture *getGlyph(char) throw() ;
+  SDL_Texture *getGlyph(char);
   ~Atlas();
 };
 

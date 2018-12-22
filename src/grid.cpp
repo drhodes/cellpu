@@ -44,8 +44,8 @@ Grid::bbox(BBox& bb) {
   int cellSize = getCell(0, 0)->size_;
   bb.top = 0;
   bb.left = 0;
-  bb.height = cellSize * m_size - 1; // -1 mitigates off by one. 
-  bb.width  = cellSize * m_size - 1;
+  bb.height = cellSize * m_size; 
+  bb.width  = cellSize * m_size; 
 }
 
 bool
@@ -84,15 +84,11 @@ Grid::setSelectAllCells(bool b) {
 
 shared_ptr<Cell>
 Grid::getNbr(int x, int y, Way w) {
-  try {
-    switch (w) {
-    case N: return getCell(x, y-1);
-    case S: return getCell(x, y+1);
-    case E: return getCell(x+1, y);
-    case W: return getCell(x-1, y);
-    default: terr("recieved an impossible Way argument");
-    }
-  } catch(exception e) {
-    eerr(e, "bad code path");
-  }
+  switch (w) {
+  case N: return getCell(x, y-1);
+  case S: return getCell(x, y+1);
+  case E: return getCell(x+1, y);
+  case W: return getCell(x-1, y);
+  default: terr("recieved an impossible Way argument");
+  } 
 }

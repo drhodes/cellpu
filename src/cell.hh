@@ -63,7 +63,7 @@ class Cell {
 public: 
   int x_, y_, value_, size_;
   bool selected_, broadcasting_, listening_;
-  byte dataReg_, colReg_, rowReg_;
+  char dataReg_, colReg_, rowReg_;
   CellConfig cfg_;
   shared_ptr<Instruction> inst_; // this has to be a pointer because of an import cycle.
   // shared_ptr<StateMachine<CellState, CellTrans>> smach;

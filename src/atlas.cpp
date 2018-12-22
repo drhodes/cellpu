@@ -26,10 +26,10 @@ Atlas::Atlas(const char *fontFilename, int size) {
 }
 
 SDL_Texture*
-Atlas::getGlyph(char c) throw() {
+Atlas::getGlyph(char c) {
   std::map<char, SDL_Texture*>::iterator tup = m_table.find(c);
   if (tup == std::end(m_table)) {
-    throw runtime_error("atlasGetGlyph got unknown character: " + c);
+    throw runtime_error("atlasGetGlyph got unknown character");
   }
   return tup->second;
 }

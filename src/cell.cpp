@@ -40,7 +40,7 @@ Cell::setSelect(bool b) {
 SDL_Color
 Cell::color() {
   // change this.
-  SDL_Color c = {0x56, 0x56, 0x56, 0xFF};  
+  SDL_Color c = inst_->m_color;
   return c;
 }
 
