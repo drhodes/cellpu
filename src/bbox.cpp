@@ -21,8 +21,8 @@ BBox::BBox(int top, int left, int height, int width)
 
 bool
 BBox::containsPx(int x, int y) {
-    return ( left <= x &&
-             x <= left + width &&
-             top <= y &&
-             y <= top + height );
+    return ( left < x &&
+             x < left + width &&
+             top < y &&
+             y < top + height );
 }
