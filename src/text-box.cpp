@@ -86,11 +86,14 @@ TextBox::render() {
     
     for (char c : str) {
       SDL_Rect msgRect = { curX, curY, m_atlas.surfWidth_, m_atlas.surfHeight_ };
-      SDL_Texture* glyph = m_atlas.getGlyph(c);
-      nullDieMsg(glyph, "failed to get a glyph in textBoxRender");            
-      SDL_RenderCopy(display::getRenderer(), glyph, NULL, &msgRect);
-      curX += m_atlas.surfWidth_;
-      curCol++;
+      optional<SDL_Texture*> glyph = m_atlas.getGlyph(c);
+      if (glyph.has_value()) {
+        SDL_RenderCopy(display::getRenderer(), glyph.value(), NULL, &msgRect);
+        curX += m_atlas.surfWidth_;
+        curCol++;
+      } else {
+        terr("failed to get a glyph in textBoxRender");         
+      }
       if (curCol >= m_numCols) break;
     }    
     curY += m_atlas.surfHeight_;

@@ -4,6 +4,9 @@
 
 #include <SDL2/SDL.h>
 #include <map>
+#include <optional>
+
+using namespace std;
 
 #define ATLAS_SIZE 127
 
@@ -15,7 +18,7 @@ public:
   Atlas(const char *fontFilename, int size);
   Atlas(const Atlas&) = delete;
   
-  SDL_Texture *getGlyph(char);
+  optional<SDL_Texture*> getGlyph(char);
   ~Atlas();
 };
 

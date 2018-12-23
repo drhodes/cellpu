@@ -29,9 +29,14 @@ namespace draw {
   text(Atlas& atlas, int x, int y, std::string txt) {
     SDL_Rect msgRect = { x, y, atlas.surfWidth_, atlas.surfHeight_ };  
     for (int i=0; txt[i]; i++) {
-      SDL_Texture* glyph = atlas.getGlyph(txt[i]);
-      SDL_RenderCopy(display::getRenderer(), glyph, nullptr, &msgRect);
-      msgRect.x += atlas.surfWidth_;
+      optional<SDL_Texture*> glyph = atlas.getGlyph(txt[i]);
+      if (glyph.has_value()) {
+        SDL_RenderCopy(display::getRenderer(), glyph.value(), nullptr, &msgRect);
+        msgRect.x += atlas.surfWidth_;
+      } else {
+        // todo setup loggin for warnings.
+      }
     }
   }
+  // namespace draw
 }

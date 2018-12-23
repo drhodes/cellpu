@@ -3,10 +3,13 @@
 #include <SDL2/SDL.h>
 #include <exception>
 #include <map>
+#include <optional>
 
 #include "atlas.hh"
 #include "display.hh"
 #include "err.hh"
+
+using namespace std;
 
 Atlas::Atlas(const char *fontFilename, int size) {
   TTF_Font* font = TTF_OpenFont(fontFilename, size);
@@ -25,13 +28,13 @@ Atlas::Atlas(const char *fontFilename, int size) {
   TTF_CloseFont(font);
 }
 
-SDL_Texture*
+optional<SDL_Texture*>
 Atlas::getGlyph(char c) {
   std::map<char, SDL_Texture*>::iterator tup = m_table.find(c);
   if (tup == std::end(m_table)) {
-    throw runtime_error("atlasGetGlyph got unknown character");
+    return nullopt;
   }
-  return tup->second;
+  return make_optional(tup->second);
 }
 
 Atlas::~Atlas() {

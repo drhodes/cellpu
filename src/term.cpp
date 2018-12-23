@@ -46,7 +46,6 @@ Term::moveToBottom() {
   this->top = winHeight - bb.height;
 }
 
-
 void
 Term::put(string str) {
   assert(m_curLine < TERM_MAX_LINES);
@@ -109,10 +108,14 @@ Term::renderLine(SDL_Renderer *renderer, int lineNum, int rowNum) {
     
   for (int i=0; str[i]; i++) {
     SDL_Rect msgRect = { curX, curY, m_atlas.surfWidth_, m_atlas.surfHeight_ };
-    SDL_Texture* glyph = m_atlas.getGlyph(str[i]);
-    nullDieMsg(glyph, "failed to get a glyph in termRender");            
-    SDL_RenderCopy(renderer, glyph, NULL, &msgRect);
-    curX += m_atlas.surfWidth_;
+    optional<SDL_Texture*> glyph = m_atlas.getGlyph(str[i]);
+    
+    if (glyph.has_value()) {
+      SDL_RenderCopy(renderer, glyph.value(), NULL, &msgRect);
+      curX += m_atlas.surfWidth_;
+    } else {
+      nullDieMsg(nullptr, "failed to get a glyph in Term::renderLine");            
+    }
   }
 }
 

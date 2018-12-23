@@ -105,10 +105,10 @@ OBJ	=	app.o\
 		grid.o\
 		instruction.o\
 		lua.o\
-		state-machine.o\
-		text-box.o\
 		opcode.o\
+		state-machine.o\
 		term.o\
+		text-box.o\
 
 main: ${OBJ} ## 
 	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.cpp $?

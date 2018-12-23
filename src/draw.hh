@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <optional>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
