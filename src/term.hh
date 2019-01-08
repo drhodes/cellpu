@@ -26,7 +26,7 @@ class Term : public EventHandler {
   static const int TERM_MAX_LINES = 10000;
         
 public:
-  Atlas& m_atlas;
+  Atlas& m_atlas = *new Atlas("./media/Terminus.ttf", 16);
   string lines[TERM_MAX_LINES];
   int m_curLine;
   int numCols, numRows;
@@ -34,7 +34,7 @@ public:
   int top, left;
   bool focus;
   
-  Term(Atlas& atlas, int left, int top, int columns, int rows);
+  Term(int left, int top, int columns, int rows);
   ~Term(); //freeTerm(Term *term);
 
   bool containsPx(Sint32 x, Sint32 y);

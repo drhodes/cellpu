@@ -7,7 +7,8 @@
 
 GridEditor::GridEditor(Grid &grid) :
   EventHandler("GridEditor"),
-  m_grid(grid)
+  m_grid(grid),
+  m_statusText(*new TextBox(*new Atlas("./media/Terminus.ttf", 16), 2, grid.bottom(), 80, 1))
 {
   m_overCell = grid.getCell(0, 0);
   m_selectedCell = grid.getCell(0, 0);
@@ -24,29 +25,37 @@ GridEditor::setupEvents() {
   registerEventHandler(SDL_MOUSEMOTION, 
                        [&](SDL_Event &ev) {
                          updateFocus(ev); 
-                         if (!m_hasFocus) return;
+                         if (!m_hasFocus) return; 
+                         m_statusText.setRow(0, "Handling SDL_MOUSEMOTION");
                          updateOverCell(ev);
                        });
   
   registerEventHandler(SDL_TEXTINPUT, 
                        [&](SDL_Event &ev) {
                          if (!m_hasFocus) return;
+                         string s = "Handling SDL_TEXTINPUT: ";
+                         s.push_back(ev.window.event);
+                           
+                         m_statusText.setRow(0, s);
                          handleTextInput(ev);        
                        });
 
   registerEventHandler(SDL_MOUSEBUTTONDOWN,
                        [&](SDL_Event &ev) {
-                         if (!m_hasFocus) return;
+                         if (!m_hasFocus) return; 
+                         m_statusText.setRow(0, "Handling SDL_MOUSEBUTTONDOWN");
                          updateSelectedCell(ev);
                        });
   
   registerEventHandler(SDL_KEYDOWN, 
                        [&](SDL_Event &ev) {
                          if (!m_hasFocus) return;
+                         m_statusText.setRow(0, "Handling SDL_KEYDOWN");
                          
                          switch (ev.key.keysym.scancode) {
                          case SDL_SCANCODE_ESCAPE: {
                            m_grid.setSelectAllCells(false);
+                           m_statusText.setRow(0, "unselected all cells");
                          }
                          default: {
                            printf("unhandled event in gridEditorProcessEvent, type: %d\n", ev.type);        
@@ -64,7 +73,6 @@ GridEditor::updateOverCell(SDL_Event &ev) {
 
 void
 GridEditor::updateSelectedCell(SDL_Event &ev) {
-  // otherwise wait until there is an overcell.
   m_selectedCell = m_overCell;
     
   // select cell if deselected, deselect cell if already selected.
@@ -97,6 +105,9 @@ GridEditor::handleTextInput(SDL_Event &ev) {
     m_grid.setSelectAllCells(true);
     break;
   }
+  case '?': {
+    // how to message the big text box from here?
+  }
     
   default: {
     // complain about no keybinding.
@@ -108,4 +119,10 @@ GridEditor::showArguments() {
   // draw arrows from the cells that contain argument.
   // clear info box.
   // draw this cell info.      
+}
+
+void
+GridEditor::render() {
+  m_grid.render();
+  m_statusText.render();
 }

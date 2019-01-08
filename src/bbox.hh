@@ -7,9 +7,12 @@
 
 class BBox {
  public:
-    int top, left, height, width;
+  int top, left, height, width;
 
-    BBox();
-    BBox(int, int, int, int);
-    bool containsPx(int, int);
+  BBox();
+  BBox(int, int, int, int);
+  
+  bool containsPx(int, int);
+  int bottom();
+  
 };

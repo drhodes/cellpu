@@ -92,3 +92,10 @@ Grid::getNbr(int x, int y, Way w) {
   default: terr("recieved an impossible Way argument");
   } 
 }
+
+int
+Grid::bottom() {
+  BBox bb;
+  bbox(bb);
+  return bb.bottom();
+}

@@ -43,15 +43,6 @@ TextBox::TextBox(Atlas &atlas, int left, int top, int columns, int rows) :
   }
 }
 
-// TextBox::~TextBox() {
-//   cerr << "TextBox is indeed being destroyed" << endl;
-// }
-
-// bool setChar(x, y, char c);
-// int  getLineHeight();
-// void render(SDL_Renderer *renderer);
-// void renderBackground(SDL_Renderer *renderer);
-
 bool
 TextBox::setChar(int row, int col, char c) {
   if (col >= m_numCols || row >= m_numRows) return false;
@@ -77,11 +68,12 @@ TextBox::renderBackground(SDL_Renderer *renderer) {
 void
 TextBox::render() {  
   renderBackground(display::getRenderer());
-  int curY = 30;
+  int border = 1; // px
+  int curY = m_bbox.top + border;
   int curRow = 0;
   
   for (string str : m_lines) {
-    int curX = m_bbox.left;
+    int curX = m_bbox.left + border;
     int curCol = 0;    
     
     for (char c : str) {
@@ -102,100 +94,3 @@ TextBox::render() {
   }
 }
 
-
-/*
-void
-TextBox::renderLine(SDL_Renderer *renderer, int lineNum, int rowNum) {
-  string str("> ");
-  str.append(lines[lineNum]);
-        
-  int curX = left;
-  int curY = top + rowNum * m_atlas.surfHeight_;
-    
-  for (int i=0; str[i]; i++) {
-    SDL_Rect msgRect = { curX, curY, m_atlas.surfWidth_, m_atlas.surfHeight_ };
-    SDL_Texture* glyph = m_atlas.getGlyph(str[i]);
-    nullDieMsg(glyph, "failed to get a glyph in textBoxRender");            
-    SDL_RenderCopy(renderer, glyph, NULL, &msgRect);
-    curX += m_atlas.surfWidth_;
-  }
-}
-
-bool
-TextBox::containsPx(Sint32 x, Sint32 y) {    
-  BBox bb;
-  boundingBox(bb);
-  return bb.containsPx(x, y);
-}
-
-
-void
-TextBox::setupEvents() {
-  registerEventHandler(SDL_MOUSEMOTION,                       
-                       [&](SDL_Event &ev) {
-                         Sint32 x = ev.motion.x;
-                         Sint32 y = ev.motion.y;        
-                         this->focus = containsPx(x, y);
-                       });
-  
-  registerEventHandler(SDL_TEXTINPUT, 
-                       [&](SDL_Event &ev) {
-                         if (this->focus) {
-                           pushChar(ev.window.event);
-                         }
-                       });
-
-  registerEventHandler(SDL_KEYDOWN, 
-                       [&](SDL_Event &ev) {
-                         if (!this->focus) return;                         
-                         switch (ev.key.keysym.scancode) {
-                           
-                         case SDL_SCANCODE_BACKSPACE:
-                           popChar();
-                           break;
-                         case SDL_SCANCODE_RETURN:
-                         case SDL_SCANCODE_RETURN2: {
-                           doReturn();
-                           break;
-                         }
-                         default:
-                           printf("unhandled scan code\n");
-                           break;
-                         }
-                       });
-}
-
-void
-TextBox::doReturn() {
-  string line = getCurLine();
-  lman.doLine(line);
-  put(line);
-}
-
-inline string
-TextBox::getCurLine() {
-  return lines[m_curLine];
-}
-
-bool
-TextBox::curLineFull() {
-  return (int)(getCurLine().length()) >= (numCols - 1);
-}
-
-/// returns false when can't append char to current line.
-bool
-TextBox::pushChar(char c) {
-  // if line full return false
-  if (!curLineFull()) {
-    lines[m_curLine].push_back(c);
-    return true;
-  }
-  return false;
-}
-
-void
-TextBox::popChar() {
-  if (getCurLine().length() > 0)
-    lines[m_curLine].pop_back();
-}
-*/

@@ -30,7 +30,9 @@ public:
   bool containsPoint(Sint32 x, Sint32 y);
   void setSelectAllCells(bool b);
   void bbox(BBox&);
+  int bottom();
 
+  
   shared_ptr<Cell> getCell(int x, int y) const;
   shared_ptr<Cell> cursorCell(int pixelX, int pixelY);
   shared_ptr<Cell> getNbr(int x, int y, Way w);

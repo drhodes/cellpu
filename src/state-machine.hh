@@ -8,11 +8,43 @@
 
 using namespace std;
 
-// why not do this in lua!
-// 
+
+
+class StateMachine {
+  struct Connecting {};
+  struct Connected{};
+  struct Disconnecting{};
+  struct Disconnected{};
+  
+  struct MouseDown{};
+  struct MouseUp{};
+  
+
+  // template <class Src, class Trig, class Tgt>
+  // void transition();
+  
+    
+  
+  
+  
+  //template <Disconnected, MouseUp, Disconnected> transition() {}
+};
+  
+  
+
+//Connecting transition(Connected) { }
+
+
 
 // template <class T>
 // string show(const T &obj);
+
+// auto Connection = [](auto& in) {
+//                     for (;;) {
+//                     }
+//                   }
+
+  
 
 /*
 template <class S, class T>
@@ -65,8 +97,6 @@ public:
     }
     die("Could not fire state machine, transition not found for current state");
   }
-
 };
-
 
 */

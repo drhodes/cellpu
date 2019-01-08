@@ -17,9 +17,8 @@
 
 extern LuaMgr lman; // main.c
 
-Term::Term(Atlas& atlas, int left, int top, int columns, int rows) :
-  EventHandler("Term"),
-  m_atlas(atlas)
+Term::Term(int left, int top, int columns, int rows) :
+  EventHandler("Term")
 {
   m_curLine = 0;
   numCols = columns;
@@ -180,7 +179,6 @@ Term::setupEvents() {
                            break;
                          }
                        });
-  
 }
 
 void

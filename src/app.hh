@@ -14,12 +14,10 @@ using namespace std;
 class App {  
   Display dsys;
 
-  // Atlas &m_gridAtlas;
   Grid &m_grid;
   GridEditor &m_ge;
     
-  Atlas &m_termAtlas;
-  Term &m_term;
+  Term &m_term = *new Term(5, 750, 80, 17);  
 
 public:
   App();

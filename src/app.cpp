@@ -1,22 +1,17 @@
 #include <memory>
-
 #include "app.hh"
 #include "text-box.hh"
 
 App::App() :
   m_grid(*new Grid(12)),
-  m_ge(*new GridEditor(m_grid)),
-
-  m_termAtlas(*new Atlas("./media/Terminus.ttf", 16)),
-  m_term(*new Term(m_termAtlas, 5, 750, 80, 17))
-{
+  m_ge(*new GridEditor(m_grid))
+{                               // 
   m_term.put("-- Localized Processing Unit, the repl is lua.");  
 }
 
 void
 App::eventLoop() {
   SDL_Event event;
-
 
   Atlas atlas("./media/Terminus.ttf", 16);
   TextBox tbox(atlas, 800, 10, 10, 10);
@@ -35,7 +30,6 @@ App::eventLoop() {
     while(SDL_PollEvent(&event)) {           
       m_ge.handleEvent(event);
       m_term.handleEvent(event);
-      //m_grid.processEvent(event);
            
       if (event.type == SDL_KEYDOWN) {            
         if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
@@ -45,7 +39,7 @@ App::eventLoop() {
     }
 
     m_term.render(display::getRenderer());
-    m_grid.render();
+    m_ge.render();
     tbox.render();
     SDL_RenderPresent(display::getRenderer());
     Uint64 loopTimeStop = SDL_GetTicks();
@@ -58,6 +52,5 @@ App::eventLoop() {
 App::~App() {
   delete &m_grid;
   delete &m_ge;
-  delete &m_termAtlas;
   delete &m_term;
 }

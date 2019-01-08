@@ -12,7 +12,8 @@ using namespace std;
 
 class Atlas {
 public:
-  int surfWidth_, surfHeight_;
+  int surfWidth_;
+  int surfHeight_;
   std::map<char, SDL_Texture*> m_table;
   
   Atlas(const char *fontFilename, int size);
