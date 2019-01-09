@@ -32,64 +32,64 @@ profile: clean main ## start cachegrind after some use
 	cachegrind callgrind.out*
 
 watch: ## setup a watch for the source directory to rebuild on change
-	when-changed -r Makefile src/*.c src/*.cpp src/*.hh -c "clear && make clean && make -j8 main"
+	when-changed -r Makefile src/*.c src/*.cc src/*.hh -c "clear && make clean && make -j8 main"
 
 expected.o:
-	${CC} -c ${CFLAGS} src/expected.cpp -o $@
+	${CC} -c ${CFLAGS} src/expected.cc -o $@
 
 common.o: 
-	${CC} -c ${CFLAGS} src/common.cpp -o $@
+	${CC} -c ${CFLAGS} src/common.cc -o $@
 
 instruction.o: 
-	${CC} -c ${CFLAGS} src/instruction.cpp -o $@
+	${CC} -c ${CFLAGS} src/instruction.cc -o $@
 
 app.o: 
-	${CC} -c ${CFLAGS} src/app.cpp -o $@
+	${CC} -c ${CFLAGS} src/app.cc -o $@
 
 text-box.o: 
-	${CC} -c ${CFLAGS} src/text-box.cpp -o $@
+	${CC} -c ${CFLAGS} src/text-box.cc -o $@
 
 event-handler.o: 
-	${CC} -c ${CFLAGS} src/event-handler.cpp -o $@
+	${CC} -c ${CFLAGS} src/event-handler.cc -o $@
 
 display.o: 
-	${CC} -c ${CFLAGS} src/display.cpp -o $@
+	${CC} -c ${CFLAGS} src/display.cc -o $@
 
 grid.o: 
-	${CC} -c ${CFLAGS} src/grid.cpp -o $@
+	${CC} -c ${CFLAGS} src/grid.cc -o $@
 
 grid-edit.o: 
-	${CC} -c ${CFLAGS} src/grid-edit.cpp -o $@
+	${CC} -c ${CFLAGS} src/grid-edit.cc -o $@
 
 cell.o:
-	${CC} -c ${CFLAGS} src/cell.cpp -o $@
+	${CC} -c ${CFLAGS} src/cell.cc -o $@
 
 draw.o:
-	${CC} -c ${CFLAGS} src/draw.cpp -o $@
+	${CC} -c ${CFLAGS} src/draw.cc -o $@
 
 atlas.o:
-	${CC} -c ${CFLAGS} src/atlas.cpp -o $@
+	${CC} -c ${CFLAGS} src/atlas.cc -o $@
 
 err.o:
-	${CC} -c ${CFLAGS} src/err.cpp -o $@
+	${CC} -c ${CFLAGS} src/err.cc -o $@
 
 callbacks.o:
-	${CC} -c ${CFLAGS} src/callbacks.cpp -o $@
+	${CC} -c ${CFLAGS} src/callbacks.cc -o $@
 
 bbox.o:
-	${CC} -c ${CFLAGS} src/bbox.cpp -o $@
+	${CC} -c ${CFLAGS} src/bbox.cc -o $@
 
 term.o:
-	${CC} -c ${CFLAGS} src/term.cpp -o $@
+	${CC} -c ${CFLAGS} src/term.cc -o $@
 
 state-machine.o:
-	${CC} -c ${CFLAGS} src/state-machine.cpp -o $@
+	${CC} -c ${CFLAGS} src/state-machine.cc -o $@
 
 opcode.o:
-	${CC} -c ${CFLAGS} src/opcode.cpp -o $@
+	${CC} -c ${CFLAGS} src/opcode.cc -o $@
 
 lua.o:
-	${CC} -c ${CFLAGS} src/lua.cpp -o $@
+	${CC} -c ${CFLAGS} src/lua.cc -o $@
 
 
 OBJ	=	app.o\
@@ -111,10 +111,10 @@ OBJ	=	app.o\
 		text-box.o\
 
 main: ${OBJ} ## 
-	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.cpp $?
+	${CC} ${CFLAGS} ${LDFLAGS} -o ${EXE} src/$@.cc $?
 
 work: ## open all files in editor
-	emacs -nw src/*.c src/*.cpp src/*.hh lua/*.lua Makefile
+	emacs -nw src/*.cc src/*.hh lua/*.lua Makefile
 
 # http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 .PHONY: help clean docs
