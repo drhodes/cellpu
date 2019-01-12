@@ -13,15 +13,13 @@ using namespace std;
 
 class App {  
   Display dsys;
-
-  Grid &m_grid;
-  GridEditor &m_ge;
-    
+  GridEditor &m_ge = *new GridEditor();
   Term &m_term = *new Term(5, 750, 80, 17);  
 
 public:
   App();
   ~App();
-  
+
+  void resizeGrid(int n);
   void eventLoop();
 };

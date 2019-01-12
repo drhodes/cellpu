@@ -15,7 +15,9 @@ LuaMgr::LuaMgr() {
   luaopen_table(_LS);          // opens the table library 
   luaopen_io(_LS);             // opens the I/O library 
   luaopen_string(_LS);         // opens the string lib. 
-  luaopen_math(_LS);           // opens the math lib. 
+  luaopen_math(_LS);           // opens the math lib.
+
+  register_callbacks();
 }
 
 LuaMgr::~LuaMgr() {
@@ -37,16 +39,19 @@ LuaMgr::doFile(const char *filename) {
   }
 }
 
-void
+string
 LuaMgr::doLine(std::string line) {
   int err = luaL_loadbuffer(_LS, line.c_str(), line.length(), "line") || lua_pcall(_LS, 0, 0, 0);
+  string s("");
   
   if (err) {
     string errStr(lua_tostring(_LS, -1));
     fprintf(stderr, "%s\n", lua_tostring(_LS, -1));
+    s += string(lua_tostring(_LS, -1));
     perr(errStr);
-    lua_pop(_LS, 1);
+    lua_pop(_LS, 1);    
   }
+  return s;
 }
 
 // managing the grid -------------------------------------------------------------------------------
@@ -69,10 +74,8 @@ LuaMgr::getGrid() {
   return reinterpret_cast<const Grid&>(*ptr2);
 }
 
-
 void
-LuaMgr::register_callbacks() {
-    
+LuaMgr::register_callbacks() {    
   lua_pushcfunction(_LS, callback::lSelectCell);
   lua_setglobal(_LS, "selectCell");
 
@@ -86,8 +89,5 @@ LuaMgr::register_callbacks() {
   
   lua_pushcfunction(_LS, sum);
   lua_setglobal(_LS, "sum");
-  
-
-  
   lua_pop(_LS, 6);
 }

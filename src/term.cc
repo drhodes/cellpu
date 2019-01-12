@@ -46,7 +46,7 @@ Term::moveToBottom() {
 }
 
 void
-Term::put(string str) {
+Term::putInput(string str) {
   assert(m_curLine < TERM_MAX_LINES);
   lines[m_curLine] = str;
   m_curLine += 1;
@@ -90,9 +90,9 @@ Term::renderBackground(SDL_Renderer *renderer) {
   SDL_Rect rect = {bb.left, bb.top, bb.width, bb.height};
   
   if (focus) {
-    SDL_SetRenderDrawColor(renderer, 0x60, 0x35, 0x6A, 0x70);
+    SDL_SetRenderDrawColor(renderer, 0x60, 0x35, 0x6A, 0xBB);
   } else {
-    SDL_SetRenderDrawColor(renderer, 0x45, 0x45, 0x45, 0x20);
+    SDL_SetRenderDrawColor(renderer, 0x45, 0x45, 0x45, 0xBB);
   }
   SDL_RenderFillRect(renderer, &rect);
 }
@@ -144,10 +144,8 @@ Term::containsPx(Sint32 x, Sint32 y) {
   return bb.containsPx(x, y);
 }
 
-
 void
 Term::setupEvents() {
-  
   registerEventHandler(SDL_MOUSEMOTION,                       
                        [&](SDL_Event &ev) {
                          Sint32 x = ev.motion.x;
@@ -161,7 +159,7 @@ Term::setupEvents() {
                            pushChar(ev.window.event);
                          }
                        });
-
+  
   registerEventHandler(SDL_KEYDOWN, 
                        [&](SDL_Event &ev) {
                          if (!this->focus) return;                         
@@ -178,14 +176,16 @@ Term::setupEvents() {
                            printf("unhandled scan code\n");
                            break;
                          }
-                       });
+                       });  
 }
 
 void
 Term::doReturn() {
   string line = getCurLine();
-  lman.doLine(line);
-  put(line);
+  string result = lman.doLine(line);
+  putInput(line);
+  putInput(result);
+  
 }
 
 inline string

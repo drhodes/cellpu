@@ -1,5 +1,3 @@
-## c-json is crying about deprecated functions that have since been undeprecated.
-
 CFLAGS= -O0 -g -std=c++17 \
 	-Wall \
 	-Werror \
@@ -7,7 +5,7 @@ CFLAGS= -O0 -g -std=c++17 \
 	-Wno-switch \
 	-fsanitize=address \
 
-LDFLAGS=-lSDL2 -llua5.3 -lSDL2_ttf -ljson-c
+LDFLAGS=-lSDL2 -llua5.3 -lSDL2_ttf
 TESTFLAGS=-Wall -g -std=c11
 TESTLIBS= -lSDL2 -llua5.3 -lcheck -lsubunit -pthread -lrt -lm -lsubunit
 EXE=sim
@@ -20,10 +18,7 @@ docs: FORCE ## create documentation with doxygen
 	doxygen doxygen.cfg
 
 tags: FORCE ## create tags
-	ctags src/*
-	etags src/*
-	etags /usr/include/SDL2/*
-
+	gtags ./src # /usr/include/SDL2 /usr/include/c++/8
 see-docs: docs ## open docs in web browser.
 	sensible-browser ./dox/html/index.html 
 
@@ -45,6 +40,9 @@ instruction.o:
 
 app.o: 
 	${CC} -c ${CFLAGS} src/app.cc -o $@
+
+cmdr.o: 
+	${CC} -c ${CFLAGS} src/cmdr.cc -o $@
 
 text-box.o: 
 	${CC} -c ${CFLAGS} src/text-box.cc -o $@
@@ -97,6 +95,7 @@ OBJ	=	app.o\
 		bbox.o\
 		callbacks.o err.o\
 		cell.o\
+		cmdr.o\
 		common.o\
 		display.o\
 		draw.o\

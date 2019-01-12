@@ -9,13 +9,14 @@
 #include "common.hh"
 #include "cell.hh"
 #include "bbox.hh"
+#include "cmdr.hh"
 
 class Cell;
 
-class Grid {
+class Grid {  
 private:
   std::vector<std::vector<shared_ptr<Cell>>> m_cells;
-
+  
 public:
   Atlas& m_atlas;
   int m_size;
@@ -31,12 +32,33 @@ public:
   void setSelectAllCells(bool b);
   void bbox(BBox&);
   int bottom();
-
+  int width();
+  void resizeGrid(int n);
+  void executeCmd(Cmd cmd);
+  void selectCell(int x, int y);
+  void registerLuaCallbacks();
   
   shared_ptr<Cell> getCell(int x, int y) const;
   shared_ptr<Cell> cursorCell(int pixelX, int pixelY);
   shared_ptr<Cell> getNbr(int x, int y, Way w);
 };
+
+
+class GridCmd : public Cmd {
+};
+
+class GridCmdSelectCell : public GridCmd {  
+  int m_x, m_y;  
+public:
+  GridCmdSelectCell() = delete;
+  GridCmdSelectCell(int x, int y) {
+    m_x = x;
+    m_y = y;
+  }
+};
+
+
+
 
 
 
@@ -316,3 +338,4 @@ print("loaded grid")
    
    
 */
+

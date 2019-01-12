@@ -5,14 +5,15 @@
 #include "grid-edit.hh"
 #include "event-handler.hh"
 
-GridEditor::GridEditor(Grid &grid) :
-  EventHandler("GridEditor"),
-  m_grid(grid),
-  m_statusText(*new TextBox(*new Atlas("./media/Terminus.ttf", 16), 2, grid.bottom(), 80, 1))
+GridEditor::GridEditor() :
+  // inherit an event handler.
+  EventHandler("GridEditor") 
 {
-  m_overCell = grid.getCell(0, 0);
-  m_selectedCell = grid.getCell(0, 0);
+  m_overCell = m_grid.getCell(0, 0); 
+  m_selectedCell = m_grid.getCell(0, 0);
   m_hasFocus = false;
+  //m_grid.executeCmd(*new GridCmdSelectCell(1, 1));
+  m_statusText.setWidth(m_grid.width());
   setupEvents();
 }
 
@@ -22,6 +23,7 @@ GridEditor::~GridEditor() {
 
 void
 GridEditor::setupEvents() {
+  
   registerEventHandler(SDL_MOUSEMOTION, 
                        [&](SDL_Event &ev) {
                          updateFocus(ev); 

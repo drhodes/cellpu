@@ -1,4 +1,10 @@
 #include <array>
+#include <functional>
+#include <utility>
+
+#include <lua5.3/lauxlib.h>
+#include <lua5.3/lua.h>
+#include <lua5.3/lualib.h>
 
 #include "err.hh"
 #include "grid.hh"
@@ -6,8 +12,16 @@
 #include "cell.hh"
 #include "bbox.hh"
 #include "display.hh"
+#include "instruction.hh"
+#include "cmdr.hh"
+#include "lua.hh"
+
+
+
+
 
 using namespace std;
+extern LuaMgr lman; // main.cc
 
 Grid::Grid(int size) :
   m_atlas(*new Atlas("./media/FIXED_V0.TTF", 8))
@@ -20,6 +34,9 @@ Grid::Grid(int size) :
     for (int col=0; col < m_size; col++) {
       auto c = make_shared<Cell>(row, col);
       curRow.push_back(c);
+      if (row % 2 == 0) {
+        c->setInstruction(make_shared<AND>());
+      }
     }
     m_cells.push_back(curRow);
   }  
@@ -48,11 +65,32 @@ Grid::bbox(BBox& bb) {
   bb.width  = cellSize * m_size; 
 }
 
+int
+Grid::width() {
+  BBox bb;
+  bbox(bb);
+  return bb.width;
+}
+
 bool
 Grid::containsPoint(Sint32 x, Sint32 y) {    
   BBox bb;
   bbox(bb);
   return bb.containsPx(x, y);
+}
+
+// void
+// Grid::registerLuaCallbacks() {
+//   auto L = lman.getLuaState();
+
+//   lua_pushcfunction(L, foo);
+//   // lua_setglobal(L, "selectCell");
+// }
+
+void
+Grid::selectCell(int x, int y) {
+  auto c = getCell(x, y);
+  c->setSelect(true);
 }
 
 shared_ptr<Cell>

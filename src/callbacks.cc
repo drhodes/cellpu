@@ -19,8 +19,10 @@
 #include "grid.hh"
 #include "cell.hh"
 #include "lua.hh"
+#include "cmdr.hh"
 
 extern LuaMgr& lman;  
+extern Cmdr cmdr;  
 
 namespace callback {
 
@@ -29,10 +31,7 @@ namespace callback {
     int x = lua_tonumber(L, 1);
     int y = lua_tonumber(L, 2);
     lua_pop(L, 2);
-    
-    const Grid &grid = lman.getGrid();    
-    auto cell = grid.getCell(x, y);
-    cell->setSelect(true);
+    cmdr.pushCmd(*new GridCmdSelectCell(x, y));
     return 0;
   }
   
@@ -41,4 +40,5 @@ namespace callback {
     _estack.dump();
     return 0;
   }
+  
 }

@@ -34,10 +34,13 @@ public:                               \
  void apply(Grid &grid, Cell &cell);  \
 };                                    \
 
-
 INSTRUCTION(NOOP)
 INSTRUCTION(AND)
 
+// shared_ptr<Instruction> randomInstruction() {
+//   //vector<shared_ptr<Instruction>> = { make_shared<AND>() }
+//   return make_shared<AND>();
+// }
 
 
 // class NOOP : public Instruction {

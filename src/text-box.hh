@@ -21,14 +21,16 @@ public:
   int m_colWidthPx;
   vector<string> m_lines;
   BBox m_bbox;
-  
+  int m_smidgen = 2;
+
   TextBox(Atlas& atlas, int left, int top, int numCols, int numRows);
   
   bool setChar(int x, int y, char c);
   bool setRow(int row, string s);
+  void setWidth(int widthInPx);
   int  getLineHeight();
   void render(); 
-  void renderBackground(SDL_Renderer *renderer); 
+  void renderBackground();
   void moveToBottom();
 };
 

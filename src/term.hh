@@ -16,6 +16,7 @@
 #include "atlas.hh"
 #include "bbox.hh"
 #include "event-handler.hh"
+#include "line.hh"
 
 // TODO introduce cursor position.
 // TODO introduce cmd line apart from other lines. nb. only the cmd line is editable.
@@ -46,7 +47,7 @@ public:
   void doReturn();
   void moveToBottom();
   void popChar();  
-  void put(string line);
+  void putInput(string line);
   void render(SDL_Renderer *renderer);
   void renderBackground(SDL_Renderer *renderer);
   void renderCursor(SDL_Renderer *renderer);

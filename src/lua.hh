@@ -21,7 +21,7 @@ public:
   ~LuaMgr();
   
   void doFile(const char *filename);
-  void doLine(std::string);
+  string doLine(std::string);
 
   lua_State* getLuaState(); // this is unfortunate.
   

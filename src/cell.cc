@@ -27,15 +27,16 @@ Cell::~Cell() {
   cerr << "Destroying Cell: x=" << x_ << ", y=" << y_ << endl;
 }
 
+void
+Cell::setInstruction(shared_ptr<Instruction> inst) {
+  inst_ = inst;  
+}
 
 
 void
 Cell::setSelect(bool b) {
   selected_ = b;
 }
-
-
-
 
 SDL_Color
 Cell::color() {
@@ -61,12 +62,20 @@ Cell::render(Atlas& atlas, SDL_Renderer *renderer) {
   int sz = this->size_;
   int n = 0;
 
-  SDL_Color cellBorderColor = {0x00, 0x00, 0x00, 0xFF};
+  SDL_Color cellBorderColor = color();  
+  cellBorderColor.r /= 2;
+  cellBorderColor.g /= 2;
+  cellBorderColor.b /= 2;
 
-  // background box.
-  draw::borderBox( x_*sz, y_*sz, sz, sz, cellBorderColor, color());
+  if (selected_ && oddMoment()) {     
+    // if the cell is selected then blink.
+    draw::borderBox( x_*sz, y_*sz, sz, sz, cellBorderColor, cellBorderColor);
+  } else {
+    // otherwise normal color for background box.
+    draw::borderBox( x_*sz, y_*sz, sz, sz, cellBorderColor, color());
+  }
     
-  char str[255]; // plenty of space.
+  char str[255]; // plenty of space for text.
     
   memset(str, '\0', 255);
   n = sprintf(str, "[%d %d]", this->x_, this->y_);
@@ -105,12 +114,6 @@ Cell::render(Atlas& atlas, SDL_Renderer *renderer) {
              y_ * sz + 4,
              str );
 
-  // if the cell is selected then blink.
-  if (selected_ && oddMoment()) {
-    draw::borderBox( x_*sz, y_*sz,
-                     sz, sz,
-                     (SDL_Color){0, 0, 0, 0}, (SDL_Color){0, 0xff, 0, 0x44});
-  }
 }
 
 // | L | R | F | B | Heading | f(a, b) |

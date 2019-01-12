@@ -8,7 +8,6 @@ namespace display {
 
   SDL_Window *getWindow() { return _window; }
   SDL_Renderer *getRenderer() { return _renderer; }
-
 }
 
 Display::Display() {

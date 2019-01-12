@@ -8,22 +8,19 @@
 
 using namespace std;
 
-#define ethrow(e, msg) throw runtime_error(string(e.what()) + string(msg) + " " + string(__FILE__));
-
 namespace draw {
   void
   borderBox(int x, int y, int w, int h, SDL_Color border, SDL_Color fill) {
-    SDL_Rect rect = {x, y, h, w};
+    SDL_Rect rect = {x, y, w, h};
     SDL_SetRenderDrawColor(display::getRenderer(), border.r, border.g, border.b, border.a);
     SDL_RenderFillRect(display::getRenderer(), &rect);
-    rect.x += 2; // shrink the rect and redraw
-    rect.y += 2; // to make border of width 2
+    rect.x += 1; // shrink the rect and redraw
+    rect.y += 1; // to make border of width 2
     rect.h -= 2;
     rect.w -= 2; 
     SDL_SetRenderDrawColor(display::getRenderer(), fill.r, fill.g, fill.b, fill.a);
     SDL_RenderFillRect(display::getRenderer(), &rect);
   }
-
   
   void
   text(Atlas& atlas, int x, int y, std::string txt) {

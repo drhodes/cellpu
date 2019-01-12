@@ -66,7 +66,6 @@ public:
   char dataReg_, colReg_, rowReg_;
   CellConfig cfg_;
   shared_ptr<Instruction> inst_; // this has to be a pointer because of an import cycle.
-  // shared_ptr<StateMachine<CellState, CellTrans>> smach;
   
   Cell(int, int);
   Cell(const Cell&) = delete;
@@ -75,7 +74,10 @@ public:
   void setColReg(int n);
   void setRowReg(int n);
   void setDataReg(int n);
+  void setInstruction(shared_ptr<Instruction>);
 
+
+  
   void setSelect(bool b);
   void setBroadcast(bool b);
   void setListen(bool b);

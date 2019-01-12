@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <string>
-#include <json-c/json.h>
+// #include <json-c/json.h>
 #include "opcode.hh"
 #include "err.hh"
 
@@ -9,7 +9,7 @@ using namespace std;
 
 
 // {type: Opcode, val: int}
-
+/*
 json_object *opcodeToJson(Opcode opc) {
     json_object *obj = json_object_new_object();
     
@@ -44,3 +44,4 @@ Opcode jsonToOpcode(string s) {
     
     return (Opcode)json_object_get_int64(value);
 }
+*/

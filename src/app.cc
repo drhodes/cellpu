@@ -2,17 +2,13 @@
 #include "app.hh"
 #include "text-box.hh"
 
-App::App() :
-  m_grid(*new Grid(12)),
-  m_ge(*new GridEditor(m_grid))
-{                               // 
-  m_term.put("-- Localized Processing Unit, the repl is lua.");  
+App::App() {
+  m_term.putInput("-- Localized Processing Unit, the repl is lua.");  
 }
 
 void
 App::eventLoop() {
   SDL_Event event;
-
   Atlas atlas("./media/Terminus.ttf", 16);
   TextBox tbox(atlas, 800, 10, 10, 10);
   tbox.setRow(0, "Is there anybody out there?");
@@ -24,7 +20,6 @@ App::eventLoop() {
     // lua sends messages
     // app recvs messages and acts.
     // needs to be a commander that delegates messages.
-    
     Uint64 loopTimeStart = SDL_GetTicks();
         
     while(SDL_PollEvent(&event)) {           
@@ -38,6 +33,9 @@ App::eventLoop() {
       }
     }
 
+    SDL_SetRenderDrawColor(display::getRenderer(), 0, 0, 0, 255);
+    SDL_RenderClear(display::getRenderer());
+    
     m_term.render(display::getRenderer());
     m_ge.render();
     tbox.render();
@@ -50,7 +48,6 @@ App::eventLoop() {
 }
 
 App::~App() {
-  delete &m_grid;
   delete &m_ge;
   delete &m_term;
 }

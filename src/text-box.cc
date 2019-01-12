@@ -14,7 +14,7 @@
 #include "lua.hh"
 #include "display.hh"
 #include "text-box.hh"
-
+#include "draw.hh"
 // +-------------------+
 // |                   | line 0
 // |                   | line 1
@@ -32,7 +32,7 @@ TextBox::TextBox(Atlas &atlas, int left, int top, int columns, int rows) :
   m_bbox.top = top;
   m_bbox.left = left;
   int promptSize = 2;
-  m_bbox.height = m_atlas.surfHeight_ * m_numRows;
+  m_bbox.height = m_atlas.surfHeight_ * m_numRows + m_smidgen;
   m_bbox.width  = m_atlas.surfWidth_ * (promptSize + m_numCols);
   
   for (int row = 0; row < m_numRows; row++) {
@@ -58,22 +58,29 @@ TextBox::setRow(int row, string s) {
 }
 
 void
-TextBox::renderBackground(SDL_Renderer *renderer) {
-  SDL_Rect rect = {m_bbox.left, m_bbox.top, m_bbox.width, m_bbox.height};
-  SDL_SetRenderDrawColor(renderer, 0x70, 0x70, 0x70, 0x70);
-  SDL_RenderFillRect(renderer, &rect);
+TextBox::renderBackground() {
+  SDL_Color borderColor = {0x40, 0x40, 0x40, 0xFF};
+  SDL_Color innerColor = {0x70, 0x70, 0x70, 0xFF};
+  draw::borderBox( m_bbox.left, m_bbox.top, m_bbox.width, m_bbox.height, borderColor, innerColor);
+}
+
+void
+TextBox::setWidth(int widthInPx) {
+  m_bbox.width = widthInPx;  
 }
 
 
 void
 TextBox::render() {  
-  renderBackground(display::getRenderer());
+  // background box.
+  renderBackground();
+  
   int border = 1; // px
-  int curY = m_bbox.top + border;
+  int curY = m_bbox.top + border + m_smidgen/2;
   int curRow = 0;
   
   for (string str : m_lines) {
-    int curX = m_bbox.left + border;
+    int curX = m_bbox.left + border + m_smidgen/2;
     int curCol = 0;    
     
     for (char c : str) {
