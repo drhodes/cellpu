@@ -20,7 +20,6 @@ void
 Instruction::apply(Grid &grid, Cell &cell) { }
 
 // -------------------------------------------------------------------------------------------------
-//NOOP::NOOP() : Instruction("NOOP", {0x30, 0x30, 0x30, 0xFF}) {}
 NOOP::NOOP() : Instruction("NOOP", {0x9d, 0x02, 0x33, 0xFF}) {
   
 }

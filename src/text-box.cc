@@ -15,6 +15,7 @@
 #include "display.hh"
 #include "text-box.hh"
 #include "draw.hh"
+
 // +-------------------+
 // |                   | line 0
 // |                   | line 1
@@ -68,7 +69,6 @@ void
 TextBox::setWidth(int widthInPx) {
   m_bbox.width = widthInPx;  
 }
-
 
 void
 TextBox::render() {  
