@@ -22,6 +22,12 @@ GridEditor::~GridEditor() {
 }
 
 void
+GridEditor::accept(Visitor& v) {
+  v.visit(*this);
+}
+
+  
+void
 GridEditor::setupEvents() {
   
   registerEventHandler(SDL_MOUSEMOTION, 

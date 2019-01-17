@@ -1,6 +1,7 @@
 #include <memory>
 #include "app.hh"
 #include "text-box.hh"
+#include "select-cell.hh"
 
 App::App() {
   m_term.putInput("-- Localized Processing Unit, the repl is lua.");  
@@ -13,6 +14,8 @@ App::eventLoop() {
   TextBox tbox(atlas, 800, 10, 10, 10);
   tbox.setRow(0, "Is there anybody out there?");
   tbox.setRow(1, "hello?");
+  SelectCellVisitor v(1,2);
+
   
   while( true ) {
     // send app events to lua queue.
@@ -32,7 +35,9 @@ App::eventLoop() {
         }
       }
     }
-
+    
+    m_ge.accept(v);
+    
     SDL_SetRenderDrawColor(display::getRenderer(), 0, 0, 0, 255);
     SDL_RenderClear(display::getRenderer());
     
@@ -48,6 +53,6 @@ App::eventLoop() {
 }
 
 App::~App() {
-  delete &m_ge;
-  delete &m_term;
+  //delete &m_ge;
+  //delete &m_term;
 }
