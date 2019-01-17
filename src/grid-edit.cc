@@ -22,8 +22,8 @@ GridEditor::~GridEditor() {
 }
 
 void
-GridEditor::accept(Visitor& v) {
-  v.visit(*this);
+GridEditor::accept(std::shared_ptr<Visitor> v) {
+  v->visit(*this);
 }
 
   

@@ -3,6 +3,8 @@
 #include "text-box.hh"
 #include "select-cell.hh"
 
+extern Cmdr cmdr; // main.cc
+
 App::App() {
   m_term.putInput("-- Localized Processing Unit, the repl is lua.");  
 }
@@ -15,7 +17,6 @@ App::eventLoop() {
   tbox.setRow(0, "Is there anybody out there?");
   tbox.setRow(1, "hello?");
   SelectCellVisitor v(1,2);
-
   
   while( true ) {
     // send app events to lua queue.
@@ -36,7 +37,15 @@ App::eventLoop() {
       }
     }
     
-    m_ge.accept(v);
+    while (true) {
+      auto v = cmdr.frontVisitor();
+      if (v.has_value()) {
+        cout << "Hey from app\n";
+        m_ge.accept(v.value());
+      } else {
+        break;
+      }
+    }
     
     SDL_SetRenderDrawColor(display::getRenderer(), 0, 0, 0, 255);
     SDL_RenderClear(display::getRenderer());

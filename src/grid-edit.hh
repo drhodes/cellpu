@@ -29,7 +29,7 @@ public:
   void showArguments();
   void setupEvents();
   void render();
-  void accept(Visitor&);
+  void accept(shared_ptr<Visitor>);
   
   // these may be used to display help for user.
   void showKeys();

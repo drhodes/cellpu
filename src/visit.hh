@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 
 class GridEditor;
 
@@ -10,7 +11,7 @@ public:
 
 class Visitable {
 public:
-  virtual void accept(Visitor&) = 0;
+  virtual void accept(std::shared_ptr<Visitor>) = 0;
 };
 
 

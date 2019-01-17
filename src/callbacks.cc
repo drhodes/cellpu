@@ -20,18 +20,21 @@
 #include "cell.hh"
 #include "lua.hh"
 #include "cmdr.hh"
+#include "select-cell.hh"
 
 extern LuaMgr& lman;  
 extern Cmdr cmdr;  
 
-namespace callback {
+using namespace std;
 
+namespace callback {
   int
   lSelectCell(lua_State *L) {
+    cout << "HEY from lSelectCell" << endl;
     int x = lua_tonumber(L, 1);
     int y = lua_tonumber(L, 2);
     lua_pop(L, 2);
-    cmdr.pushCmd(*new GridCmdSelectCell(x, y));
+    cmdr.pushVisitor(make_shared<SelectCellVisitor>(x, y));
     return 0;
   }
   
