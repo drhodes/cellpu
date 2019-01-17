@@ -16,7 +16,6 @@ App::eventLoop() {
   TextBox tbox(atlas, 800, 10, 10, 10);
   tbox.setRow(0, "Is there anybody out there?");
   tbox.setRow(1, "hello?");
-  SelectCellVisitor v(1,2);
   
   while( true ) {
     // send app events to lua queue.
@@ -40,7 +39,6 @@ App::eventLoop() {
     while (true) {
       auto v = cmdr.frontVisitor();
       if (v.has_value()) {
-        cout << "Hey from app\n";
         m_ge.accept(v.value());
       } else {
         break;

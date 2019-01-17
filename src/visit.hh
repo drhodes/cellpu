@@ -2,10 +2,14 @@
 #include <memory>
 
 class GridEditor;
+class Grid;
+class Cell;
 
 class Visitor {
 public:
   virtual void visit(GridEditor&) = 0;
+  virtual void visit(Grid&) = 0;
+  virtual void visit(Cell&) = 0;
   //~Visitor() = default;  
 };
 

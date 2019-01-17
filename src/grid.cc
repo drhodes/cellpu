@@ -88,6 +88,17 @@ Grid::containsPoint(Sint32 x, Sint32 y) {
 // }
 
 void
+Grid::accept(std::shared_ptr<Visitor> v) {
+  v->visit(*this);
+  for (int row=0; row < m_size; row++) { 
+    for (int col=0; col < m_size; col++) {
+      m_cells[row][col]->accept(v);
+    }
+  }
+}
+
+
+void
 Grid::selectCell(int x, int y) {
   auto c = getCell(x, y);
   c->setSelect(true);

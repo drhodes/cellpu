@@ -12,6 +12,12 @@ public:
     m_y = y;
   }  
   void visit(GridEditor &ge) {    
-    ge.m_grid.selectCell(m_x, m_y);
+    //ge.m_grid.selectCell(m_x, m_y);
   }
+  void visit(Grid &g) {
+    g.selectCell(m_x, m_y);
+  }
+  void visit(Cell &cell) {
+    //cell.setSelect(true))
+  }  
 };

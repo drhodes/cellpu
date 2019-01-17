@@ -9,6 +9,7 @@
 #include "opcode.hh"
 #include "instruction.hh"
 #include "state-machine.hh"
+#include "visit.hh"
 
 class Grid;
 class Instruction;
@@ -59,7 +60,9 @@ enum class CellTrans {
                       MouseClick,                      
 };
 
-class Cell {
+class Cell :
+  public Visitable
+{
 public: 
   int x_, y_, value_, size_;
   bool selected_, broadcasting_, listening_;
@@ -71,6 +74,9 @@ public:
   Cell(const Cell&) = delete;
   ~Cell();
 
+  void accept(shared_ptr<Visitor>);
+
+  
   void setColReg(int n);
   void setRowReg(int n);
   void setDataReg(int n);

@@ -13,7 +13,9 @@
 
 class Cell;
 
-class Grid {  
+class Grid :
+  public Visitable
+{
 private:
   std::vector<std::vector<shared_ptr<Cell>>> m_cells;
   
@@ -37,6 +39,7 @@ public:
   void executeCmd(Cmd cmd);
   void selectCell(int x, int y);
   void registerLuaCallbacks();
+  void accept(shared_ptr<Visitor>);
   
   shared_ptr<Cell> getCell(int x, int y) const;
   shared_ptr<Cell> cursorCell(int pixelX, int pixelY);
