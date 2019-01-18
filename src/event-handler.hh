@@ -6,8 +6,6 @@
 
 using namespace std;
 
-//typedef std::function<void(SDL_Event&)> SDL_handler
-
 class EventHandler {
 public:
   string m_handlerName;
