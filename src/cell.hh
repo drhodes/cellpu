@@ -65,13 +65,13 @@ class Cell :
 {
 private:
   const int m_size = 30;
-public: 
-  int x_, y_, value_;
+  char m_dataReg, m_colReg, m_rowReg;
+  int m_col, m_row, m_value;
   int m_zoom;
-  bool selected_, broadcasting_, listening_;
-  char dataReg_, colReg_, rowReg_;
-  CellConfig cfg_;
-  shared_ptr<Instruction> inst_; // this has to be a pointer because of an import cycle.
+  bool m_selected, m_broadcasting, m_listening;
+  CellConfig m_cfg;
+public: 
+  shared_ptr<Instruction> m_inst; // this has to be a pointer because of an import cycle.
   
   Cell(int, int);
   Cell(const Cell&) = delete;
@@ -81,13 +81,24 @@ public:
   
   void setColReg(int n);
   void setRowReg(int n);
-  void setDataReg(int n);
+  void dataReg(int n);
+  int dataReg();
   void setInstruction(shared_ptr<Instruction>);
   void setZoom(int zoom);
-  void setSelect(bool b);
+
+  void selected(bool b);
+  bool selected();
+  
   void setBroadcast(bool b);
   void setListen(bool b);
 
+
+  
+  
+  int row();
+  int col();
+
+  
   string instructionName() const;
   int size() const;
   SDL_Color color() const;

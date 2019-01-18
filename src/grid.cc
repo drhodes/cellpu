@@ -91,7 +91,7 @@ Grid::accept(std::shared_ptr<Visitor> v) {
 void
 Grid::selectCell(int col, int row) {
   auto c = getCell(col, row);
-  c->setSelect(true);
+  c->selected(true);
 }
 
 shared_ptr<Cell>
@@ -116,7 +116,7 @@ void
 Grid::setSelectAllCells(bool b) {
   for (int x = 0; x < m_size; x++) {
     for (int y = 0; y < m_size; y++) {
-      getCell(x, y)->setSelect(b);
+      getCell(x, y)->selected(b);
     }
   }
 }

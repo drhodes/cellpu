@@ -84,7 +84,7 @@ GridEditor::updateSelectedCell(SDL_Event &ev) {
   m_selectedCell = m_overCell;
     
   // select cell if deselected, deselect cell if already selected.
-  m_selectedCell->setSelect(!m_selectedCell->selected_);
+  m_selectedCell->selected(!m_selectedCell->selected());
 }
 
 void
