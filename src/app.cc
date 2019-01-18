@@ -18,11 +18,6 @@ App::eventLoop() {
   tbox.setRow(1, "hello?");
   
   while( true ) {
-    // send app events to lua queue.
-    // lua consumes events
-    // lua sends messages
-    // app recvs messages and acts.
-    // needs to be a commander that delegates messages.
     Uint64 loopTimeStart = SDL_GetTicks();
         
     while(SDL_PollEvent(&event)) {           
@@ -48,9 +43,9 @@ App::eventLoop() {
     SDL_SetRenderDrawColor(display::getRenderer(), 0, 0, 0, 255);
     SDL_RenderClear(display::getRenderer());
     
-    m_term.render(display::getRenderer());
     m_ge.render();
     tbox.render();
+    m_term.render(display::getRenderer());
     SDL_RenderPresent(display::getRenderer());
     Uint64 loopTimeStop = SDL_GetTicks();
     Uint64 delta = loopTimeStop - loopTimeStart;
