@@ -3,6 +3,8 @@
 
 #include "cmdr.hh"
 
+// TODO make this iterable.
+
 using namespace std;
 
 void
