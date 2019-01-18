@@ -35,6 +35,12 @@ Term::~Term() {
 }
 
 void
+Term::accept(std::shared_ptr<Visitor> v) {
+  v->visit(*this);
+}
+
+
+void
 Term::moveToBottom() {
   auto win = display::getWindow();
   int w, winHeight;

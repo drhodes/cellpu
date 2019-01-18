@@ -17,7 +17,7 @@
 #include "bbox.hh"
 #include "event-handler.hh"
 #include "line.hh"
-
+#include "visit.hh"
 // TODO introduce cursor position.
 // TODO introduce cmd line apart from other lines. nb. only the cmd line is editable.
 
@@ -55,6 +55,9 @@ public:
   void setNumRows(int linesShown);
   void setupEvents();
 
+  void accept(std::shared_ptr<Visitor>);
+
+  
 };
 
 
