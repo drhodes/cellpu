@@ -22,8 +22,9 @@
 #include "cmdr.hh"
 #include "select-cell.hh"
 #include "zoom-grid-visitor.hh"
+#include "tell-term-visitor.hh"
 
-extern LuaMgr& lman;  
+extern LuaMgr lman;  
 extern Cmdr cmdr;  
 
 using namespace std;
@@ -44,6 +45,26 @@ namespace callback {
     int factor = lua_tonumber(L, 1);
     lua_pop(L, 1);
     cmdr.pushVisitor(make_shared<ZoomGridVisitor>(factor));
+    return 0;
+  }
+
+  int
+  lBindKey(lua_State *L) {
+    string key = lua_tostring(L, 1);
+    string cmd = lua_tostring(L, 2);
+    cout << "lKeyBind says: " << key << " -> " << cmd << endl;
+        
+    lua_pop(L, 2);
+    lman.bindKey(key, cmd);
+    return 0;
+  }
+
+  int
+  lGetKeyBind(lua_State *L) {
+    string key = lua_tostring(L, 1);
+    lua_pop(L, 1);
+    string binding = "'" + key + "'" + " is bound to: " + lman.getKeyBind(key);
+    cmdr.pushVisitor(make_shared<TellTermVisitor>(binding));
     return 0;
   }
   
