@@ -7,6 +7,9 @@
 #include <SDL2/SDL_ttf.h>
 
 #include <string>
+#include <map>
+
+#include "keybinding.hh"
 
 using namespace std;
 
@@ -14,7 +17,8 @@ class Grid;
 
 class LuaMgr {
 private:
-  lua_State *_LS = nullptr;  
+  lua_State *_LS = nullptr;
+  KeyBindings m_keybindings;
   
 public:  
   LuaMgr();
@@ -24,11 +28,12 @@ public:
   string doLine(std::string);
 
   lua_State* getLuaState(); // this is unfortunate.
+
+  void bindKey(string key, string cmd);
+  string getKeyBind(string key);
   
   int putL(lua_State *L);
   
-  void putGrid(Grid *grid);
-  const Grid& getGrid();
-  
-  void register_callbacks();
+  void registerCallback(string funcname, lua_CFunction func);
+  void registerAllCallbacks();
 };

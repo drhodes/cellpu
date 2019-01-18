@@ -1,6 +1,5 @@
 #include <string>
 
-//c#include "callbacks.hh"
 #include "lua.hh"
 #include "err.hh"
 #include "callbacks.hh"
@@ -16,8 +15,9 @@ LuaMgr::LuaMgr() {
   luaopen_io(_LS);             // opens the I/O library 
   luaopen_string(_LS);         // opens the string lib. 
   luaopen_math(_LS);           // opens the math lib.
-
-  register_callbacks();
+  
+  registerAllCallbacks();
+  doFile("./lua/keyboard-cfg.lua");
 }
 
 LuaMgr::~LuaMgr() {
@@ -30,13 +30,24 @@ LuaMgr::getLuaState() {
 }
 
 void
+LuaMgr::bindKey(string key, string cmd) {
+  m_keybindings.bindKey(key, cmd);
+}
+
+string
+LuaMgr::getKeyBind(string key) {
+  return m_keybindings.getKeyBind(key);
+}
+
+
+void
 LuaMgr::doFile(const char *filename) {  
   int err = luaL_dofile(_LS, filename);
   if (err) {
-    fprintf(stderr, "%s\n", lua_tostring(_LS, -1));
+    std::cerr << lua_tostring(_LS, -1);
     perr(lua_tostring(_LS, -1));
     lua_pop(_LS, 1);  // pop error message from the stack 
-  }
+  } 
 }
 
 string
@@ -54,36 +65,19 @@ LuaMgr::doLine(std::string line) {
   return s;
 }
 
-// managing the grid -------------------------------------------------------------------------------
-
 void
-LuaMgr::putGrid(Grid *grid) {
-  lua_pushinteger(_LS, (uintptr_t)grid);
-  lua_setglobal(_LS, "grid");
-}
-
-const Grid&
-LuaMgr::getGrid() {
-  // fetch the pointer to grid and place at top of stack.
-  lua_getglobal(_LS, "grid"); 
-  
-  // get top of stack and coerce to pointer type.    
-  uintptr_t *ptr2 = new uintptr_t;
-  *ptr2 = (uintptr_t)lua_tointeger(_LS, -1);
-  lua_pop(_LS, 1);
-  return reinterpret_cast<const Grid&>(*ptr2);
+LuaMgr::registerAllCallbacks() {    
+  registerCallback("selectCell", callback::lSelectCell);  
+  registerCallback("dump", callback::lDump);  
+  registerCallback("zoom", callback::lZoomGrid);
+  registerCallback("bindKey", callback::lBindKey);
+  registerCallback("getKeyBind", callback::lGetKeyBind);
 }
 
 void
-LuaMgr::register_callbacks() {    
-  lua_pushcfunction(_LS, callback::lSelectCell);
-  lua_setglobal(_LS, "selectCell");
-
-  lua_pushcfunction(_LS, callback::lDump);
-  lua_setglobal(_LS, "dump");
-
-  lua_pushcfunction(_LS, callback::lZoomGrid);
-  lua_setglobal(_LS, "zoom");
-  
-  lua_pop(_LS, 6);
+LuaMgr::registerCallback(string funcname, lua_CFunction func) {
+  // What kind of invariants need to hold here?  
+  lua_pushcfunction(_LS, func);
+  lua_setglobal(_LS, funcname.c_str());
+  lua_pop(_LS, 1); 
 }
