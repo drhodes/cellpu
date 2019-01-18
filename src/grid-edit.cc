@@ -26,10 +26,22 @@ GridEditor::accept(std::shared_ptr<Visitor> v) {
   v->visit(*this);
   m_grid.accept(v);
 }
-  
+
+void panEast() {
+  cout << "[STUB] panning East" << endl;
+}
+void panWest() {
+  cout << "[STUB] panning West" << endl;
+}
+void panNorth() {
+  cout << "[STUB] panning North" << endl;
+}
+void panSouth() {
+  cout << "[STUB] panning South" << endl;
+}
+
 void
 GridEditor::setupEvents() {
-  
   registerEventHandler(SDL_MOUSEMOTION, 
                        [&](SDL_Event &ev) {
                          updateFocus(ev); 

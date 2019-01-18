@@ -30,10 +30,15 @@ public:
   void setupEvents();
   void render();
   void accept(shared_ptr<Visitor>);
+
+
+  void panEast();
+  void panWest();
+  void panNorth();
+  void panSouth();
   
   // these may be used to display help for user.
   void showKeys();
   void hideKeys();
 };
-
 
