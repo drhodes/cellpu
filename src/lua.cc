@@ -81,13 +81,9 @@ LuaMgr::register_callbacks() {
 
   lua_pushcfunction(_LS, callback::lDump);
   lua_setglobal(_LS, "dump");
+
+  lua_pushcfunction(_LS, callback::lZoomGrid);
+  lua_setglobal(_LS, "zoom");
   
-  auto sum = [] (lua_State *L) {
-               cout << "Hey!" << endl;
-               return 0;
-             };
-  
-  lua_pushcfunction(_LS, sum);
-  lua_setglobal(_LS, "sum");
   lua_pop(_LS, 6);
 }

@@ -6,10 +6,10 @@
 
 using namespace std;
 
-Cell::Cell(int x, int y) { 
-  x_ = x;
-  y_ = y;
-  size_ = 60;
+Cell::Cell(int col, int row) { 
+  x_ = col;
+  y_ = row;
+  m_zoom = 1;
   selected_ = false;
   broadcasting_ = false;
   listening_ = false;
@@ -32,20 +32,20 @@ Cell::accept(std::shared_ptr<Visitor> v) {
   v->visit(*this);
 }
 
-
 void
 Cell::setInstruction(shared_ptr<Instruction> inst) {
   inst_ = inst;  
 }
-
 
 void
 Cell::setSelect(bool b) {
   selected_ = b;
 }
 
+void Cell::setZoom(int zoom) { m_zoom = zoom; }
+
 SDL_Color
-Cell::color() {
+Cell::color() const {
   // change this.
   SDL_Color c = inst_->m_color;
   return c;
@@ -59,13 +59,18 @@ Cell::cycle(struct Grid *grid) {
 }
 
 string
-Cell::instructionName() {
+Cell::instructionName() const {
   return inst_->m_name;
 }
 
+int
+Cell::size() const {
+  return m_zoom * this->m_size;
+}
+
 void
-Cell::render(Atlas& atlas, SDL_Renderer *renderer) {
-  int sz = this->size_;
+Cell::render(Atlas& atlas, SDL_Renderer *renderer) const {
+  int sz = this->size();
   int n = 0;
 
   SDL_Color cellBorderColor = color();  
@@ -83,43 +88,29 @@ Cell::render(Atlas& atlas, SDL_Renderer *renderer) {
     
   char str[255]; // plenty of space for text.
     
+  if (sz > 40) {  // enough room for row, col
   memset(str, '\0', 255);
   n = sprintf(str, "[%d %d]", this->x_, this->y_);
-  draw::text(atlas, x_ * sz + 4, y_ * sz + 4, str);
-    
+  draw::text(atlas,
+             x_*sz + 4,
+             y_*sz + 4,
+             str);
+  }
+
   memset(str, '\0', n);
   n = sprintf(str, "%s", instructionName().c_str());
   draw::text(atlas,
              x_ * sz + 4,
-             y_ * sz + 16, str);
-    
-  // render the value of the data register
-  memset(str, '\0', n);
-  n = sprintf(str, "%d", dataReg_);
-  draw::text(atlas, x_ * sz + sz/2, y_ * sz + sz/2, str);
-      
-  // render the text value of the optical row register.
-  memset(str, '\0', n);
-  n = sprintf(str, "%d", rowReg_);
-  draw::text(atlas,
-             x_ * sz + sz/2 + sz/4,
-             y_ * sz + sz/2, str);
-
-  // render the text value of the optical column register.
-  memset(str, '\0', n);
-  n = sprintf(str, "%d", colReg_); 
-  draw::text(atlas,
-             x_ * sz + sz/2,
-             y_ * sz + sz/2 + sz/4, str);
-
+             y_ * sz + 16,
+             str);
+  
   // draw an arrow in the direction of the heading, upper right.
   memset(str, '\0', n);
   n = sprintf(str, "%c", headingToChar(cfg_.heading)); 
   draw::text(atlas,
-             x_ * sz + sz - 8,
-             y_ * sz + 4,
+             (x_ * sz) + sz - 8,
+             (y_ * sz) + 4,
              str );
-
 }
 
 // | L | R | F | B | Heading | f(a, b) |
@@ -162,40 +153,3 @@ Cell::getArgWay2() {
   }
   die("unreachable code reached");
 }
-
-// DONT need to validate cell config yet, check for bit errors, this isn't a bitlevel
-// representation. Using types to maintain sanity at the moment.
-
-
-// self.select = function()
-//    self.selected = true
-// end
-
-
-// self.deselect = function()
-//    self.selected = false
-// end
-
-// self.setBroadcast = function(bool)
-//    self.broadcasting = bool
-//    self.listening = not bool
-// end
-
-// self.setListen = function(bool)
-//    self.listening = bool
-//    self.broadcasting = not bool
-// end
-
-// self.borderColor = function()
-//    if self.selected then
-//       return {0x30, 0x40, 0xFF, 0xFF}
-//    else 
-//       return {0x00, 0x00, 0x00, 0xFF}
-//    end
-// end
-
-// self.SWAPDR = function()
-//    tmp = self.rowReg
-//    self.rowReg = self.data
-//    self.data = tmp
-// end

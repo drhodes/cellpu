@@ -63,8 +63,11 @@ enum class CellTrans {
 class Cell :
   public Visitable
 {
+private:
+  const int m_size = 30;
 public: 
-  int x_, y_, value_, size_;
+  int x_, y_, value_;
+  int m_zoom;
   bool selected_, broadcasting_, listening_;
   char dataReg_, colReg_, rowReg_;
   CellConfig cfg_;
@@ -75,23 +78,22 @@ public:
   ~Cell();
 
   void accept(shared_ptr<Visitor>);
-
   
   void setColReg(int n);
   void setRowReg(int n);
   void setDataReg(int n);
   void setInstruction(shared_ptr<Instruction>);
-
-
-  
+  void setZoom(int zoom);
   void setSelect(bool b);
   void setBroadcast(bool b);
   void setListen(bool b);
 
-  SDL_Color color();
+  string instructionName() const;
+  int size() const;
+  SDL_Color color() const;
 
   void cycle(struct Grid *grid);
-  void render(Atlas& atlas, SDL_Renderer *renderer);
+  void render(Atlas& atlas, SDL_Renderer *renderer) const;
   void cfgInputValidate();
 
   string instructionName();

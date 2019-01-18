@@ -16,16 +16,10 @@
 #include "cmdr.hh"
 #include "lua.hh"
 
-
-
-
-
 using namespace std;
 extern LuaMgr lman; // main.cc
 
-Grid::Grid(int size) :
-  m_atlas(*new Atlas("./media/FIXED_V0.TTF", 8))
-{
+Grid::Grid(int size) {
   if (size < 1) die("got bad size for new grid");
   m_size = size;
   
@@ -58,11 +52,11 @@ Grid::render() {
 
 void
 Grid::bbox(BBox& bb) {
-  int cellSize = getCell(0, 0)->size_;
+  int cellSize = getCell(0, 0)->size();
   bb.top = 0;
   bb.left = 0;
-  bb.height = cellSize * m_size; 
-  bb.width  = cellSize * m_size; 
+  bb.height = m_size * cellSize; 
+  bb.width  = m_size * cellSize; 
 }
 
 int
@@ -72,6 +66,11 @@ Grid::width() {
   return bb.width;
 }
 
+void
+Grid::zoom(int factor) {
+  m_zoom = factor;
+}
+
 bool
 Grid::containsPoint(Sint32 x, Sint32 y) {    
   BBox bb;
@@ -79,16 +78,8 @@ Grid::containsPoint(Sint32 x, Sint32 y) {
   return bb.containsPx(x, y);
 }
 
-// void
-// Grid::registerLuaCallbacks() {
-//   auto L = lman.getLuaState();
-
-//   lua_pushcfunction(L, foo);
-//   // lua_setglobal(L, "selectCell");
-// }
-
 void
-Grid::accept(std::shared_ptr<Visitor> v) {
+Grid::accept(std::shared_ptr<Visitor> v) {  
   v->visit(*this);
   for (int row=0; row < m_size; row++) { 
     for (int col=0; col < m_size; col++) {
@@ -97,29 +88,28 @@ Grid::accept(std::shared_ptr<Visitor> v) {
   }
 }
 
-
 void
-Grid::selectCell(int x, int y) {
-  auto c = getCell(x, y);
+Grid::selectCell(int col, int row) {
+  auto c = getCell(col, row);
   c->setSelect(true);
 }
 
 shared_ptr<Cell>
 Grid::cursorCell(Sint32 pixelX, Sint32 pixelY) {
   if (!containsPoint(pixelX, pixelY)) return {};
-  int cellSize = getCell(0, 0)->size_;
-  int x = pixelX / cellSize;
-  int y = pixelY / cellSize;    
-  return getCell(x, y);
+  int cellSize = getCell(0, 0)->size(); // get the size of an arbitary cell
+  int col = pixelX / cellSize;
+  int row = pixelY / cellSize;
+  return getCell(col, row);
 }
 
 shared_ptr<Cell>
-Grid::getCell(int x, int y) const {
-  if (x < 0) terr("x must be greater than 0");
-  if (y < 0) terr("y must be greater than 0");
-  if (x >= m_size) terr("x cell coordinate outside of grid");
-  if (y >= m_size) terr("y cell coordinate outside of grid");
-  return m_cells[x][y];
+Grid::getCell(int col, int row) const {
+  if (col < 0) terr("col must be greater than 0");
+  if (row < 0) terr("row must be greater than 0");
+  if (col >= m_size) terr("col cell coordinate outside of grid");
+  if (row >= m_size) terr("row cell coordinate outside of grid");
+  return m_cells[col][row];
 }
 
 void

@@ -18,9 +18,10 @@ class Grid :
 {
 private:
   std::vector<std::vector<shared_ptr<Cell>>> m_cells;
+  int m_zoom = 1;
   
 public:
-  Atlas& m_atlas;
+  Atlas& m_atlas = *new Atlas("./media/FIXED_V0.TTF", 8);
   int m_size;
   
   Grid(int size);
@@ -40,6 +41,7 @@ public:
   void selectCell(int x, int y);
   void registerLuaCallbacks();
   void accept(shared_ptr<Visitor>);
+  void zoom(int factor);
   
   shared_ptr<Cell> getCell(int x, int y) const;
   shared_ptr<Cell> cursorCell(int pixelX, int pixelY);
@@ -59,8 +61,6 @@ public:
     m_y = y;
   }
 };
-
-
 
 
 
