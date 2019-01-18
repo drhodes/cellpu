@@ -21,7 +21,7 @@
 #include "lua.hh"
 #include "cmdr.hh"
 #include "select-cell.hh"
-#include "zoom-grid.hh"
+#include "zoom-grid-visitor.hh"
 
 extern LuaMgr& lman;  
 extern Cmdr cmdr;  
