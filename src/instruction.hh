@@ -12,6 +12,7 @@ class Cell;
 
 // -- Instructions. -----------------------------------------------------------------------------------
 // -- GridInstruction
+
 // -- CellInstruction
 
 class Instruction {
@@ -36,29 +37,6 @@ public:                               \
 
 INSTRUCTION(NOOP)
 INSTRUCTION(AND)
-
-// shared_ptr<Instruction> randomInstruction() {
-//   //vector<shared_ptr<Instruction>> = { make_shared<AND>() }
-//   return make_shared<AND>();
-// }
-
-
-// class NOOP : public Instruction {
-// public:
-//   NOOP();
-//   void apply(Grid &grid, Cell &cell);
-// };
-
-// class AND : public Instruction {
-// public:
-//   AND();
-//   void apply(Grid &grid, Cell &cell);
-// };
-
-
-
-
-
 
 
 /*
