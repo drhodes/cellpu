@@ -89,6 +89,8 @@ opcode.o:
 lua.o:
 	${CC} -c ${CFLAGS} src/lua.cc -o $@
 
+keybinding.o: 
+	${CC} -c ${CFLAGS} src/keybinding.cc -o $@
 
 OBJ	=	app.o\
 		atlas.o\
@@ -103,6 +105,7 @@ OBJ	=	app.o\
 		grid-edit.o\
 		grid.o\
 		instruction.o\
+		keybinding.o\
 		lua.o\
 		opcode.o\
 		state-machine.o\
