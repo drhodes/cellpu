@@ -22,4 +22,5 @@ public:
 
   void resizeGrid(int n);
   void eventLoop();
+  void accept(std::shared_ptr<Visitor>);
 };

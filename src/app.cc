@@ -32,9 +32,10 @@ App::eventLoop() {
     }
     
     while (true) {
+      // consume visitors.
       auto v = cmdr.frontVisitor();
-      if (v.has_value()) {
-        m_ge.accept(v.value());
+      if (v.has_value())
+        accept(v.value());
       } else {
         break;
       }
@@ -52,6 +53,12 @@ App::eventLoop() {
     int wait = delta > 32 ? 0 : 32 - delta;
     SDL_Delay(wait);
   }
+}
+
+void
+App::accept(std::shared_ptr<Visitor> v) {
+  m_ge.accept(v);
+  m_term.accept(v);
 }
 
 App::~App() {
