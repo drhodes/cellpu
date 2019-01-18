@@ -1,8 +1,8 @@
 #include "visit.hh"
 #include "grid-edit.hh"
-
+  
 class SelectCellVisitor :
-  public Visitor
+  public BaseVisitor 
 {
 private:
   int m_x, m_y;
@@ -11,13 +11,7 @@ public:
     m_x = x;
     m_y = y;
   }  
-  void visit(GridEditor &ge) {    
-    //ge.m_grid.selectCell(m_x, m_y);
-  }
   void visit(Grid &g) {
     g.selectCell(m_x, m_y);
   }
-  void visit(Cell &cell) {
-    //cell.setSelect(true))
-  }  
 };
