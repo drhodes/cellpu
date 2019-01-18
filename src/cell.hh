@@ -21,11 +21,9 @@ typedef struct TwoPortCfg {
   Dir leftInput, rightInput;
 } TwoPortCfg;
 
-
 typedef struct OnePortCfg {
   Dir input;
 } OnePortCfg;
-
 
 typedef struct PortCfg {
   PortCfgType type;    
@@ -46,33 +44,37 @@ typedef struct CellConfig {
   // cell outputs
 } CellConfig;
 
-enum class CellState {
-                      Resting,
-                      Highlighted,
-                      Blinking,
-                      Processing,
-                      Listening,
+enum class CellState { Resting,
+                       Highlighted,
+                       Blinking,
+                       Processing,
+                       Listening,
 };
 
-enum class CellTrans {
-                      MouseOver,
-                      MouseExit,
-                      MouseClick,                      
+enum class CellTrans { MouseOver,
+                       MouseExit,
+                       MouseClick,                      
 };
 
 class Cell :
   public Visitable
 {
 private:
-  const int m_size = 30;
-  char m_dataReg, m_colReg, m_rowReg;
-  int m_col, m_row, m_value;
+  int m_size = 30;
+  char m_dataReg;
+  char m_colReg;
+  char m_rowReg;
+  int m_col;
+  int m_row;
+  int m_value;
   int m_zoom;
-  bool m_selected, m_broadcasting, m_listening;
-  CellConfig m_cfg;
-public: 
+  bool m_selected;
+  bool m_broadcasting;
+  bool m_listening;
+  CellConfig m_cfg; 
   shared_ptr<Instruction> m_inst; // this has to be a pointer because of an import cycle.
   
+public: 
   Cell(int, int);
   Cell(const Cell&) = delete;
   ~Cell();
@@ -91,13 +93,9 @@ public:
   
   void setBroadcast(bool b);
   void setListen(bool b);
-
-
-  
   
   int row();
   int col();
-
   
   string instructionName() const;
   int size() const;
