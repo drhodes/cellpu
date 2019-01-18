@@ -14,6 +14,7 @@ namespace callback {
     int lDrawText(lua_State *L);
     int lUpdate(lua_State *L);
     int lSelectCell(lua_State *L);
+    int lZoomGrid(lua_State *L);
     int lDump(lua_State *L);
 
   //void register_all(lua_State *L);
