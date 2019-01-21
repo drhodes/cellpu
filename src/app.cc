@@ -34,7 +34,7 @@ App::eventLoop() {
     while (true) {
       // consume visitors.
       auto v = cmdr.frontVisitor();
-      if (v.has_value())
+      if (v.has_value()) {
         accept(v.value());
       } else {
         break;
