@@ -6,13 +6,11 @@
 #include "event-handler.hh"
 
 GridEditor::GridEditor() :
-  // inherit an event handler.
   EventHandler("GridEditor") 
 {
   m_overCell = m_grid.getCell(0, 0); 
   m_selectedCell = m_grid.getCell(0, 0);
   m_hasFocus = false;
-  //m_grid.executeCmd(*new GridCmdSelectCell(1, 1));
   m_statusText.setWidth(m_grid.width());
   setupEvents();
 }
@@ -27,16 +25,23 @@ GridEditor::accept(std::shared_ptr<Visitor> v) {
   m_grid.accept(v);
 }
 
-void panEast() {
-  cout << "[STUB] panning East" << endl;
+void
+GridEditor::panEast() {
+  cout << "[STUB] panning East" << endl;  
 }
-void panWest() {
+
+void
+GridEditor::panWest() {
   cout << "[STUB] panning West" << endl;
 }
-void panNorth() {
+
+void
+GridEditor::panNorth() {
   cout << "[STUB] panning North" << endl;
 }
-void panSouth() {
+
+void
+GridEditor::panSouth() {
   cout << "[STUB] panning South" << endl;
 }
 
@@ -55,11 +60,10 @@ GridEditor::setupEvents() {
                          if (!m_hasFocus) return;
                          string s = "Handling SDL_TEXTINPUT: ";
                          s.push_back(ev.window.event);
-                           
                          m_statusText.setRow(0, s);
                          handleTextInput(ev);        
                        });
-
+  
   registerEventHandler(SDL_MOUSEBUTTONDOWN,
                        [&](SDL_Event &ev) {
                          if (!m_hasFocus) return; 
@@ -78,10 +82,9 @@ GridEditor::setupEvents() {
                            m_statusText.setRow(0, "unselected all cells");
                          }
                          default: {
-                           printf("unhandled event in gridEditorProcessEvent, type: %d\n", ev.type);        
-                         }}                             
+                           printf("unhandled event in gridEditorProcessEvent, type: %d\n", ev.type);                                }}                             
                        });
-}  
+}
 
 void
 GridEditor::updateOverCell(SDL_Event &ev) {
@@ -121,10 +124,16 @@ GridEditor::handleTextInput(SDL_Event &ev) {
     // rotate heading.
     break;
   }
+    
+  case 'w': {
+    panNorth();
+  }
+    
   case 'a': {
     m_grid.setSelectAllCells(true);
     break;
   }
+    
   case '?': {
     // how to message the big text box from here?
   }
