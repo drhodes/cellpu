@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <optional>
 
 #include "keybinding.hh"
 
@@ -10,12 +11,12 @@ KeyBindings::bindKey(string key, string cmd) {
   m_keybindings[key] = cmd;
 }
 
-string
+std::optional<string>
 KeyBindings::getKeyBind(string key) {  
   auto binding = m_keybindings.find(key);
   if (binding == std::end(m_keybindings)) {
-    return "unknown-binding";
+    return nullopt;
   } else {
-    return binding->second;
+    return make_optional(binding->second);
   }
 }

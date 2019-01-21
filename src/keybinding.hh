@@ -7,9 +7,9 @@ using namespace std;
 
 class KeyBindings {
 private:
-  std::map<string, string> m_keybindings; 
+  std::map<string, string> m_keybindings;
+  
 public:
   void bindKey(string key, string cmd);
-  string getKeyBind(string key);
-
+  std::optional<string> getKeyBind(string key);
 };
