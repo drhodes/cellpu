@@ -4,10 +4,10 @@
 class PanVisitor : public BaseVisitor 
 {
 private:
-  int m_factor;
+  string m_cmd;
 public:  
-  PanVisitor(string cmd) {
-    m_cmd = cmd
+  PanVisitor(string cmd) {    
+    m_cmd = cmd;
   }  
   void visit(GridEditor &ge) {
     if (m_cmd == "pan-east") ge.panEast();
