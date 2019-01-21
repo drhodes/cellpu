@@ -63,8 +63,15 @@ namespace callback {
   lGetKeyBind(lua_State *L) {
     string key = lua_tostring(L, 1);
     lua_pop(L, 1);
-    string binding = "'" + key + "'" + " is bound to: " + lman.getKeyBind(key);
-    cmdr.pushVisitor(make_shared<TellTermVisitor>(binding));
+    string bindingMsg = "'" + key + "'" + " is bound to: ";
+    optional<string> visitorId = lman.getKeyBind(key);
+
+    if (visitorId.has_value()) {
+      bindingMsg += visitorId.value();
+    } else {
+      bindingMsg += "<unbound-visitor>";
+    }
+    cmdr.pushVisitor(make_shared<TellTermVisitor>(bindingMsg));
     return 0;
   }
   

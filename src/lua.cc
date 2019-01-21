@@ -34,7 +34,7 @@ LuaMgr::bindKey(string key, string cmd) {
   m_keybindings.bindKey(key, cmd);
 }
 
-string
+optional<string>
 LuaMgr::getKeyBind(string key) {
   return m_keybindings.getKeyBind(key);
 }

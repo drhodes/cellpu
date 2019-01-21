@@ -30,7 +30,7 @@ public:
   lua_State* getLuaState(); // this is unfortunate.
 
   void bindKey(string key, string cmd);
-  string getKeyBind(string key);
+  optional<string> getKeyBind(string key);
   
   int putL(lua_State *L);
   

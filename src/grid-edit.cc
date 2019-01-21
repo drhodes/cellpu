@@ -82,7 +82,8 @@ GridEditor::setupEvents() {
                            m_statusText.setRow(0, "unselected all cells");
                          }
                          default: {
-                           printf("unhandled event in gridEditorProcessEvent, type: %d\n", ev.type);                                }}                             
+                           printf("unhandled event in gridEditorProcessEvent, type: %d\n", ev.type);
+                         }} 
                        });
 }
 
