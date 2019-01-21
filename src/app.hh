@@ -15,7 +15,7 @@ class App {
   Display dsys;
   GridEditor &m_ge = *new GridEditor();
   Term &m_term = *new Term(5, 750, 80, 17);  
-
+  bool m_running = true;
 public:
   App();
   ~App();
@@ -23,4 +23,6 @@ public:
   void resizeGrid(int n);
   void eventLoop();
   void accept(std::shared_ptr<Visitor>);
+  void quit();
+
 };

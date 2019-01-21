@@ -2,6 +2,7 @@
 #include "app.hh"
 #include "text-box.hh"
 #include "select-cell.hh"
+#include "event-loop.hh"
 
 extern Cmdr cmdr; // main.cc
 
@@ -11,25 +12,16 @@ App::App() {
 
 void
 App::eventLoop() {
-  SDL_Event event;
   Atlas atlas("./media/Terminus.ttf", 16);
   TextBox tbox(atlas, 800, 10, 10, 10);
+  EventLoop eventLoop;
+  
   tbox.setRow(0, "Is there anybody out there?");
   tbox.setRow(1, "hello?");
   
-  while( true ) {
-    Uint64 loopTimeStart = SDL_GetTicks();
-        
-    while(SDL_PollEvent(&event)) {           
-      m_ge.handleEvent(event);
-      m_term.handleEvent(event);
-           
-      if (event.type == SDL_KEYDOWN) {            
-        if(event.key.keysym.scancode == SDL_SCANCODE_Q) {
-          return;
-        }
-      }
-    }
+  while(m_running) {
+    Uint64 loopTimeStart = SDL_GetTicks();    
+    eventLoop.handleAll();
     
     while (true) {
       // consume visitors.
@@ -55,13 +47,20 @@ App::eventLoop() {
   }
 }
 
+
 void
 App::accept(std::shared_ptr<Visitor> v) {
+  v->visit(*this);
   m_ge.accept(v);
   m_term.accept(v);
 }
 
+void
+App::quit() {
+  m_running = false;
+}
+
 App::~App() {
-  //delete &m_ge;
-  //delete &m_term;
+  // delete &m_ge;
+  delete &m_term;
 }
