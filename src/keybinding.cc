@@ -4,9 +4,6 @@
 
 #include "keybinding.hh"
 
-KeyBindings::KeyBindings() {
-}
-
 void
 KeyBindings::bindKey(string key, string cmd) {
   std::cerr << "Binding: " << key << " -> " << cmd << endl;
