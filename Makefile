@@ -53,6 +53,9 @@ event-handler.o:
 display.o: 
 	${CC} -c ${CFLAGS} src/display.cc -o $@
 
+event-loop.o: 
+	${CC} -c ${CFLAGS} src/event-loop.cc -o $@
+
 grid.o: 
 	${CC} -c ${CFLAGS} src/grid.cc -o $@
 
@@ -102,6 +105,7 @@ OBJ	=	app.o\
 		display.o\
 		draw.o\
 		event-handler.o\
+		event-loop.o\
 		grid-edit.o\
 		grid.o\
 		instruction.o\
