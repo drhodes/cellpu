@@ -6,7 +6,7 @@ class GridEditor;
 class Grid;
 class Cell;
 class Term;
-
+class App;
 
 class Visitor {
 public:
@@ -14,6 +14,7 @@ public:
   virtual void visit(Grid&) = 0;
   virtual void visit(Cell&) = 0;
   virtual void visit(Term&) = 0;
+  virtual void visit(App&) = 0;
 };
 
 
@@ -27,9 +28,10 @@ public:
 class BaseVisitor :
   public Visitor
 {
-  void visit(Grid &g) { }
-  void visit(GridEditor &ge) { } 
-  void visit(Cell &cell) { }
-  void visit(Term &term) { }
+  void visit(Grid&) { }
+  void visit(GridEditor&) { } 
+  void visit(Cell&) { }
+  void visit(Term&) { }
+  void visit(App&) { }
 };
 
