@@ -29,6 +29,7 @@ public:
   void setupEvents();
   void render();
   void accept(shared_ptr<Visitor>);
+  void setSelectAllCells(bool);
 
 
   void statusText(string);

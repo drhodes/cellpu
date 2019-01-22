@@ -87,12 +87,20 @@ GridEditor::setupEvents() {
                        });
 }
 
+void
+GridEditor::setSelectAllCells(bool b) {
+  m_grid.setSelectAllCells(b);
+}
 
 void
 GridEditor::statusText(string msg) {
   m_statusText.setRow(0, msg);
 }
 
+void
+GridEditor::setSelectAllCells(bool b) {
+  m_grid.setSelectAllCells(b);
+}
 
 void
 GridEditor::updateOverCell(SDL_Event &ev) {
