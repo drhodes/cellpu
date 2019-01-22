@@ -13,7 +13,7 @@ class TextInputVisitor : public BaseVisitor
 private:
   SDL_Event m_ev;
 public:  
-  TextInputVisitor(SDL_Event &ev) {    
+  TextInputVisitor(SDL_Event &ev) {
     m_ev = ev;
   }  
   void visit(GridEditor &ge) {
@@ -37,4 +37,12 @@ public:
       }
     }
   }
+
+  void visit(Term &term) {
+    if (term.focus()) {
+      term.pushChar(m_ev.window.event);
+    }
+  }
+
+  
 };
