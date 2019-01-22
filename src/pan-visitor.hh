@@ -1,3 +1,4 @@
+#pragma once
 #include "visit.hh"
 #include "grid-edit.hh"
   

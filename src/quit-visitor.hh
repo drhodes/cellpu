@@ -1,3 +1,5 @@
+#pragma once
+
 #include "visit.hh"
 #include "app.hh"
   
