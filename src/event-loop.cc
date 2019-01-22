@@ -5,9 +5,10 @@
 // see lua.hh for c++ interface
 // to push appropriate visitors onto the cmdr queue which
 // is consumed in app.cc
+
 #include "event-loop.hh"
-#include "quit-visitor.hh"
-#include "pan-visitor.hh"
+#include "text-input-visitor.hh"
+#include "mouse-motion-visitor.hh"
 
 extern LuaMgr lman;  
 extern Cmdr cmdr;
@@ -24,47 +25,12 @@ EventLoop::handleAll() {
     
     if (event.type == SDL_KEYDOWN) {      
     } else if (event.type == SDL_TEXTINPUT) {
-      handleTextInput(event);
+      cmdr.pushVisitor(make_shared<TextInputVisitor>(event));
+    } else if (event.type == SDL_MOUSEMOTION) {
+      cmdr.pushVisitor(make_shared<MouseMotionVisitor>(event));
+    } else {
+      // unhandled event.
     }
   }
 }
 
-void
-EventLoop::handleTextInput(SDL_Event &ev) {
-  std::string key(1, (char)ev.window.event);
-  optional<string> binding = lman.getKeyBind(key);
-  
-  if (binding.has_value()) {
-    string visitorId = binding.value();
-
-    // Yes, using strings here is not ideal.
-    // better to use enums, but these values are coming from lua.
-    // TODO: consider these type safer
-    
-    if (false) {
-    } else if (visitorId == "pan-west" ||
-               visitorId == "pan-east" ||
-               visitorId == "pan-south" ||
-               visitorId == "pan-north") {      
-      cmdr.pushVisitor(make_shared<PanVisitor>(visitorId));
-      
-    } else if (visitorId == "quit") {
-      cmdr.pushVisitor(make_shared<QuitVisitor>());
-      
-    } else {      
-      // report error
-    }
-    
-    // if (!m_hasFocus) return;
-    // string s = "Handling SDL_TEXTINPUT: ";
-    // s.push_back(ev.window.event);
-    // m_statusText.setRow(0, s);
-    // handleTextInput(ev);        
-    //                      });
-  }
-}
-
-void
-EventLoop::push(shared_ptr<Visitor> &v) {
-  //cmdr.pushVisitor(v)
-}

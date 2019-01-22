@@ -87,6 +87,13 @@ GridEditor::setupEvents() {
                        });
 }
 
+
+void
+GridEditor::statusText(string msg) {
+  m_statusText.setRow(0, msg);
+}
+
+
 void
 GridEditor::updateOverCell(SDL_Event &ev) {
   if (m_grid.containsPoint(ev.motion.x, ev.motion.y)) {
@@ -110,6 +117,11 @@ GridEditor::updateFocus(SDL_Event &ev) {
   } else {
     m_hasFocus = false;
   }    
+}
+
+bool
+GridEditor::hasFocus() {
+  return m_hasFocus;
 }
 
 void

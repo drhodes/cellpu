@@ -21,7 +21,6 @@ public:
   GridEditor();
   ~GridEditor();
 
-  // void processEvent(SDL_Event&);
   void updateOverCell(SDL_Event &ev);
   void updateSelectedCell(SDL_Event &ev);
   void updateFocus(SDL_Event &ev);
@@ -31,6 +30,10 @@ public:
   void render();
   void accept(shared_ptr<Visitor>);
 
+
+  void statusText(string);
+
+  bool hasFocus();
 
   void panEast();
   void panWest();
