@@ -28,11 +28,11 @@ class Term : public EventHandler {
         
 public:
   Atlas& m_atlas = *new Atlas("./media/Terminus.ttf", 16);
-  string lines[TERM_MAX_LINES];
+  string m_lines[TERM_MAX_LINES];
   int m_curLine;
-  int numCols, numRows;
-  int lineHeight, colWidth;
-  int top, left;
+  int m_numCols, m_numRows;
+  int m_lineHeight, m_colWidth;
+  int m_top, m_left;
   bool m_focus;
   
   Term(int left, int top, int columns, int rows);

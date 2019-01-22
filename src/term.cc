@@ -21,10 +21,10 @@ Term::Term(int left, int top, int columns, int rows) :
   EventHandler("Term")
 {
   m_curLine = 0;
-  numCols = columns;
-  numRows = rows;
-  this->top = top;
-  this->left = left;
+  m_numCols = columns;
+  m_numRows = rows;
+  m_top = top;
+  m_left = left;
 
   setupEvents();
   moveToBottom();
@@ -39,7 +39,6 @@ Term::accept(std::shared_ptr<Visitor> v) {
   v->visit(*this);
 }
 
-
 void
 Term::moveToBottom() {
   auto win = display::getWindow();
@@ -48,23 +47,23 @@ Term::moveToBottom() {
   BBox bb;
   boundingBox(bb);
   
-  this->top = winHeight - bb.height;
+  m_top = winHeight - bb.height;
 }
 
 void
 Term::putInput(string str) {
   assert(m_curLine < TERM_MAX_LINES);
-  lines[m_curLine] = str;
+  m_lines[m_curLine] = str;
   m_curLine += 1;
 }
 
 void
 Term::boundingBox(BBox &bb) {
   int promptSize = 2; // TODO consider custom prompt.
-  bb.top = top;
-  bb.left = left;
-  bb.height = m_atlas.surfHeight_ * (numRows + 1);
-  bb.width  = m_atlas.surfWidth_ * (promptSize + numCols);
+  bb.top = m_top;
+  bb.left = m_left;
+  bb.height = m_atlas.surfHeight_ * (m_numRows + 1);
+  bb.width  = m_atlas.surfWidth_ * (promptSize + m_numCols);
 }
 
 void
@@ -73,12 +72,12 @@ Term::renderCursor(SDL_Renderer *renderer) {
   string line = getCurLine();
   int curCol = line.length();
   int promptSize = 2; // TODO consider custom prompt.
-  int x = left + ((promptSize + curCol) * m_atlas.surfWidth_);
-  int y = top;
+  int x = m_left + ((promptSize + curCol) * m_atlas.surfWidth_);
+  int y = m_top;
 
-  if (m_curLine >= numRows) {
+  if (m_curLine >= m_numRows) {
     // when the cursor hits the bottom of the terminal.
-    y += numRows * m_atlas.surfHeight_;
+    y += m_numRows * m_atlas.surfHeight_;
   } else {
     y += m_curLine * m_atlas.surfHeight_;
   }
@@ -106,10 +105,10 @@ Term::renderBackground(SDL_Renderer *renderer) {
 void
 Term::renderLine(SDL_Renderer *renderer, int lineNum, int rowNum) {
   string str("> ");
-  str.append(lines[lineNum]);
+  str.append(m_lines[lineNum]);
         
-  int curX = left;
-  int curY = top + rowNum * m_atlas.surfHeight_;
+  int curX = m_left;
+  int curY = m_top + rowNum * m_atlas.surfHeight_;
     
   for (int i=0; str[i]; i++) {
     SDL_Rect msgRect = { curX, curY, m_atlas.surfWidth_, m_atlas.surfHeight_ };
@@ -133,7 +132,7 @@ Term::render(SDL_Renderer *renderer) {
   SDL_GetWindowSize(display::getWindow(), &winW, &winH);
 
   int bottomLine = m_curLine;
-  int topLine = bottomLine - numRows;
+  int topLine = bottomLine - m_numRows;
   if (topLine < 0) topLine = 0;
     
   int rowNum = 0;
@@ -196,12 +195,12 @@ Term::doReturn() {
 
 inline string
 Term::getCurLine() {
-  return lines[m_curLine];
+  return m_lines[m_curLine];
 }
 
 bool
 Term::curLineFull() {
-  return (int)(getCurLine().length()) >= (numCols - 1);
+  return (int)(getCurLine().length()) >= (m_numCols - 1);
 }
 
 /// returns false when can't append char to current line.
@@ -209,7 +208,7 @@ bool
 Term::pushChar(char c) {
   // if line full return false
   if (!curLineFull()) {
-    lines[m_curLine].push_back(c);
+    m_lines[m_curLine].push_back(c);
     return true;
   }
   return false;
@@ -218,9 +217,8 @@ Term::pushChar(char c) {
 void
 Term::popChar() {
   if (getCurLine().length() > 0)
-    lines[m_curLine].pop_back();
+    m_lines[m_curLine].pop_back();
 }
-
 
 void
 Term::focus(bool f) {
