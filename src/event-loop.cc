@@ -9,6 +9,7 @@
 #include "event-loop.hh"
 #include "text-input-visitor.hh"
 #include "mouse-motion-visitor.hh"
+#include "key-down-visitor.hh"
 
 extern LuaMgr lman;  
 extern Cmdr cmdr;
@@ -23,7 +24,8 @@ EventLoop::handleAll() {
     // m_ge.handleEvent(event);
     // m_term.handleEvent(event);
     
-    if (event.type == SDL_KEYDOWN) {      
+    if (event.type == SDL_KEYDOWN) {       
+      cmdr.pushVisitor(make_shared<KeyDownVisitor>(event));
     } else if (event.type == SDL_TEXTINPUT) {
       cmdr.pushVisitor(make_shared<TextInputVisitor>(event));
     } else if (event.type == SDL_MOUSEMOTION) {
