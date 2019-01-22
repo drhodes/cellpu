@@ -95,7 +95,7 @@ Term::renderBackground(SDL_Renderer *renderer) {
   boundingBox(bb);
   SDL_Rect rect = {bb.left, bb.top, bb.width, bb.height};
   
-  if (focus) {
+  if (m_focus) {
     SDL_SetRenderDrawColor(renderer, 0x60, 0x35, 0x6A, 0xBB);
   } else {
     SDL_SetRenderDrawColor(renderer, 0x45, 0x45, 0x45, 0xBB);
@@ -127,7 +127,7 @@ Term::renderLine(SDL_Renderer *renderer, int lineNum, int rowNum) {
 void
 Term::render(SDL_Renderer *renderer) {
   renderBackground(renderer);
-  if (focus) renderCursor(renderer);
+  if (m_focus) renderCursor(renderer);
     
   int winW, winH;
   SDL_GetWindowSize(display::getWindow(), &winW, &winH);
@@ -156,19 +156,19 @@ Term::setupEvents() {
                        [&](SDL_Event &ev) {
                          Sint32 x = ev.motion.x;
                          Sint32 y = ev.motion.y;        
-                         this->focus = containsPx(x, y);
+                         this->m_focus = containsPx(x, y);
                        });
   
   registerEventHandler(SDL_TEXTINPUT, 
                        [&](SDL_Event &ev) {
-                         if (this->focus) {
+                         if (this->m_focus) {
                            pushChar(ev.window.event);
                          }
                        });
   
   registerEventHandler(SDL_KEYDOWN, 
                        [&](SDL_Event &ev) {
-                         if (!this->focus) return;                         
+                         if (!this->m_focus) return;                         
                          switch (ev.key.keysym.scancode) {
                          case SDL_SCANCODE_BACKSPACE:
                            popChar();
@@ -219,4 +219,15 @@ void
 Term::popChar() {
   if (getCurLine().length() > 0)
     lines[m_curLine].pop_back();
+}
+
+
+void
+Term::focus(bool f) {
+  m_focus = f;
+}
+
+bool
+Term::focus() {
+  return m_focus;
 }

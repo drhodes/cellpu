@@ -33,7 +33,7 @@ public:
   int numCols, numRows;
   int lineHeight, colWidth;
   int top, left;
-  bool focus;
+  bool m_focus;
   
   Term(int left, int top, int columns, int rows);
   ~Term(); //freeTerm(Term *term);
@@ -55,6 +55,9 @@ public:
   void setNumRows(int linesShown);
   void setupEvents();
 
+  void focus(bool);
+  bool focus();
+  
   void accept(std::shared_ptr<Visitor>);
 
   
