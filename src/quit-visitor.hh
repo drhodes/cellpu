@@ -3,7 +3,8 @@
 #include "visit.hh"
 #include "app.hh"
   
-class QuitVisitor : public BaseVisitor 
+class QuitVisitor :
+  public BaseVisitor 
 {
 public:  
   QuitVisitor() { }
