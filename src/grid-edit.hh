@@ -7,7 +7,6 @@
 #include "visit.hh"
 
 class GridEditor :
-  public EventHandler,
   public Visitable
 {
 public:
