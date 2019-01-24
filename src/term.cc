@@ -185,6 +185,15 @@ Term::setupEvents() {
 }
 
 void
+Term::updateFocus(SDL_Event& ev) {
+  if (ev.type == SDL_MOUSEMOTION) {
+    m_focus = containsPx(ev.motion.x, ev.motion.y);
+  } else {
+    m_focus = false;
+  }    
+}
+
+void
 Term::doReturn() {
   string line = getCurLine();
   string result = lman.doLine(line);

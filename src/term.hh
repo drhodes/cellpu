@@ -55,11 +55,11 @@ public:
   void setNumRows(int linesShown);
   void setupEvents();
 
-  void focus(bool);
+  void focus(bool); // this should be private.
   bool focus();
-  
-  void accept(std::shared_ptr<Visitor>);
 
+  void updateFocus(SDL_Event&);
+  void accept(std::shared_ptr<Visitor>);
   
 };
 

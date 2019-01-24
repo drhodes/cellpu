@@ -24,9 +24,7 @@ public:
   }
 
   void visit(Term &term) {
-    Sint32 x = m_ev.motion.x;
-    Sint32 y = m_ev.motion.y;        
-    term.focus(term.containsPx(x, y));
+    term.updateFocus(m_ev); 
   }
   
 };
