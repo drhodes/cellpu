@@ -63,6 +63,10 @@ GridEditor::updateOverCell(SDL_Event &ev) {
 }
 
 void
+GridEditor::setSelectedCellInstruction(shared_ptr<Instruction> inst) {
+}
+
+void
 GridEditor::updateSelectedCell(SDL_Event &ev) {
   m_selectedCell = m_overCell;
     

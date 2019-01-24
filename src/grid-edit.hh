@@ -31,10 +31,9 @@ public:
   void render();
   void accept(shared_ptr<Visitor>);
   void setSelectAllCells(bool);
-
+  void setSelectedCellInstruction(shared_ptr<Instruction> inst);
 
   void statusText(string);
-
   bool hasFocus();
 
   void panEast();
