@@ -56,9 +56,7 @@ enum class CellTrans { MouseOver,
                        MouseClick,                      
 };
 
-class Cell :
-  public Visitable
-{
+class Cell {
 private:
   int m_size = 30;
   char m_dataReg;

@@ -28,11 +28,6 @@ Cell::~Cell() {
 }
 
 void
-Cell::accept(std::shared_ptr<Visitor> v) {
-  v->visit(*this);
-}
-
-void
 Cell::setInstruction(shared_ptr<Instruction> inst) {
   m_inst = inst;  
 }
