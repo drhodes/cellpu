@@ -34,8 +34,7 @@ App::eventLoop() {
     }
     
     SDL_SetRenderDrawColor(display::getRenderer(), 0, 0, 0, 255);
-    SDL_RenderClear(display::getRenderer());
-    
+    SDL_RenderClear(display::getRenderer());    
     m_ge.render();
     tbox.render();
     m_term.render(display::getRenderer());
@@ -47,12 +46,11 @@ App::eventLoop() {
   }
 }
 
-
 void
 App::accept(std::shared_ptr<Visitor> v) {
-  v->visit(*this);
-  m_ge.accept(v);
   m_term.accept(v);
+  m_ge.accept(v);
+  v->visit(*this);
 }
 
 void
@@ -61,6 +59,6 @@ App::quit() {
 }
 
 App::~App() {
-  // delete &m_ge;
+  delete &m_ge;
   delete &m_term;
 }
