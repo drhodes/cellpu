@@ -10,6 +10,7 @@
 #include "text-input-visitor.hh"
 #include "mouse-motion-visitor.hh"
 #include "key-down-visitor.hh"
+#include "mouse-button-down-visitor.hh"
 
 extern LuaMgr lman;  
 extern Cmdr cmdr;
@@ -19,19 +20,16 @@ EventLoop::handleAll() {
   SDL_Event event;
   
   while(SDL_PollEvent(&event)) {
-    // REFACTORING.
-    // GridEdit::handleEvent is going away.  
-    // m_ge.handleEvent(event);
-    // m_term.handleEvent(event);
-    
     if (event.type == SDL_KEYDOWN) {       
       cmdr.pushVisitor(make_shared<KeyDownVisitor>(event));
     } else if (event.type == SDL_TEXTINPUT) {
       cmdr.pushVisitor(make_shared<TextInputVisitor>(event));
     } else if (event.type == SDL_MOUSEMOTION) {
       cmdr.pushVisitor(make_shared<MouseMotionVisitor>(event));
+    } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+      cmdr.pushVisitor(make_shared<MouseButtonDownVisitor>(event));
     } else {
-      // unhandled event.
+      // unhandled event type.
     }
   }
 }
