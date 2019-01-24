@@ -16,7 +16,9 @@ GridEditor::GridEditor() :
 }
 
 GridEditor::~GridEditor() {
-  cerr << "destroying grid editor" << endl;
+  cerr << "destroying grid editor" << endl;  
+  delete &m_grid;
+  delete &m_statusText;
 }
 
 void
