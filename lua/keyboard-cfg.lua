@@ -3,7 +3,7 @@ print("LUA: loading keyboard-cfg.lua")
 local key_bindings = {
    a = "pan-west",
    b = nil,
-   c = nil,
+   c = "cycle-instruction",
    d = "pan-east",
    e = nil,
    f = nil,
@@ -14,7 +14,7 @@ local key_bindings = {
    k = nil,
    l = nil,
    m = nil,
-   n = nil,
+   n = "noop-instruction",
    o = nil,
    p = nil,
    q = "quit",
