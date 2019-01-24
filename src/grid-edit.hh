@@ -14,12 +14,14 @@ public:
   TextBox& m_statusText = *new TextBox(*new Atlas("./media/Terminus.ttf", 16), 0, m_grid.bottom(), 80, 1);
 
   shared_ptr<Cell> m_overCell;
-  shared_ptr<Cell> m_selectedCell;
+  
+  // TODO this should be a vector cells since more than one cell may be selected at once.
+  shared_ptr<Cell> m_selectedCell; 
   bool m_hasFocus;
 
   GridEditor();
   ~GridEditor();
-
+  
   void updateOverCell(SDL_Event &ev);
   void updateSelectedCell(SDL_Event &ev);
   void updateFocus(SDL_Event &ev);
