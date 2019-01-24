@@ -10,6 +10,7 @@
 #include "cell.hh"
 #include "bbox.hh"
 #include "cmdr.hh"
+#include "visit.hh"
 
 class Cell;
 
@@ -42,12 +43,12 @@ public:
   void registerLuaCallbacks();
   void accept(shared_ptr<Visitor>);
   void zoom(int factor);
+  void zoomCells();
   
   shared_ptr<Cell> getCell(int x, int y) const;
   shared_ptr<Cell> cursorCell(int pixelX, int pixelY);
   shared_ptr<Cell> getNbr(int x, int y, Way w);
 };
-
 
 class GridCmd : public Cmd {
 };
@@ -61,7 +62,6 @@ public:
     m_y = y;
   }
 };
-
 
 
 

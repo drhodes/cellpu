@@ -12,7 +12,6 @@ class Visitor {
 public:
   virtual void visit(GridEditor&) = 0;
   virtual void visit(Grid&) = 0;
-  virtual void visit(Cell&) = 0;
   virtual void visit(Term&) = 0;
   virtual void visit(App&) = 0;
 };
@@ -21,6 +20,7 @@ public:
 class Visitable {
 public:
   virtual void accept(std::shared_ptr<Visitor>) = 0;
+  virtual ~Visitable() {}
 };
 
 // TODO. according to experts using stubs shouldn't work 
@@ -30,7 +30,6 @@ class BaseVisitor :
 {
   void visit(Grid&) { }
   void visit(GridEditor&) { } 
-  void visit(Cell&) { }
   void visit(Term&) { }
   void visit(App&) { }
 };

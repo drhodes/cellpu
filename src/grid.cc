@@ -66,10 +66,6 @@ Grid::width() {
   return bb.width;
 }
 
-void
-Grid::zoom(int factor) {
-  m_zoom = factor;
-}
 
 bool
 Grid::containsPoint(Sint32 x, Sint32 y) {    
@@ -80,12 +76,7 @@ Grid::containsPoint(Sint32 x, Sint32 y) {
 
 void
 Grid::accept(std::shared_ptr<Visitor> v) {  
-  v->visit(*this);
-  for (int row=0; row < m_size; row++) { 
-    for (int col=0; col < m_size; col++) {
-      m_cells[row][col]->accept(v);
-    }
-  }
+  v->visit(*this);  
 }
 
 void
@@ -137,4 +128,22 @@ Grid::bottom() {
   BBox bb;
   bbox(bb);
   return bb.bottom();
+}
+
+void
+Grid::zoom(int factor) {
+  m_zoom = factor;
+  zoomCells();
+}
+
+void
+Grid::zoomCells() {
+  // this is going to change eventually.
+  // only zoom the displayed cells
+  // TODO only render the cells in the viewport.
+  for (int row=0; row < m_size; row++) { 
+    for (int col=0; col < m_size; col++) {
+      m_cells[row][col]->setZoom(m_zoom);
+    }
+  }
 }

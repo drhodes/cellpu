@@ -12,7 +12,5 @@ public:
   void visit(Grid &g) {
     g.zoom(m_factor);
   }
-  void visit(Cell &c) {
-    c.setZoom(m_factor);
-  }
+  
 };
