@@ -1,4 +1,7 @@
-CFLAGS= -O0 -g -std=c++17 \
+CFLAGS= \
+	-O0 \
+	-g \
+	-std=c++17 \
 	-Wall \
 	-Werror \
 	-Wno-deprecated-declarations \
