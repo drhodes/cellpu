@@ -151,6 +151,18 @@ Grid::zoom(int factor) {
 }
 
 void
+Grid::zoomIn() {
+  zoom(m_zoom + 1);
+}
+
+void
+Grid::zoomOut() {  
+  if (m_zoom > 1) {
+    zoom(m_zoom - 1); 
+  }
+}
+
+void
 Grid::zoomCells() {
   // this is going to change eventually.
   // only zoom the displayed cells

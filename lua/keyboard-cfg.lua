@@ -29,10 +29,15 @@ local key_bindings = {
    z = nil,
 }
 
+key_bindings["+"] = "zoom-in"
+key_bindings["-"] = "zoom-out"
+
 for key, value in pairs(key_bindings)
 do
    --print("binding", key, "to", value)
    bindKey(key, value)
 end
+
+
 
 

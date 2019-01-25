@@ -103,3 +103,14 @@ GridEditor::render() {
   m_grid.render();
   m_statusText.render();
 }
+
+
+void
+GridEditor::zoomIn() {
+  m_grid.zoomIn();
+}
+
+void
+GridEditor::zoomOut() {
+  m_grid.zoomOut();
+}

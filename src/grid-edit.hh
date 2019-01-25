@@ -37,6 +37,10 @@ public:
   void panWest();
   void panNorth();
   void panSouth();
+
+  void zoomIn();
+  void zoomOut();
+
   
   // these may be used to display help for user.
   void showKeys();

@@ -35,8 +35,13 @@ public:
             visitorId == "pan-south" ||
             visitorId == "pan-north") {      
           cmdr.pushVisitor(make_shared<PanVisitor>(visitorId));
-        } else if (visitorId == "noop-instruction") {
-          ge.setSelectedCellInstruction(make_shared<NOOP>());
+        } else if (visitorId == "noop-instruction") {          
+          ge.setSelectedCellsInstruction(make_shared<NOOP>());
+        } else if (visitorId == "zoom-in") {
+          ge.statusText("zooming in: " + visitorId);
+          ge.zoomIn(); 
+        } else if (visitorId == "zoom-out") {
+          ge.zoomOut();
         } else {
           // report error
           ge.statusText("unhandled binding: " + visitorId);

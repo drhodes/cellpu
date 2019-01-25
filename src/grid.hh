@@ -43,6 +43,8 @@ public:
   void registerLuaCallbacks();
   void accept(shared_ptr<Visitor>);
   void zoom(int factor);
+  void zoomIn();
+  void zoomOut();
   void zoomCells();
   vector<shared_ptr<Cell>> getAllSelectedCells();
 
