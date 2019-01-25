@@ -44,7 +44,10 @@ public:
   void accept(shared_ptr<Visitor>);
   void zoom(int factor);
   void zoomCells();
+  vector<shared_ptr<Cell>> getAllSelectedCells();
+
   
+
   shared_ptr<Cell> getCell(int x, int y) const;
   shared_ptr<Cell> cursorCell(int pixelX, int pixelY);
   shared_ptr<Cell> getNbr(int x, int y, Way w);

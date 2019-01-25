@@ -7,7 +7,6 @@
 
 GridEditor::GridEditor() {
   m_overCell = m_grid.getCell(0, 0); 
-  m_selectedCell = m_grid.getCell(0, 0);
   m_hasFocus = false;
   m_statusText.setWidth(m_grid.width());
 }
@@ -52,6 +51,7 @@ GridEditor::statusText(string msg) {
 void
 GridEditor::setSelectAllCells(bool b) {
   m_grid.setSelectAllCells(b);
+  
 }
 
 void
@@ -63,16 +63,19 @@ GridEditor::updateOverCell(SDL_Event &ev) {
 }
 
 void
-GridEditor::setSelectedCellInstruction(shared_ptr<Instruction> inst) {
+GridEditor::setSelectedCellsInstruction(shared_ptr<Instruction> inst) {
+  auto cells = m_grid.getAllSelectedCells();
+  for (auto cell : cells) {
+    cell->setInstruction(inst);
+  }
 }
 
 void
-GridEditor::updateSelectedCell(SDL_Event &ev) {
-  m_selectedCell = m_overCell;
-    
-  // select cell if deselected, deselect cell if already selected.
-  m_selectedCell->selected(!m_selectedCell->selected());
+GridEditor::toggleSelectCurCell(SDL_Event &ev) {
+  shared_ptr<Cell> cell = m_grid.cursorCell(ev.motion.x, ev.motion.y);
+  cell->selected(!cell->selected());
 }
+
 
 void
 GridEditor::updateFocus(SDL_Event &ev) {

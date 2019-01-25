@@ -42,7 +42,8 @@ public:
           ge.statusText("unhandled binding: " + visitorId);
         }
       } else {
-        ge.statusText("key not bound"); 
+        std::string key(1, (char)m_ev.window.event);
+        ge.statusText("key not bound: " + key); 
       }
     }
   }

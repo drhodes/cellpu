@@ -19,6 +19,7 @@ public:
   void visit(GridEditor &ge) {
     if (!ge.hasFocus()) return;
     ge.statusText("Handling SDL_MOUSEDOWN");
-    ge.updateSelectedCell(m_ev);
+    //ge.updateSelectedCell(m_ev);
+    ge.toggleSelectCurCell(m_ev);
   }  
 };

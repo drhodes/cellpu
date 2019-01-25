@@ -112,6 +112,20 @@ Grid::setSelectAllCells(bool b) {
   }
 }
 
+vector<shared_ptr<Cell>>
+Grid::getAllSelectedCells() {
+  auto cells = new vector<std::shared_ptr<Cell>>();
+  for (int x = 0; x < m_size; x++) {
+    for (int y = 0; y < m_size; y++) {
+      auto c = getCell(x, y);
+      if (c->selected()) {
+        cells->push_back(c);
+      }
+    }
+  }
+  return *cells; // this is a move.
+}
+
 shared_ptr<Cell>
 Grid::getNbr(int x, int y, Way w) {
   switch (w) {
