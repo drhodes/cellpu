@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <stdbool.h> 
+#include <stdbool.h>
 
 class BBox {
  public:
@@ -11,8 +11,7 @@ class BBox {
 
   BBox();
   BBox(int, int, int, int);
-  
+
   bool containsPx(int, int);
   int bottom();
-  
 };

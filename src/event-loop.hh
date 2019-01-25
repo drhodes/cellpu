@@ -2,11 +2,10 @@
 #include "visit.hh"
 
 class EventLoop {
-private:
+ private:
   void push(std::shared_ptr<Visitor> &v);
 
-public:
+ public:
   void handleAll();
   void handleTextInput(SDL_Event &ev);
-
 };

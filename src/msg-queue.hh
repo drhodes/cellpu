@@ -2,12 +2,6 @@
 
 #include <queue>
 
-
-namespace msgQueue {  
-  std::queue<std::string> messages;
-
-
-  
-  
-  
+namespace msgQueue {
+std::queue<std::string> messages;
 }

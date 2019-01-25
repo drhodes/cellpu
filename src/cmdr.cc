@@ -1,5 +1,5 @@
-#include <queue>
 #include <optional>
+#include <queue>
 
 #include "cmdr.hh"
 
@@ -7,20 +7,11 @@
 
 using namespace std;
 
-void
-Cmdr::pushCmd(shared_ptr<Cmd> cmd) {
-  m_commands.push(cmd);
-}
+void Cmdr::pushCmd(shared_ptr<Cmd> cmd) { m_commands.push(cmd); }
 
-void
-Cmdr::pushVisitor(shared_ptr<Visitor> v) {
-  m_visitors.push(v);
-}
+void Cmdr::pushVisitor(shared_ptr<Visitor> v) { m_visitors.push(v); }
 
-
-optional<shared_ptr<Cmd>>
-Cmdr::frontCmd() {
-  
+optional<shared_ptr<Cmd>> Cmdr::frontCmd() {
   if (m_commands.size() == 0) {
     return nullopt;
   } else {
@@ -30,8 +21,7 @@ Cmdr::frontCmd() {
   }
 }
 
-std::optional<shared_ptr<Visitor>>
-Cmdr::frontVisitor() {
+std::optional<shared_ptr<Visitor>> Cmdr::frontVisitor() {
   if (m_visitors.size() == 0) {
     return nullopt;
   } else {

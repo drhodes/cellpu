@@ -2,7 +2,7 @@
 
 #include "visit.hh"
 #include "grid-edit.hh"
-#include "term.hh"
+#include "lua.hh"
 
 extern Cmdr cmdr; // main.cc
 extern LuaMgr lman; // main.cc

@@ -1,18 +1,16 @@
 #include <SDL2/SDL.h>
-#include "visit.hh"
-#include "grid-edit.hh"
 
-class MouseMotionEventVisitor : public BaseVisitor 
-{
-private:
+#include "grid-edit.hh"
+#include "visit.hh"
+
+class MouseMotionEventVisitor : public BaseVisitor {
+ private:
   SDL_Event m_event;
-  bool m_bubble = true; // bubble events down through the z-index
-                        // layers.
-public:  
-  EventVisitor(SDL_Event &ev) {
-    SDL_Event m_event = ev;
-  }
-  
+  bool m_bubble = true;  // bubble events down through the z-index
+                         // layers.
+ public:
+  EventVisitor(SDL_Event &ev) { SDL_Event m_event = ev; }
+
   void visit(GridEditor &ge) {
     if (m_bubble) {
       ge.updateFocus(ev);
@@ -33,5 +31,4 @@ public:
       cell.showDetails();
     }
   }
-  
 };

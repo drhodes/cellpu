@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <stdio.h>
 #include <exception>
 #include <map>
 #include <optional>
@@ -11,25 +11,25 @@
 
 using namespace std;
 
-Atlas::Atlas(const char *fontFilename, int size) {
+Atlas::Atlas(const char* fontFilename, int size) {
   TTF_Font* font = TTF_OpenFont(fontFilename, size);
   nullDie(font);
-  TTF_SetFontHinting(font, TTF_HINTING_NONE); 
-    
+  TTF_SetFontHinting(font, TTF_HINTING_NONE);
+
   SDL_Color white = {255, 255, 255, 255};
 
-  for (char c = 0; c<ATLAS_SIZE; c++) {
+  for (char c = 0; c < ATLAS_SIZE; c++) {
     SDL_Surface* surfaceTxt = TTF_RenderGlyph_Blended(font, c, white);
-    SDL_Texture* tex = SDL_CreateTextureFromSurface(display::getRenderer(), surfaceTxt);
-    SDL_QueryTexture( tex, NULL, NULL, &surfWidth_, &surfHeight_);
+    SDL_Texture* tex =
+        SDL_CreateTextureFromSurface(display::getRenderer(), surfaceTxt);
+    SDL_QueryTexture(tex, NULL, NULL, &surfWidth_, &surfHeight_);
     m_table.insert(std::pair<char, SDL_Texture*>(c, tex));
     SDL_FreeSurface(surfaceTxt);
   }
   TTF_CloseFont(font);
 }
 
-optional<SDL_Texture*>
-Atlas::getGlyph(char c) {
+optional<SDL_Texture*> Atlas::getGlyph(char c) {
   std::map<char, SDL_Texture*>::iterator tup = m_table.find(c);
   if (tup == std::end(m_table)) {
     return nullopt;

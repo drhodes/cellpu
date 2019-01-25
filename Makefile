@@ -53,9 +53,6 @@ cmdr.o:
 text-box.o: 
 	${CC} -c ${CFLAGS} src/text-box.cc -o $@
 
-event-handler.o: 
-	${CC} -c ${CFLAGS} src/event-handler.cc -o $@
-
 display.o: 
 	${CC} -c ${CFLAGS} src/display.cc -o $@
 
@@ -89,12 +86,6 @@ bbox.o:
 term.o:
 	${CC} -c ${CFLAGS} src/term.cc -o $@
 
-state-machine.o:
-	${CC} -c ${CFLAGS} src/state-machine.cc -o $@
-
-opcode.o:
-	${CC} -c ${CFLAGS} src/opcode.cc -o $@
-
 lua.o:
 	${CC} -c ${CFLAGS} src/lua.cc -o $@
 
@@ -110,7 +101,6 @@ OBJ	=	app.o\
 		common.o\
 		display.o\
 		draw.o\
-		event-handler.o\
 		event-loop.o\
 		grid-edit.o\
 		grid.o\
@@ -118,8 +108,6 @@ OBJ	=	app.o\
 		instruction-selector.o\
 		keybinding.o\
 		lua.o\
-		opcode.o\
-		state-machine.o\
 		term.o\
 		text-box.o\
 

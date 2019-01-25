@@ -1,12 +1,12 @@
 #include "cell.hh"
-#include "err.hh"
 #include "draw.hh"
+#include "err.hh"
 #include "instruction.hh"
 #include "state-machine.hh"
 
 using namespace std;
 
-Cell::Cell(int col, int row) { 
+Cell::Cell(int col, int row) {
   m_col = col;
   m_row = row;
   m_zoom = 1;
@@ -18,109 +18,74 @@ Cell::Cell(int col, int row) {
   m_dataReg = 0;
   m_value = 0;
   m_inst = make_shared<NOOP>();
-  
-  // smach = make_shared<StateMachine<CellState, CellTrans>>();
-  // smach->startAt(CellState::Resting);
 }
 
 Cell::~Cell() {
   cerr << "Destroying Cell: x=" << m_col << ", y=" << m_row << endl;
 }
 
-void
-Cell::setInstruction(shared_ptr<Instruction> inst) {
-  m_inst = inst;  
-}
+void Cell::setInstruction(shared_ptr<Instruction> inst) { m_inst = inst; }
 
-void
-Cell::dataReg(int n) {
-  m_dataReg = n;
-}
+void Cell::dataReg(int n) { m_dataReg = n; }
 
-int
-Cell::dataReg() {
-  return m_dataReg;
-}
+int Cell::dataReg() { return m_dataReg; }
 
-void
-Cell::selected(bool b) {
-  m_selected = b;
-}
+void Cell::selected(bool b) { m_selected = b; }
 
-bool
-Cell::selected() {
-  return m_selected;
-}
+bool Cell::selected() { return m_selected; }
 
 void Cell::setZoom(int zoom) { m_zoom = zoom; }
 
-SDL_Color
-Cell::color() const {
+SDL_Color Cell::color() const {
   // change this.
   SDL_Color c = m_inst->m_color;
   return c;
 }
 
-void
-Cell::cycle(struct Grid *grid) {
+void Cell::cycle(struct Grid *grid) {
   // the instruction needs to see the neighborhood, so it needs a
-  // pointer to grid. 
+  // pointer to grid.
   // inst->op(grid, cell);
 }
 
-string
-Cell::instructionName() const {
-  return m_inst->m_name;
-}
+string Cell::instructionName() const { return m_inst->m_name; }
 
-int
-Cell::size() const {
-  return m_zoom * this->m_size;
-}
+int Cell::size() const { return m_zoom * this->m_size; }
 
-void
-Cell::render(Atlas& atlas, SDL_Renderer *renderer) const {
+void Cell::render(Atlas &atlas, SDL_Renderer *renderer) const {
   int sz = this->size();
   int n = 0;
 
-  SDL_Color cellBorderColor = color();  
+  SDL_Color cellBorderColor = color();
   cellBorderColor.r /= 2;
   cellBorderColor.g /= 2;
   cellBorderColor.b /= 2;
 
-  if (m_selected && oddMoment()) {     
+  if (m_selected && oddMoment()) {
     // if the cell is selected then blink.
-    draw::borderBox( m_col*sz, m_row*sz, sz, sz, cellBorderColor, cellBorderColor);
+    draw::borderBox(m_col * sz, m_row * sz, sz, sz, cellBorderColor,
+                    cellBorderColor);
   } else {
     // otherwise normal color for background box.
-    draw::borderBox( m_col*sz, m_row*sz, sz, sz, cellBorderColor, color());
+    draw::borderBox(m_col * sz, m_row * sz, sz, sz, cellBorderColor, color());
   }
-    
-  char str[255]; // plenty of space for text.
-    
+
+  char str[255];  // plenty of space for text.
+
   if (sz > 40) {  // enough room for row, col
-  memset(str, '\0', 255);
-  n = sprintf(str, "[%d %d]", m_col, this->m_row);
-  draw::text(atlas,
-             m_col*sz + 4,
-             m_row*sz + 4,
-             str);
+    memset(str, '\0', 255);
+    n = sprintf(str, "[%d %d]", m_col, this->m_row);
+    draw::text(atlas, m_col * sz + 4, m_row * sz + 4, str);
   }
 
   memset(str, '\0', n);
   n = sprintf(str, "%s", instructionName().c_str());
-  draw::text(atlas,
-             m_col * sz + 4,
-             m_row * sz + 16,
-             str);
-  
+  draw::text(atlas, m_col * sz + 4, m_row * sz + 16, str);
+
   // draw an arrow in the direction of the heading, upper right.
   memset(str, '\0', n);
-  n = sprintf(str, "%c", headingToChar(m_cfg.heading)); 
-  draw::text(atlas,
-             m_col * sz + sz - 8,
-             m_row * sz + 4,
-             str );
+  n = sprintf(str, "%c", headingToChar(m_cfg.heading));
+  draw::text(atlas, m_col * sz + sz - 8, m_row * sz + 4, str);
 }
 
 // | L | R | F | B | Heading | f(a, b) |
@@ -136,40 +101,32 @@ Cell::render(Atlas& atlas, SDL_Renderer *renderer) const {
 // |   |   | a |   | North   | f(F)    |
 // |   |   |   | a | North   | f(B)    |
 
-Way
-Cell::getArgWay1() {
+Way Cell::getArgWay1() {
   Dir d;
-  switch(m_cfg.inputPorts.type) {
-  case PortCfgType::ONE_PORT: {
-    d = m_cfg.inputPorts.value.inputOnePort.input;
-    return wayFromHeading(m_cfg.heading, d);
-  }
-  case PortCfgType::TWO_PORT: {
-    d = m_cfg.inputPorts.value.inputTwoPort.leftInput;
-    return wayFromHeading(m_cfg.heading, d);
-  }}
-  die("unreachable code reached");
-}
-
-Way
-Cell::getArgWay2() {
-  Dir d;
-  switch(m_cfg.inputPorts.type) {
-  case PortCfgType::ONE_PORT:
-    die("This cell doesn't not support a second input argument");    
-  case PortCfgType::TWO_PORT:
-    d = m_cfg.inputPorts.value.inputTwoPort.rightInput;
-    return wayFromHeading(m_cfg.heading, d);
+  switch (m_cfg.inputPorts.type) {
+    case PortCfgType::ONE_PORT: {
+      d = m_cfg.inputPorts.value.inputOnePort.input;
+      return wayFromHeading(m_cfg.heading, d);
+    }
+    case PortCfgType::TWO_PORT: {
+      d = m_cfg.inputPorts.value.inputTwoPort.leftInput;
+      return wayFromHeading(m_cfg.heading, d);
+    }
   }
   die("unreachable code reached");
 }
 
+Way Cell::getArgWay2() {
+  Dir d;
+  switch (m_cfg.inputPorts.type) {
+    case PortCfgType::ONE_PORT:
+      die("This cell doesn't not support a second input argument");
+    case PortCfgType::TWO_PORT:
+      d = m_cfg.inputPorts.value.inputTwoPort.rightInput;
+      return wayFromHeading(m_cfg.heading, d);
+  }
+  die("unreachable code reached");
+}
 
-int
-Cell::row() {
-  return m_row;
-}
-int
-Cell::col() {
-  return m_col;
-}
+int Cell::row() { return m_row; }
+int Cell::col() { return m_col; }

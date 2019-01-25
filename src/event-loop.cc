@@ -7,20 +7,19 @@
 // is consumed in app.cc
 
 #include "event-loop.hh"
-#include "text-input-visitor.hh"
-#include "mouse-motion-visitor.hh"
 #include "key-down-visitor.hh"
 #include "mouse-button-down-visitor.hh"
+#include "mouse-motion-visitor.hh"
+#include "text-input-visitor.hh"
 
-extern LuaMgr lman;  
+extern LuaMgr lman;
 extern Cmdr cmdr;
 
-void
-EventLoop::handleAll() {
+void EventLoop::handleAll() {
   SDL_Event event;
-  
-  while(SDL_PollEvent(&event)) {
-    if (event.type == SDL_KEYDOWN) {       
+
+  while (SDL_PollEvent(&event)) {
+    if (event.type == SDL_KEYDOWN) {
       cmdr.pushVisitor(make_shared<KeyDownVisitor>(event));
     } else if (event.type == SDL_TEXTINPUT) {
       cmdr.pushVisitor(make_shared<TextInputVisitor>(event));
@@ -33,4 +32,3 @@ EventLoop::handleAll() {
     }
   }
 }
-

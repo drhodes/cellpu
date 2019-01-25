@@ -1,24 +1,24 @@
 #pragma once
 
-#include <queue>
-#include <optional>
 #include <memory>
+#include <optional>
+#include <queue>
 #include "visit.hh"
 
 using namespace std;
 
 class Cmd {
-public:
+ public:
   virtual ~Cmd() = default;
 };
 
 // singleton.
 class Cmdr {
-private:
+ private:
   std::queue<shared_ptr<Cmd>> m_commands;
   std::queue<shared_ptr<Visitor>> m_visitors;
-  
-public:
+
+ public:
   void pushCmd(shared_ptr<Cmd> cmd);
   void pushVisitor(shared_ptr<Visitor>);
   std::optional<shared_ptr<Cmd>> frontCmd();
@@ -26,10 +26,7 @@ public:
 };
 
 class CmdNode {
-public:
+ public:
   virtual void order(shared_ptr<Cmd>) = 0;
-  virtual ~CmdNode() {
-  }
+  virtual ~CmdNode() {}
 };
-
-
