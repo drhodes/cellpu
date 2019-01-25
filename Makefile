@@ -41,6 +41,9 @@ common.o:
 instruction.o: 
 	${CC} -c ${CFLAGS} src/instruction.cc -o $@
 
+instruction-selector.o: 
+	${CC} -c ${CFLAGS} src/instruction-selector.cc -o $@
+
 app.o: 
 	${CC} -c ${CFLAGS} src/app.cc -o $@
 
@@ -112,6 +115,7 @@ OBJ	=	app.o\
 		grid-edit.o\
 		grid.o\
 		instruction.o\
+		instruction-selector.o\
 		keybinding.o\
 		lua.o\
 		opcode.o\

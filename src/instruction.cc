@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 
-#include <string>
 #include <optional>
+#include <string>
 
 #include "err.hh"
 #include "instruction.hh"

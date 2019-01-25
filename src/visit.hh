@@ -4,9 +4,9 @@
 // avoid cyclic includes.
 class GridEditor;
 class Grid;
-class Cell;
 class Term;
 class App;
+class InstructionSelector;
 
 class Visitor {
 public:
@@ -14,6 +14,7 @@ public:
   virtual void visit(Grid&) = 0;
   virtual void visit(Term&) = 0;
   virtual void visit(App&) = 0;
+  virtual void visit(InstructionSelector&) = 0;
 };
 
 
@@ -32,5 +33,6 @@ class BaseVisitor :
   void visit(GridEditor&) { } 
   void visit(Term&) { }
   void visit(App&) { }
+  void visit(InstructionSelector&) { }
 };
 
