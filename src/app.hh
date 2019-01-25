@@ -8,13 +8,16 @@
 #include "atlas.hh"
 #include "lua.hh"
 #include "display.hh"
+#include "instruction-selector.hh"
 
 using namespace std;
 
 class App {  
   Display dsys;
-  GridEditor &m_ge = *new GridEditor();
-  Term &m_term = *new Term(5, 750, 80, 17);  
+  GridEditor m_ge;
+  Term m_term = Term(5, 750, 80, 17);
+  InstructionSelector m_instSel;  
+  
   bool m_running = true;
 public:
   App();

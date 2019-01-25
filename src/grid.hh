@@ -22,7 +22,7 @@ private:
   int m_zoom = 1;
   
 public:
-  Atlas& m_atlas = *new Atlas("./media/FIXED_V0.TTF", 8);
+  Atlas m_atlas = Atlas("./media/FIXED_V0.TTF", 8);
   int m_size;
   
   Grid(int size);

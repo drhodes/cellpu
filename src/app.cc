@@ -3,6 +3,7 @@
 #include "text-box.hh"
 #include "select-cell.hh"
 #include "event-loop.hh"
+#include "instruction-selector.hh"
 
 extern Cmdr cmdr; // main.cc
 
@@ -59,6 +60,4 @@ App::quit() {
 }
 
 App::~App() {
-  delete &m_ge;
-  delete &m_term;
 }
