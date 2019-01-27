@@ -7,6 +7,7 @@ CFLAGS= \
 	-Wno-deprecated-declarations \
 	-Wno-switch \
 	-fsanitize=address \
+	-I./libs/kangaru/install-path/include/ \
 
 LDFLAGS=-lSDL2 -llua5.3 -lSDL2_ttf
 TESTFLAGS=-Wall -g -std=c11
@@ -22,6 +23,7 @@ docs: FORCE ## create documentation with doxygen
 
 tags: FORCE ## create tags
 	gtags ./src # /usr/include/SDL2 /usr/include/c++/8
+
 see-docs: docs ## open docs in web browser.
 	sensible-browser ./dox/html/index.html 
 
