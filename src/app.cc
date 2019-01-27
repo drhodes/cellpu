@@ -36,9 +36,12 @@ void App::eventLoop() {
 
     SDL_SetRenderDrawColor(display::getRenderer(), 0, 0, 0, 255);
     SDL_RenderClear(display::getRenderer());
+    
     m_ge.render();
-    tbox.render();
+    tbox.render();    
     m_term.render(display::getRenderer());
+    m_instSel.render(display::getRenderer());
+    
     SDL_RenderPresent(display::getRenderer());
     Uint64 loopTimeStop = SDL_GetTicks();
     Uint64 delta = loopTimeStop - loopTimeStart;
@@ -48,6 +51,7 @@ void App::eventLoop() {
 }
 
 void App::accept(std::shared_ptr<Visitor> v) {
+  m_instSel.accept(v);
   m_term.accept(v);
   m_ge.accept(v);
   v->visit(*this);

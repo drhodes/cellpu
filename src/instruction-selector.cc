@@ -11,7 +11,18 @@ InstructionSelector::InstructionSelector() {
 
 // InstructionSelector::
 void InstructionSelector::accept(std::shared_ptr<Visitor> v) {
-  v->visit(*this);
+  v->visit(*this);    
 }
 
-void InstructionSelector::render(SDL_Renderer *renderer) {}
+void InstructionSelector::renderBackground(SDL_Renderer *renderer) {
+  // render a large translucent square to indicate sole focus on this element.
+  SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x77);
+  SDL_Rect rect = {0, 0, 10000, 10000};
+  SDL_RenderFillRect(renderer, &rect);
+}
+
+void InstructionSelector::render(SDL_Renderer *renderer) {
+  if (show()) {
+    renderBackground(renderer);
+  }
+}

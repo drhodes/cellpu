@@ -31,7 +31,9 @@ extern Cmdr cmdr;
 using namespace std;
 
 namespace callback {
-
+  // These are C functions that follow strict rules laid out by the
+  // lua interop: 
+  
 int lSelectCell(lua_State *L) {
   int x = lua_tonumber(L, 1);
   int y = lua_tonumber(L, 2);

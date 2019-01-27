@@ -13,14 +13,12 @@ class TextInputVisitor : public BaseVisitor {
  private:
   SDL_Event m_ev;
 
-  // this is probably not very good.
-  // it seems adhoc
-  bool m_bubbleEvent = true;
-
  public:
   TextInputVisitor(SDL_Event &ev) { m_ev = ev; }
 
   void visit(GridEditor &ge) {
+    if (!bubbleEvent()) return;
+
     if (ge.hasFocus()) {
       auto binding = getBinding();
 
@@ -30,8 +28,7 @@ class TextInputVisitor : public BaseVisitor {
         if (visitorId == "pan-west" || visitorId == "pan-east" ||
             visitorId == "pan-south" || visitorId == "pan-north") {
           cmdr.pushVisitor(make_shared<PanVisitor>(visitorId));
-        } else if (visitorId == "noop-instruction") {
-          ge.setSelectedCellsInstruction(make_shared<NOOP>());
+
         } else if (visitorId == "zoom-in") {
           ge.statusText("zooming in: " + visitorId);
           ge.zoomIn();
@@ -49,20 +46,34 @@ class TextInputVisitor : public BaseVisitor {
   }
 
   void visit(Term &term) {
+    if (!bubbleEvent()) return;
+
     if (term.focus()) {
       // prevent event from bubbling out.
-      m_bubbleEvent = false;
+      bubbleEvent(false);
       term.pushChar(m_ev.window.event);
     }
   }
 
   void visit(App &app) {
-    if (!m_bubbleEvent) return;
+    if (!bubbleEvent()) return;
 
     auto binding = getBinding();
     if (binding.has_value()) {
       if (binding.value() == "quit") {
         app.quit();
+      }
+    }
+  }
+
+  void visit(InstructionSelector &is) {
+    if (!bubbleEvent()) return;
+    if (is.focus()) bubbleEvent(false);
+
+    auto binding = getBinding();
+    if (binding.has_value()) {
+      string visitorId = binding.value();
+      if (visitorId == "noop-instruction") {
       }
     }
   }
