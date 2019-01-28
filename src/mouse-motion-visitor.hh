@@ -4,9 +4,6 @@
 #include "term.hh"
 #include "visit.hh"
 
-extern Cmdr cmdr;    // main.cc
-extern LuaMgr lman;  // main.cc
-
 class MouseMotionVisitor : public BaseVisitor {
  private:
   SDL_Event m_ev;

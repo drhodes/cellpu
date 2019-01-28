@@ -5,8 +5,7 @@
 #include "instruction-selector.hh"
 #include "select-cell.hh"
 #include "text-box.hh"
-
-extern Cmdr cmdr;  // main.cc
+#include "global.hh"
 
 App::App() {
   m_term.putInput("-- Localized Processing Unit, the repl is lua.");
@@ -23,10 +22,10 @@ void App::eventLoop() {
   while (m_running) {
     Uint64 loopTimeStart = SDL_GetTicks();
     eventLoop.handleAll();
-
+    
     while (true) {
       // consume visitors.
-      auto v = cmdr.frontVisitor();
+      auto v = global::cmdr().frontVisitor();
       if (v.has_value()) {
         accept(v.value());
       } else {

@@ -17,7 +17,6 @@
 #include "lua.hh"
 
 using namespace std;
-extern LuaMgr lman;  // main.cc
 
 Grid::Grid(int size) {
   if (size < 1) die("got bad size for new grid");
@@ -153,4 +152,3 @@ void Grid::zoomCells() {
     }
   }
 }
-

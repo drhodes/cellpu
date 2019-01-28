@@ -24,9 +24,8 @@
 #include "select-cell.hh"
 #include "tell-term-visitor.hh"
 #include "zoom-grid-visitor.hh"
+#include "global.hh"
 
-extern LuaMgr lman;
-extern Cmdr cmdr;
 
 using namespace std;
 
@@ -38,14 +37,14 @@ int lSelectCell(lua_State *L) {
   int x = lua_tonumber(L, 1);
   int y = lua_tonumber(L, 2);
   lua_pop(L, 2);
-  cmdr.pushVisitor(make_shared<SelectCellVisitor>(x, y));
+  global::cmdr().pushVisitor(make_shared<SelectCellVisitor>(x, y));
   return 0;
 }
 
 int lZoomGrid(lua_State *L) {
   int factor = lua_tonumber(L, 1);
   lua_pop(L, 1);
-  cmdr.pushVisitor(make_shared<ZoomGridVisitor>(factor));
+  global::cmdr().pushVisitor(make_shared<ZoomGridVisitor>(factor));
   return 0;
 }
 
@@ -55,7 +54,7 @@ int lBindKey(lua_State *L) {
   cout << "lKeyBind says: " << key << " -> " << cmd << endl;
 
   lua_pop(L, 2);
-  lman.bindKey(key, cmd);
+  global::lman().bindKey(key, cmd);
   return 0;
 }
 
@@ -63,14 +62,14 @@ int lGetKeyBind(lua_State *L) {
   string key = lua_tostring(L, 1);
   lua_pop(L, 1);
   string bindingMsg = "'" + key + "'" + " is bound to: ";
-  optional<string> visitorId = lman.getKeyBind(key);
+  optional<string> visitorId = global::lman().getKeyBind(key);
 
   if (visitorId.has_value()) {
     bindingMsg += visitorId.value();
   } else {
     bindingMsg += "<unbound-visitor>";
   }
-  cmdr.pushVisitor(make_shared<TellTermVisitor>(bindingMsg));
+  global::cmdr().pushVisitor(make_shared<TellTermVisitor>(bindingMsg));
   return 0;
 }
 

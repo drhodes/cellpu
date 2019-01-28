@@ -67,6 +67,9 @@ grid.o:
 grid-edit.o: 
 	${CC} -c ${CFLAGS} src/grid-edit.cc -o $@
 
+global.o: 
+	${CC} -c ${CFLAGS} src/global.cc -o $@
+
 cell.o:
 	${CC} -c ${CFLAGS} src/cell.cc -o $@
 
@@ -104,6 +107,7 @@ OBJ	=	app.o\
 		display.o\
 		draw.o\
 		event-loop.o\
+		global.o\
 		grid-edit.o\
 		grid.o\
 		instruction.o\

@@ -14,8 +14,6 @@
 #include "lua.hh"
 #include "term.hh"
 
-extern LuaMgr lman;  // main.c
-
 Term::Term(int left, int top, int columns, int rows) {
   m_curLine = 0;
   m_numCols = columns;
@@ -142,7 +140,7 @@ void Term::updateFocus(SDL_Event &ev) {
 
 void Term::doReturn() {
   string line = getCurLine();
-  string result = lman.doLine(line);
+  string result = global::lman().doLine(line);
   putInput(line);
   putInput(result);
 }

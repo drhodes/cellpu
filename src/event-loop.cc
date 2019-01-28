@@ -7,28 +7,29 @@
 // is consumed in app.cc
 
 #include "event-loop.hh"
+#include "global.hh"
 #include "key-down-visitor.hh"
 #include "mouse-button-down-visitor.hh"
 #include "mouse-motion-visitor.hh"
 #include "text-input-visitor.hh"
-
-extern LuaMgr lman;
-extern Cmdr cmdr;
 
 void EventLoop::handleAll() {
   SDL_Event event;
 
   while (SDL_PollEvent(&event)) {
     if (event.type == SDL_KEYDOWN) {
-      cmdr.pushVisitor(make_shared<KeyDownVisitor>(event));
+      global::cmdr().pushVisitor(make_shared<KeyDownVisitor>(event));
     } else if (event.type == SDL_TEXTINPUT) {
-      cmdr.pushVisitor(make_shared<TextInputVisitor>(event));
+      global::cmdr().pushVisitor(make_shared<TextInputVisitor>(event));
     } else if (event.type == SDL_MOUSEMOTION) {
-      cmdr.pushVisitor(make_shared<MouseMotionVisitor>(event));
+      global::cmdr().pushVisitor(make_shared<MouseMotionVisitor>(event));
     } else if (event.type == SDL_MOUSEBUTTONDOWN) {
-      cmdr.pushVisitor(make_shared<MouseButtonDownVisitor>(event));
+      global::cmdr().pushVisitor(make_shared<MouseButtonDownVisitor>(event));
     } else {
-      // unhandled event type.
-    }
+      // next up scaling the window
+    } 
+    // unhandled event type.
   }
 }
+
+

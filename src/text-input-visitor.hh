@@ -6,9 +6,6 @@
 #include "quit-visitor.hh"
 #include "visit.hh"
 
-extern Cmdr cmdr;    // main.cc
-extern LuaMgr lman;  // main.cc
-
 class TextInputVisitor : public BaseVisitor {
  private:
   SDL_Event m_ev;
@@ -27,7 +24,7 @@ class TextInputVisitor : public BaseVisitor {
 
         if (visitorId == "pan-west" || visitorId == "pan-east" ||
             visitorId == "pan-south" || visitorId == "pan-north") {
-          cmdr.pushVisitor(make_shared<PanVisitor>(visitorId));
+          global::cmdr().pushVisitor(make_shared<PanVisitor>(visitorId));
 
         } else if (visitorId == "zoom-in") {
           ge.statusText("zooming in: " + visitorId);
@@ -80,6 +77,6 @@ class TextInputVisitor : public BaseVisitor {
 
   optional<string> getBinding() {
     std::string key(1, (char)m_ev.window.event);
-    return lman.getKeyBind(key);
+    return global::lman().getKeyBind(key);
   }
 };
