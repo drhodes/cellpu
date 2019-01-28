@@ -3,6 +3,7 @@
 #include <memory>
 #include <optional>
 #include <queue>
+
 #include "visit.hh"
 
 using namespace std;
@@ -30,3 +31,4 @@ class CmdNode {
   virtual void order(shared_ptr<Cmd>) = 0;
   virtual ~CmdNode() {}
 };
+

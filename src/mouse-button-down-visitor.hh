@@ -1,22 +1,17 @@
 #pragma once
 
-#include "visit.hh"
 #include "grid-edit.hh"
-#include "lua.hh"
 #include "instruction-selector.hh"
+#include "lua.hh"
+#include "visit.hh"
 
-extern Cmdr cmdr; // main.cc
-extern LuaMgr lman; // main.cc
-
-class MouseButtonDownVisitor : public BaseVisitor 
-{
-private:
+class MouseButtonDownVisitor : public BaseVisitor {
+ private:
   SDL_Event m_ev;
-public:  
-  MouseButtonDownVisitor(SDL_Event &ev) {    
-    m_ev = ev;
-  }
-  
+
+ public:
+  MouseButtonDownVisitor(SDL_Event &ev) { m_ev = ev; }
+
   void visit(GridEditor &ge) {
     if (!bubbleEvent()) return;
     if (!ge.hasFocus()) return;
@@ -30,5 +25,4 @@ public:
       bubbleEvent(false);
     }
   }
-
 };

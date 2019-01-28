@@ -37,3 +37,5 @@ class LuaMgr {
   void registerCallback(string funcname, lua_CFunction func);
   void registerAllCallbacks();
 };
+
+
