@@ -10,7 +10,7 @@ GridEditor::GridEditor() {
   m_statusText.setWidth(m_grid.width());
 }
 
-GridEditor::~GridEditor() { cerr << "destroying grid editor" << endl; }
+// GridEditor::~GridEditor() { cerr << "destroying grid editor" << endl; }
 
 void GridEditor::accept(std::shared_ptr<Visitor> v) {
   v->visit(*this);

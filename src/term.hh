@@ -27,7 +27,7 @@ class Term {
   static const int TERM_MAX_LINES = 10000;
 
  public:
-  Atlas &m_atlas = *new Atlas("./media/Terminus.ttf", 16);
+  Atlas m_atlas = Atlas("./media/Terminus.ttf", 16);
   string m_lines[TERM_MAX_LINES];
   int m_curLine;
   int m_numCols, m_numRows;
@@ -36,7 +36,7 @@ class Term {
   bool m_focus;
 
   Term(int left, int top, int columns, int rows);
-  ~Term();  // freeTerm(Term *term);
+  //~Term();  // freeTerm(Term *term);
 
   bool containsPx(Sint32 x, Sint32 y);
   bool curLineFull();

@@ -6,6 +6,7 @@
 #include <lua5.3/lua.h>
 #include <lua5.3/lualib.h>
 
+#include "global.hh"
 #include "atlas.hh"
 #include "bbox.hh"
 #include "common.hh"
@@ -24,7 +25,7 @@ Term::Term(int left, int top, int columns, int rows) {
   moveToBottom();
 }
 
-Term::~Term() { cerr << "Term is indeed being destroyed" << endl; }
+// Term::~Term() { cerr << "Term is indeed being destroyed" << endl; }
 
 void Term::accept(std::shared_ptr<Visitor> v) { v->visit(*this); }
 

@@ -5,17 +5,15 @@
 #include "text-box.hh"
 #include "visit.hh"
 
-class GridEditor : public Visitable {
- public:
+class GridEditor : public Visitable { 
+  Atlas m_atlas = Atlas("./media/Terminus.ttf", 16);
+public:
   Grid m_grid = Grid(12);
-  TextBox m_statusText = TextBox(*new Atlas("./media/Terminus.ttf", 16), 0,
-                                 m_grid.bottom(), 80, 1);
-
+  TextBox m_statusText = TextBox(m_atlas, 0, m_grid.bottom(), 80, 1);
   shared_ptr<Cell> m_overCell;
   bool m_hasFocus;
 
   GridEditor();
-  ~GridEditor();
 
   void updateOverCell(SDL_Event &ev);
   void updateFocus(SDL_Event &ev);
