@@ -7,7 +7,6 @@ CFLAGS= \
 	-Wno-deprecated-declarations \
 	-Wno-switch \
 	-fsanitize=address \
-	-I./libs/kangaru/install-path/include/ \
 
 LDFLAGS=-lSDL2 -llua5.3 -lSDL2_ttf
 TESTFLAGS=-Wall -g -std=c11
