@@ -6,22 +6,22 @@
 #include <lua5.3/lua.h>
 #include <lua5.3/lualib.h>
 
-#include "global.hh"
 #include "atlas.hh"
 #include "bbox.hh"
 #include "common.hh"
 #include "display.hh"
 #include "err.hh"
+#include "global.hh"
 #include "lua.hh"
 #include "term.hh"
 
-Term::Term(int left, int top, int columns, int rows) {
+Term::Term(IEntity &parent, int left, int top, int columns, int rows)
+    : m_parent{parent} {
   m_curLine = 0;
   m_numCols = columns;
   m_numRows = rows;
   m_top = top;
   m_left = left;
-
   moveToBottom();
 }
 
@@ -169,3 +169,15 @@ void Term::popChar() {
 void Term::focus(bool f) { m_focus = f; }
 
 bool Term::focus() { return m_focus; }
+
+// IEntity.
+
+bool Term::hasFocus() { return true; }
+
+IEntity &Term::parent() { return m_parent; }
+
+BBox &Term::bbox() { return m_bbox; }
+
+void Term::hidden(bool b) { m_hidden = b; }
+
+bool Term::hidden() { return (parent().hidden() || m_hidden); }

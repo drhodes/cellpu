@@ -15,6 +15,7 @@
 
 #include "atlas.hh"
 #include "bbox.hh"
+#include "entity.hh"
 #include "line.hh"
 #include "visit.hh"
 // TODO introduce cursor position.
@@ -23,19 +24,20 @@
 
 using namespace std;
 
-class Term {
+class Term : IEntity {
   static const int TERM_MAX_LINES = 10000;
 
  public:
-  Atlas m_atlas = Atlas("./media/Terminus.ttf", 16);
+  Atlas m_atlas{"./media/Terminus.ttf", 16};
   string m_lines[TERM_MAX_LINES];
   int m_curLine;
   int m_numCols, m_numRows;
   int m_lineHeight, m_colWidth;
   int m_top, m_left;
   bool m_focus;
+  IEntity &m_parent;
 
-  Term(int left, int top, int columns, int rows);
+  Term(IEntity &parent, int left, int top, int columns, int rows);
   //~Term();  // freeTerm(Term *term);
 
   bool containsPx(Sint32 x, Sint32 y);
@@ -60,6 +62,13 @@ class Term {
 
   void updateFocus(SDL_Event &);
   void accept(std::shared_ptr<Visitor>);
+
+  // entity interface;
+  bool hasFocus();
+  IEntity &parent();
+  BBox &bbox();
+  void hidden(bool b);
+  bool hidden();
 };
 
 // State diagram for terminal.
