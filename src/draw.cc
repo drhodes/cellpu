@@ -9,7 +9,8 @@
 using namespace std;
 
 namespace draw {
-void borderBox(int x, int y, int w, int h, SDL_Color border, SDL_Color fill) {
+void
+borderBox(int x, int y, int w, int h, SDL_Color border, SDL_Color fill) {
   SDL_Rect rect = {x, y, w, h};
   SDL_SetRenderDrawColor(display::getRenderer(), border.r, border.g, border.b,
                          border.a);
@@ -23,11 +24,12 @@ void borderBox(int x, int y, int w, int h, SDL_Color border, SDL_Color fill) {
   SDL_RenderFillRect(display::getRenderer(), &rect);
 }
 
-void text(Atlas& atlas, int x, int y, std::string txt) {
+void
+text(Atlas& atlas, int x, int y, std::string txt) {
   SDL_Rect msgRect = {x, y, atlas.surfWidth_, atlas.surfHeight_};
   for (int i = 0; txt[i]; i++) {
     optional<SDL_Texture*> glyph = atlas.getGlyph(txt[i]);
-    if (glyph.has_value()) {
+    if (glyph) {
       SDL_RenderCopy(display::getRenderer(), glyph.value(), nullptr, &msgRect);
       msgRect.x += atlas.surfWidth_;
     } else {

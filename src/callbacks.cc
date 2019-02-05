@@ -19,21 +19,21 @@
 #include "cell.hh"
 #include "cmdr.hh"
 #include "err.hh"
+#include "global.hh"
 #include "grid.hh"
 #include "lua.hh"
 #include "select-cell.hh"
 #include "tell-term-visitor.hh"
 #include "zoom-grid-visitor.hh"
-#include "global.hh"
-
 
 using namespace std;
 
 namespace callback {
-  // These are C functions that follow strict rules laid out by the
-  // lua interop: 
-  
-int lSelectCell(lua_State *L) {
+// These are C functions that follow strict rules laid out by the
+// lua interop:
+
+int
+lSelectCell(lua_State *L) {
   int x = lua_tonumber(L, 1);
   int y = lua_tonumber(L, 2);
   lua_pop(L, 2);
@@ -41,14 +41,16 @@ int lSelectCell(lua_State *L) {
   return 0;
 }
 
-int lZoomGrid(lua_State *L) {
+int
+lZoomGrid(lua_State *L) {
   int factor = lua_tonumber(L, 1);
   lua_pop(L, 1);
   global::cmdr().pushVisitor(make_shared<ZoomGridVisitor>(factor));
   return 0;
 }
 
-int lBindKey(lua_State *L) {
+int
+lBindKey(lua_State *L) {
   string key = lua_tostring(L, 1);
   string cmd = lua_tostring(L, 2);
   cout << "lKeyBind says: " << key << " -> " << cmd << endl;
@@ -58,13 +60,14 @@ int lBindKey(lua_State *L) {
   return 0;
 }
 
-int lGetKeyBind(lua_State *L) {
+int
+lGetKeyBind(lua_State *L) {
   string key = lua_tostring(L, 1);
   lua_pop(L, 1);
   string bindingMsg = "'" + key + "'" + " is bound to: ";
   optional<string> visitorId = global::lman().getKeyBind(key);
 
-  if (visitorId.has_value()) {
+  if (visitorId) {
     bindingMsg += visitorId.value();
   } else {
     bindingMsg += "<unbound-visitor>";
@@ -73,7 +76,8 @@ int lGetKeyBind(lua_State *L) {
   return 0;
 }
 
-int lDump(lua_State *L) {
+int
+lDump(lua_State *L) {
   _estack.dump();
   return 0;
 }

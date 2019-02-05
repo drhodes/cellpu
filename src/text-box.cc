@@ -43,28 +43,37 @@ TextBox::TextBox(Atlas &atlas, int left, int top, int columns, int rows)
   }
 }
 
-bool TextBox::setChar(int row, int col, char c) {
-  if (col >= m_numCols || row >= m_numRows) return false;
+bool
+TextBox::setChar(int row, int col, char c) {
+  if (col >= m_numCols || row >= m_numRows)
+    return false;
   m_lines[row][col] = c;
   return true;
 }
 
-bool TextBox::setRow(int row, string s) {
-  if (row >= m_numRows) return false;
+bool
+TextBox::setRow(int row, string s) {
+  if (row >= m_numRows)
+    return false;
   m_lines[row] = s;
   return true;
 }
 
-void TextBox::renderBackground() {
+void
+TextBox::renderBackground() {
   SDL_Color borderColor = {0x40, 0x40, 0x40, 0xFF};
   SDL_Color innerColor = {0x70, 0x70, 0x70, 0xFF};
   draw::borderBox(m_bbox.left, m_bbox.top, m_bbox.width, m_bbox.height,
                   borderColor, innerColor);
 }
 
-void TextBox::setWidth(int widthInPx) { m_bbox.width = widthInPx; }
+void
+TextBox::setWidth(int widthInPx) {
+  m_bbox.width = widthInPx;
+}
 
-void TextBox::render() {
+void
+TextBox::render() {
   // background box.
   renderBackground();
 
@@ -79,17 +88,19 @@ void TextBox::render() {
     for (char c : str) {
       SDL_Rect msgRect = {curX, curY, m_atlas.surfWidth_, m_atlas.surfHeight_};
       optional<SDL_Texture *> glyph = m_atlas.getGlyph(c);
-      if (glyph.has_value()) {
+      if (glyph) {
         SDL_RenderCopy(display::getRenderer(), glyph.value(), NULL, &msgRect);
         curX += m_atlas.surfWidth_;
         curCol++;
       } else {
         terr("failed to get a glyph in textBoxRender");
       }
-      if (curCol >= m_numCols) break;
+      if (curCol >= m_numCols)
+        break;
     }
     curY += m_atlas.surfHeight_;
     curRow++;
-    if (curRow >= m_numRows) break;
+    if (curRow >= m_numRows)
+      break;
   }
 }

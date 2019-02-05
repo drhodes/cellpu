@@ -15,11 +15,11 @@
 
 using namespace std;
 
-class App : IEntity {
+class App : public IEntity {
  private:
   Display dsys;
-  GridEditor m_ge;
-  Term m_term = Term(*this, 5, 750, 80, 17);
+  GridEditor m_ge{*this};
+  Term m_term{*this, 5, 750, 80, 17};
   InstructionSelector m_instSel;
   bool m_running = true;
 

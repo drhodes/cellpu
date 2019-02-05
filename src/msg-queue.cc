@@ -3,9 +3,9 @@
 
 using namespace std;
 
-namespace msgQueue {
-queue<string> msgs;
+// namespace msgQueue {
+// queue<string> msgs;
 
-void(string s) { msgs.push(s); }
+// void(string s) { msgs.push(s); }
 
-}  // namespace msgQueue
+// }  // namespace msgQueue

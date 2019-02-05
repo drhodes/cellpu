@@ -5,6 +5,7 @@
 #include "event-loop.hh"
 #include "global.hh"
 #include "instruction-selector.hh"
+#include "render-visitor.hh"
 #include "select-cell.hh"
 #include "text-box.hh"
 
@@ -12,7 +13,8 @@ App::App() {
   m_term.putInput("-- Localized Processing Unit, the repl is lua.");
 }
 
-void App::eventLoop() {
+void
+App::eventLoop() {
   Atlas atlas("./media/Terminus.ttf", 16);
   EventLoop eventLoop;
 
@@ -23,7 +25,7 @@ void App::eventLoop() {
     while (true) {
       // consume visitors.
       auto v = global::cmdr().frontVisitor();
-      if (v.has_value()) {
+      if (v) {
         accept(v.value());
       } else {
         break;
@@ -45,7 +47,8 @@ void App::eventLoop() {
   }
 }
 
-void App::accept(std::shared_ptr<Visitor> v) {
+void
+App::accept(std::shared_ptr<Visitor> v) {
   m_instSel.accept(v);
   m_term.accept(v);
   m_ge.accept(v);
@@ -53,18 +56,37 @@ void App::accept(std::shared_ptr<Visitor> v) {
 }
 
 // IEntity
-void App::quit() { m_running = false; }
+void
+App::quit() {
+  m_running = false;
+}
 
-bool App::hasFocus() { return false; }
+bool
+App::hasFocus() {
+  return false;
+}
 
-IEntity& App::parent() { return *this; }
+IEntity&
+App::parent() {
+  return *this;
+}
 
-BBox& App::bbox() { return m_bbox; }
+BBox&
+App::bbox() {
+  return m_bbox;
+}
 
-int App::zIndex() {
+int
+App::zIndex() {
   return 0;  // bottom of pile
 }
 
-void App::hidden(bool b) { m_hidden = b; }
+void
+App::hidden(bool b) {
+  m_hidden = b;
+}
 
-bool App::hidden() { return m_hidden; }
+bool
+App::hidden() {
+  return m_hidden;
+}

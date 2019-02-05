@@ -3,7 +3,8 @@
 #include "app.hh"
 #include "global.hh"
 
-int main(void) {
+int
+main(void) {
   App app;
   app.eventLoop();
   std::cout << "Quitting normally. cya!" << endl;

@@ -3,11 +3,11 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include <experimental/optional>
 #include <map>
-#include <optional>
 
 using namespace std;
-
+using namespace std::experimental;
 #define ATLAS_SIZE 127
 
 class Atlas {

@@ -1,9 +1,10 @@
 #pragma once
 
+#include <experimental/optional>
 #include <map>
 #include <string>
-
 using namespace std;
+using namespace std::experimental;
 
 class KeyBindings {
  private:
@@ -11,5 +12,5 @@ class KeyBindings {
 
  public:
   void bindKey(string key, string cmd);
-  std::optional<string> getKeyBind(string key);
+  optional<string> getKeyBind(string key);
 };

@@ -2,8 +2,8 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <exception>
+#include <experimental/optional>
 #include <map>
-#include <optional>
 
 #include "atlas.hh"
 #include "display.hh"
@@ -29,7 +29,8 @@ Atlas::Atlas(const char* fontFilename, int size) {
   TTF_CloseFont(font);
 }
 
-optional<SDL_Texture*> Atlas::getGlyph(char c) {
+optional<SDL_Texture*>
+Atlas::getGlyph(char c) {
   std::map<char, SDL_Texture*>::iterator tup = m_table.find(c);
   if (tup == std::end(m_table)) {
     return nullopt;

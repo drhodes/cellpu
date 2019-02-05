@@ -1,3 +1,4 @@
+/*
 #ifndef OPTICAL_CTL_C
 #define OPTICAL_CTL_C
 
@@ -40,3 +41,4 @@ bool opticalCtlConfig(OpticalCtl *oc, Dir src, Dir tgt) {
 }
 
 #endif  // OPTICAL_CTL_C
+*/

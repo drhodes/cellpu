@@ -27,9 +27,13 @@ Term::Term(IEntity &parent, int left, int top, int columns, int rows)
 
 // Term::~Term() { cerr << "Term is indeed being destroyed" << endl; }
 
-void Term::accept(std::shared_ptr<Visitor> v) { v->visit(*this); }
+void
+Term::accept(std::shared_ptr<Visitor> v) {
+  v->visit(*this);
+}
 
-void Term::moveToBottom() {
+void
+Term::moveToBottom() {
   auto win = display::getWindow();
   int w, winHeight;
   SDL_GetWindowSize(win, &w, &winHeight);
@@ -39,13 +43,15 @@ void Term::moveToBottom() {
   m_top = winHeight - bb.height;
 }
 
-void Term::putInput(string str) {
+void
+Term::putInput(string str) {
   assert(m_curLine < TERM_MAX_LINES);
   m_lines[m_curLine] = str;
   m_curLine += 1;
 }
 
-void Term::boundingBox(BBox &bb) {
+void
+Term::boundingBox(BBox &bb) {
   int promptSize = 2;  // TODO consider custom prompt.
   bb.top = m_top;
   bb.left = m_left;
@@ -53,7 +59,8 @@ void Term::boundingBox(BBox &bb) {
   bb.width = m_atlas.surfWidth_ * (promptSize + m_numCols);
 }
 
-void Term::renderCursor(SDL_Renderer *renderer) {
+void
+Term::renderCursor(SDL_Renderer *renderer) {
   SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
   string line = getCurLine();
   int curCol = line.length();
@@ -71,10 +78,12 @@ void Term::renderCursor(SDL_Renderer *renderer) {
   SDL_Rect rect = {x, y, m_atlas.surfWidth_, m_atlas.surfHeight_};
 
   // Blink
-  if (oddSecond()) SDL_RenderFillRect(renderer, &rect);
+  if (oddSecond())
+    SDL_RenderFillRect(renderer, &rect);
 }
 
-void Term::renderBackground(SDL_Renderer *renderer) {
+void
+Term::renderBackground(SDL_Renderer *renderer) {
   BBox bb;
   boundingBox(bb);
   SDL_Rect rect = {bb.left, bb.top, bb.width, bb.height};
@@ -87,7 +96,8 @@ void Term::renderBackground(SDL_Renderer *renderer) {
   SDL_RenderFillRect(renderer, &rect);
 }
 
-void Term::renderLine(SDL_Renderer *renderer, int lineNum, int rowNum) {
+void
+Term::renderLine(SDL_Renderer *renderer, int lineNum, int rowNum) {
   string str("> ");
   str.append(m_lines[lineNum]);
 
@@ -98,7 +108,7 @@ void Term::renderLine(SDL_Renderer *renderer, int lineNum, int rowNum) {
     SDL_Rect msgRect = {curX, curY, m_atlas.surfWidth_, m_atlas.surfHeight_};
     optional<SDL_Texture *> glyph = m_atlas.getGlyph(str[i]);
 
-    if (glyph.has_value()) {
+    if (glyph) {
       SDL_RenderCopy(renderer, glyph.value(), NULL, &msgRect);
       curX += m_atlas.surfWidth_;
     } else {
@@ -107,16 +117,19 @@ void Term::renderLine(SDL_Renderer *renderer, int lineNum, int rowNum) {
   }
 }
 
-void Term::render(SDL_Renderer *renderer) {
+void
+Term::render(SDL_Renderer *renderer) {
   renderBackground(renderer);
-  if (m_focus) renderCursor(renderer);
+  if (m_focus)
+    renderCursor(renderer);
 
   int winW, winH;
   SDL_GetWindowSize(display::getWindow(), &winW, &winH);
 
   int bottomLine = m_curLine;
   int topLine = bottomLine - m_numRows;
-  if (topLine < 0) topLine = 0;
+  if (topLine < 0)
+    topLine = 0;
 
   int rowNum = 0;
   for (int lineNum = topLine; lineNum <= bottomLine; lineNum++) {
@@ -125,13 +138,15 @@ void Term::render(SDL_Renderer *renderer) {
   }
 }
 
-bool Term::containsPx(Sint32 x, Sint32 y) {
+bool
+Term::containsPx(Sint32 x, Sint32 y) {
   BBox bb;
   boundingBox(bb);
   return bb.containsPx(x, y);
 }
 
-void Term::updateFocus(SDL_Event &ev) {
+void
+Term::updateFocus(SDL_Event &ev) {
   if (ev.type == SDL_MOUSEMOTION) {
     m_focus = containsPx(ev.motion.x, ev.motion.y);
   } else {
@@ -139,21 +154,27 @@ void Term::updateFocus(SDL_Event &ev) {
   }
 }
 
-void Term::doReturn() {
+void
+Term::doReturn() {
   string line = getCurLine();
   string result = global::lman().doLine(line);
   putInput(line);
   putInput(result);
 }
 
-inline string Term::getCurLine() { return m_lines[m_curLine]; }
+inline string
+Term::getCurLine() {
+  return m_lines[m_curLine];
+}
 
-bool Term::curLineFull() {
+bool
+Term::curLineFull() {
   return (int)(getCurLine().length()) >= (m_numCols - 1);
 }
 
 /// returns false when can't append char to current line.
-bool Term::pushChar(char c) {
+bool
+Term::pushChar(char c) {
   // if line full return false
   if (!curLineFull()) {
     m_lines[m_curLine].push_back(c);
@@ -162,22 +183,45 @@ bool Term::pushChar(char c) {
   return false;
 }
 
-void Term::popChar() {
-  if (getCurLine().length() > 0) m_lines[m_curLine].pop_back();
+void
+Term::popChar() {
+  if (getCurLine().length() > 0)
+    m_lines[m_curLine].pop_back();
 }
 
-void Term::focus(bool f) { m_focus = f; }
+void
+Term::focus(bool f) {
+  m_focus = f;
+}
 
-bool Term::focus() { return m_focus; }
+bool
+Term::focus() {
+  return m_focus;
+}
 
 // IEntity.
 
-bool Term::hasFocus() { return true; }
+bool
+Term::hasFocus() {
+  return true;
+}
 
-IEntity &Term::parent() { return m_parent; }
+IEntity &
+Term::parent() {
+  return m_parent;
+}
 
-BBox &Term::bbox() { return m_bbox; }
+BBox &
+Term::bbox() {
+  return m_bbox;
+}
 
-void Term::hidden(bool b) { m_hidden = b; }
+void
+Term::hidden(bool b) {
+  m_hidden = b;
+}
 
-bool Term::hidden() { return (parent().hidden() || m_hidden); }
+bool
+Term::hidden() {
+  return (parent().hidden() || m_hidden);
+}

@@ -27,6 +27,7 @@ using namespace std;
 class Term : IEntity {
   static const int TERM_MAX_LINES = 10000;
 
+ private:
  public:
   Atlas m_atlas{"./media/Terminus.ttf", 16};
   string m_lines[TERM_MAX_LINES];

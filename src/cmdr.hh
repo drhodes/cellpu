@@ -1,12 +1,13 @@
 #pragma once
 
+#include <experimental/optional>
 #include <memory>
-#include <optional>
 #include <queue>
 
 #include "visit.hh"
 
 using namespace std;
+using namespace std::experimental;
 
 class Cmd {
  public:
@@ -22,13 +23,13 @@ class Cmdr {
  public:
   void pushCmd(shared_ptr<Cmd> cmd);
   void pushVisitor(shared_ptr<Visitor>);
-  std::optional<shared_ptr<Cmd>> frontCmd();
-  std::optional<shared_ptr<Visitor>> frontVisitor();
+  optional<shared_ptr<Cmd>> frontCmd();
+  optional<shared_ptr<Visitor>> frontVisitor();
 };
 
 class CmdNode {
  public:
   virtual void order(shared_ptr<Cmd>) = 0;
-  virtual ~CmdNode() {}
+  virtual ~CmdNode() {
+  }
 };
-
