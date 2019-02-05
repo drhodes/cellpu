@@ -1,19 +1,23 @@
 #pragma once
 
 #include "cell.hh"
+#include "entity.hh"
 #include "grid.hh"
 #include "text-box.hh"
 #include "visit.hh"
 
-class GridEditor : public Visitable { 
-  Atlas m_atlas = Atlas("./media/Terminus.ttf", 16);
-public:
-  Grid m_grid = Grid(12);
+class GridEditor : public Visitable, public IEntity {
+  Atlas m_atlas{"./media/Terminus.ttf", 16};
+
+ public:
+  Grid m_grid{*this, 12};
   TextBox m_statusText = TextBox(m_atlas, 0, m_grid.bottom(), 80, 1);
   shared_ptr<Cell> m_overCell;
   bool m_hasFocus;
+  IEntity &m_parent;
 
-  GridEditor();
+  GridEditor() = delete;
+  GridEditor(IEntity &);
 
   void updateOverCell(SDL_Event &ev);
   void updateFocus(SDL_Event &ev);
@@ -27,7 +31,6 @@ public:
   void toggleSelectCurCell(SDL_Event &ev);
 
   void statusText(string);
-  bool hasFocus();
 
   void panEast();
   void panWest();
@@ -37,7 +40,10 @@ public:
   void zoomIn();
   void zoomOut();
 
-  // these may be used to display help for user.
-  void showKeys();
-  void hideKeys();
+  // entity
+  bool hasFocus();
+  IEntity &parent();
+  void hidden(bool);
+  bool hidden();
+  BBox &bbox();
 };

@@ -1,7 +1,3 @@
-#include <array>
-#include <functional>
-#include <utility>
-
 #include <lua5.3/lauxlib.h>
 #include <lua5.3/lua.h>
 #include <lua5.3/lualib.h>
@@ -18,7 +14,7 @@
 
 using namespace std;
 
-Grid::Grid(int size) {
+Grid::Grid(IEntity &parent, int size) : m_parent{parent} {
   if (size < 1) die("got bad size for new grid");
   m_size = size;
 
@@ -44,7 +40,9 @@ void Grid::render() {
   }
 }
 
-void Grid::bbox(BBox& bb) {
+Atlas &Grid::getAtlas() { return m_atlas; }
+
+void Grid::bbox(BBox &bb) {
   int cellSize = getCell(0, 0)->size();
   bb.top = 0;
   bb.left = 0;
@@ -94,6 +92,8 @@ void Grid::setSelectAllCells(bool b) {
     }
   }
 }
+
+int Grid::getSize() { return m_size; }
 
 vector<shared_ptr<Cell>> Grid::getAllSelectedCells() {
   auto cells = new vector<std::shared_ptr<Cell>>();
@@ -152,3 +152,9 @@ void Grid::zoomCells() {
     }
   }
 }
+
+bool Grid::hasFocus() { return true; }
+IEntity &Grid::parent() { return m_parent; }
+BBox &Grid::bbox() { return m_bbox; }
+void Grid::hidden(bool b) { m_hidden = b; }
+bool Grid::hidden() { return (parent().hidden() || m_hidden); }

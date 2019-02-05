@@ -4,7 +4,7 @@
 #include "grid-edit.hh"
 #include "grid.hh"
 
-GridEditor::GridEditor() {
+GridEditor::GridEditor(IEntity &parent) : m_parent{parent} {
   m_overCell = m_grid.getCell(0, 0);
   m_hasFocus = false;
   m_statusText.setWidth(m_grid.width());
@@ -56,7 +56,7 @@ void GridEditor::updateFocus(SDL_Event &ev) {
   }
 }
 
-bool GridEditor::hasFocus() { return m_hasFocus; }
+// bool GridEditor::hasFocus() { return m_hasFocus; }
 
 void GridEditor::showArguments() {
   // draw arrows from the cells that contain argument.
@@ -72,3 +72,9 @@ void GridEditor::render() {
 void GridEditor::zoomIn() { m_grid.zoomIn(); }
 
 void GridEditor::zoomOut() { m_grid.zoomOut(); }
+
+bool GridEditor::hasFocus() { return true; }
+IEntity &GridEditor::parent() { return m_parent; }
+BBox &GridEditor::bbox() { return m_bbox; }
+void GridEditor::hidden(bool b) { m_hidden = b; }
+bool GridEditor::hidden() { return (parent().hidden() || m_hidden); }
