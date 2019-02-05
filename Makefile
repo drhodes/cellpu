@@ -13,7 +13,7 @@ TESTFLAGS=-Wall -g -std=c11
 TESTLIBS= -lSDL2 -llua5.3 -lcheck -lsubunit -pthread -lrt -lm -lsubunit
 EXE=sim
 TESTEXE=testbin
-CC=ccache g++
+CC=g++
 
 all: clean main ## build
 
@@ -47,6 +47,9 @@ instruction-selector.o:
 
 app.o: 
 	${CC} -c ${CFLAGS} src/app.cc -o $@
+
+entity-store.o: 
+	${CC} -c ${CFLAGS} src/entity-store.cc -o $@
 
 cmdr.o: 
 	${CC} -c ${CFLAGS} src/cmdr.cc -o $@
