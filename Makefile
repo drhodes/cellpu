@@ -58,6 +58,9 @@ app.o:
 entity-store.o: 
 	${CC} -c ${CFLAGS} src/entity-store.cc -o $@
 
+camera.o: 
+	${CC} -c ${CFLAGS} src/camera.cc -o $@
+
 cmdr.o: 
 	${CC} -c ${CFLAGS} src/cmdr.cc -o $@
 
