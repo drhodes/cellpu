@@ -5,8 +5,15 @@ namespace display {
 SDL_Window *_window = NULL;
 SDL_Renderer *_renderer = NULL;
 
-SDL_Window *getWindow() { return _window; }
-SDL_Renderer *getRenderer() { return _renderer; }
+SDL_Window *
+getWindow() {
+  return _window;
+}
+
+SDL_Renderer *
+getRenderer() {
+  return _renderer;
+}
 }  // namespace display
 
 Display::Display() {
@@ -23,6 +30,7 @@ Display::Display() {
 
   display::_renderer =
       SDL_CreateRenderer(display::getWindow(), -1, SDL_RENDERER_ACCELERATED);
+
   SDL_SetRenderDrawBlendMode(display::getRenderer(), SDL_BLENDMODE_BLEND);
   TTF_Init();
 

@@ -17,6 +17,7 @@ void
 App::eventLoop() {
   Atlas atlas("./media/Terminus.ttf", 16);
   EventLoop eventLoop;
+  EntityStore es;
 
   while (m_running) {
     Uint64 loopTimeStart = SDL_GetTicks();

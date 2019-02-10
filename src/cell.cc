@@ -24,35 +24,62 @@ Cell::~Cell() {
   cerr << "Destroying Cell: x=" << m_col << ", y=" << m_row << endl;
 }
 
-void Cell::setInstruction(shared_ptr<Instruction> inst) { m_inst = inst; }
+void
+Cell::setInstruction(shared_ptr<Instruction> inst) {
+  m_inst = inst;
+}
 
-void Cell::dataReg(int n) { m_dataReg = n; }
+void
+Cell::dataReg(int n) {
+  m_dataReg = n;
+}
 
-int Cell::dataReg() { return m_dataReg; }
+int
+Cell::dataReg() {
+  return m_dataReg;
+}
 
-void Cell::selected(bool b) { m_selected = b; }
+void
+Cell::selected(bool b) {
+  m_selected = b;
+}
 
-bool Cell::selected() { return m_selected; }
+bool
+Cell::selected() {
+  return m_selected;
+}
 
-void Cell::setZoom(int zoom) { m_zoom = zoom; }
+void
+Cell::setZoom(int zoom) {
+  m_zoom = zoom;
+}
 
-SDL_Color Cell::color() const {
+SDL_Color
+Cell::color() const {
   // change this.
   SDL_Color c = m_inst->m_color;
   return c;
 }
 
-void Cell::cycle(struct Grid *grid) {
+void
+Cell::cycle(struct Grid *grid) {
   // the instruction needs to see the neighborhood, so it needs a
   // pointer to grid.
   // inst->op(grid, cell);
 }
 
-string Cell::instructionName() const { return m_inst->m_name; }
+string
+Cell::instructionName() const {
+  return m_inst->m_name;
+}
 
-int Cell::size() const { return m_zoom * this->m_size; }
+int
+Cell::size() const {
+  return m_zoom * this->m_size;
+}
 
-void Cell::render(Atlas &atlas, SDL_Renderer *renderer) const {
+void
+Cell::render(Atlas &atlas, SDL_Renderer *renderer) const {
   int sz = this->size();
   int n = 0;
 
@@ -101,7 +128,8 @@ void Cell::render(Atlas &atlas, SDL_Renderer *renderer) const {
 // |   |   | a |   | North   | f(F)    |
 // |   |   |   | a | North   | f(B)    |
 
-Way Cell::getArgWay1() {
+Way
+Cell::getArgWay1() {
   Dir d;
   switch (m_cfg.inputPorts.type) {
     case PortCfgType::ONE_PORT: {
@@ -116,7 +144,8 @@ Way Cell::getArgWay1() {
   die("unreachable code reached");
 }
 
-Way Cell::getArgWay2() {
+Way
+Cell::getArgWay2() {
   Dir d;
   switch (m_cfg.inputPorts.type) {
     case PortCfgType::ONE_PORT:
@@ -128,5 +157,11 @@ Way Cell::getArgWay2() {
   die("unreachable code reached");
 }
 
-int Cell::row() { return m_row; }
-int Cell::col() { return m_col; }
+int
+Cell::row() {
+  return m_row;
+}
+int
+Cell::col() {
+  return m_col;
+}

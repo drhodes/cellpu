@@ -13,7 +13,7 @@ TESTFLAGS=-Wall -g -std=c11
 TESTLIBS= -lSDL2 -llua5.3 -lcheck -lsubunit -pthread -lrt -lm -lsubunit
 EXE=sim
 TESTEXE=testbin
-CC=g++
+CC=ccache g++
 
 all: clean main ## build
 
@@ -32,6 +32,13 @@ profile: clean main ## start cachegrind after some use
 
 watch: ## setup a watch for the source directory to rebuild on change
 	when-changed -r Makefile src/*.c src/*.cc src/*.hh -c "clear && make clean && make -j8 main"
+
+# make-release:
+# 	trash build 2> /dev/null
+# 	mkdir build
+# 	cd build
+# 	conan install ..
+# 	cmake ..
 
 expected.o:
 	${CC} -c ${CFLAGS} src/expected.cc -o $@
