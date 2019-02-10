@@ -40,7 +40,7 @@ Term::moveToBottom() {
   BBox bb;
   boundingBox(bb);
 
-  m_top = winHeight - bb.height;
+  m_top = winHeight - bb.height();
 }
 
 void
@@ -53,10 +53,10 @@ Term::putInput(string str) {
 void
 Term::boundingBox(BBox &bb) {
   int promptSize = 2;  // TODO consider custom prompt.
-  bb.top = m_top;
-  bb.left = m_left;
-  bb.height = m_atlas.surfHeight_ * (m_numRows + 1);
-  bb.width = m_atlas.surfWidth_ * (promptSize + m_numCols);
+  bb.top(m_top);
+  bb.left(m_left);
+  bb.height(m_atlas.surfHeight_ * (m_numRows + 1));
+  bb.width(m_atlas.surfWidth_ * (promptSize + m_numCols));
 }
 
 void
@@ -86,7 +86,7 @@ void
 Term::renderBackground(SDL_Renderer *renderer) {
   BBox bb;
   boundingBox(bb);
-  SDL_Rect rect = {bb.left, bb.top, bb.width, bb.height};
+  SDL_Rect rect = {bb.left(), bb.top(), bb.width(), bb.height()};
 
   if (m_focus) {
     SDL_SetRenderDrawColor(renderer, 0x60, 0x35, 0x6A, 0xBB);

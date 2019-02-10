@@ -15,7 +15,8 @@
 using namespace std;
 
 Grid::Grid(IEntity &parent, int size) : m_parent{parent} {
-  if (size < 1) die("got bad size for new grid");
+  if (size < 1)
+    die("got bad size for new grid");
   m_size = size;
 
   for (int row = 0; row < m_size; row++) {
@@ -31,7 +32,8 @@ Grid::Grid(IEntity &parent, int size) : m_parent{parent} {
   }
 }
 
-void Grid::render() {
+void
+Grid::render() {
   // render grid cells.
   for (int row = 0; row < m_size; row++) {
     for (int col = 0; col < m_size; col++) {
@@ -40,52 +42,70 @@ void Grid::render() {
   }
 }
 
-Atlas &Grid::getAtlas() { return m_atlas; }
-
-void Grid::bbox(BBox &bb) {
-  int cellSize = getCell(0, 0)->size();
-  bb.top = 0;
-  bb.left = 0;
-  bb.height = m_size * cellSize;
-  bb.width = m_size * cellSize;
+Atlas &
+Grid::getAtlas() {
+  return m_atlas;
 }
 
-int Grid::width() {
+void
+Grid::bbox(BBox &bb) {
+  int cellSize = getCell(0, 0)->size();
+  bb.top(0);
+  bb.left(0);
+  bb.height(m_size * cellSize);
+  bb.width(m_size * cellSize);
+}
+
+int
+Grid::width() {
   BBox bb;
   bbox(bb);
-  return bb.width;
+  return bb.width();
 }
 
-bool Grid::containsPoint(Sint32 x, Sint32 y) {
+bool
+Grid::containsPoint(Sint32 x, Sint32 y) {
   BBox bb;
   bbox(bb);
   return bb.containsPx(x, y);
 }
 
-void Grid::accept(std::shared_ptr<Visitor> v) { v->visit(*this); }
+void
+Grid::accept(std::shared_ptr<Visitor> v) {
+  v->visit(*this);
+}
 
-void Grid::selectCell(int col, int row) {
+void
+Grid::selectCell(int col, int row) {
   auto c = getCell(col, row);
   c->selected(true);
 }
 
-shared_ptr<Cell> Grid::cursorCell(Sint32 pixelX, Sint32 pixelY) {
-  if (!containsPoint(pixelX, pixelY)) return {};
+shared_ptr<Cell>
+Grid::cursorCell(Sint32 pixelX, Sint32 pixelY) {
+  if (!containsPoint(pixelX, pixelY))
+    return {};
   int cellSize = getCell(0, 0)->size();  // get the size of an arbitary cell
   int col = pixelX / cellSize;
   int row = pixelY / cellSize;
   return getCell(col, row);
 }
 
-shared_ptr<Cell> Grid::getCell(int col, int row) const {
-  if (col < 0) terr("col must be greater than 0");
-  if (row < 0) terr("row must be greater than 0");
-  if (col >= m_size) terr("col cell coordinate outside of grid");
-  if (row >= m_size) terr("row cell coordinate outside of grid");
+shared_ptr<Cell>
+Grid::getCell(int col, int row) const {
+  if (col < 0)
+    terr("col must be greater than 0");
+  if (row < 0)
+    terr("row must be greater than 0");
+  if (col >= m_size)
+    terr("col cell coordinate outside of grid");
+  if (row >= m_size)
+    terr("row cell coordinate outside of grid");
   return m_cells[col][row];
 }
 
-void Grid::setSelectAllCells(bool b) {
+void
+Grid::setSelectAllCells(bool b) {
   for (int x = 0; x < m_size; x++) {
     for (int y = 0; y < m_size; y++) {
       getCell(x, y)->selected(b);
@@ -93,9 +113,13 @@ void Grid::setSelectAllCells(bool b) {
   }
 }
 
-int Grid::getSize() { return m_size; }
+int
+Grid::getSize() {
+  return m_size;
+}
 
-vector<shared_ptr<Cell>> Grid::getAllSelectedCells() {
+vector<shared_ptr<Cell>>
+Grid::getAllSelectedCells() {
   auto cells = new vector<std::shared_ptr<Cell>>();
   for (int x = 0; x < m_size; x++) {
     for (int y = 0; y < m_size; y++) {
@@ -108,7 +132,8 @@ vector<shared_ptr<Cell>> Grid::getAllSelectedCells() {
   return *cells;  // this is a move.
 }
 
-shared_ptr<Cell> Grid::getNbr(int x, int y, Way w) {
+shared_ptr<Cell>
+Grid::getNbr(int x, int y, Way w) {
   switch (w) {
     case N:
       return getCell(x, y - 1);
@@ -123,26 +148,33 @@ shared_ptr<Cell> Grid::getNbr(int x, int y, Way w) {
   }
 }
 
-int Grid::bottom() {
+int
+Grid::bottom() {
   BBox bb;
   bbox(bb);
   return bb.bottom();
 }
 
-void Grid::zoom(int factor) {
+void
+Grid::zoom(int factor) {
   m_zoom = factor;
   zoomCells();
 }
 
-void Grid::zoomIn() { zoom(m_zoom + 1); }
+void
+Grid::zoomIn() {
+  zoom(m_zoom + 1);
+}
 
-void Grid::zoomOut() {
+void
+Grid::zoomOut() {
   if (m_zoom > 1) {
     zoom(m_zoom - 1);
   }
 }
 
-void Grid::zoomCells() {
+void
+Grid::zoomCells() {
   // this is going to change eventually.
   // only zoom the displayed cells
   // TODO only render the cells in the viewport.
@@ -153,8 +185,23 @@ void Grid::zoomCells() {
   }
 }
 
-bool Grid::hasFocus() { return true; }
-IEntity &Grid::parent() { return m_parent; }
-BBox &Grid::bbox() { return m_bbox; }
-void Grid::hidden(bool b) { m_hidden = b; }
-bool Grid::hidden() { return (parent().hidden() || m_hidden); }
+bool
+Grid::hasFocus() {
+  return true;
+}
+IEntity &
+Grid::parent() {
+  return m_parent;
+}
+BBox &
+Grid::bbox() {
+  return m_bbox;
+}
+void
+Grid::hidden(bool b) {
+  m_hidden = b;
+}
+bool
+Grid::hidden() {
+  return (parent().hidden() || m_hidden);
+}
