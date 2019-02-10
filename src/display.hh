@@ -6,6 +6,7 @@
 namespace display {
 SDL_Window *getWindow();
 SDL_Renderer *getRenderer();
+void getWindowSize(int *x, int *y);
 }  // namespace display
 
 class Display {

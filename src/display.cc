@@ -2,6 +2,8 @@
 #include "err.hh"
 
 namespace display {
+// globally accessible state
+
 SDL_Window *_window = NULL;
 SDL_Renderer *_renderer = NULL;
 
@@ -14,8 +16,15 @@ SDL_Renderer *
 getRenderer() {
   return _renderer;
 }
+
+void
+getWindowSize(int *x, int *y) {
+  SDL_GetWindowSize(getWindow(), x, y);
+}
+
 }  // namespace display
 
+// ----------------------------------------------------------------------------------------------------
 Display::Display() {
   SDL_Init(SDL_INIT_VIDEO);
   SDL_StartTextInput();
@@ -30,6 +39,8 @@ Display::Display() {
 
   display::_renderer =
       SDL_CreateRenderer(display::getWindow(), -1, SDL_RENDERER_ACCELERATED);
+
+  SDL_SetWindowResizable(display::getWindow(), SDL_TRUE);
 
   SDL_SetRenderDrawBlendMode(display::getRenderer(), SDL_BLENDMODE_BLEND);
   TTF_Init();
