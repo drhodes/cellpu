@@ -4,7 +4,7 @@ BasedOnStyle:  Google
 
 AllowShortLoopsOnASingleLine: true
 AlwaysBreakAfterDefinitionReturnType: true
-AllowShortFunctionsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: true
 AllowShortIfStatementsOnASingleLine: false
 
 # AccessModifierOffset: -1
