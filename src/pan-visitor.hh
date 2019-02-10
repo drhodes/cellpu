@@ -1,6 +1,6 @@
 #pragma once
 
-#include "grid-edit.hh"
+#include "camera.hh"
 #include "visit.hh"
 
 class PanVisitor : public BaseVisitor {
@@ -8,11 +8,18 @@ class PanVisitor : public BaseVisitor {
   string m_cmd;
 
  public:
-  PanVisitor(string cmd) { m_cmd = cmd; }
-  void visit(GridEditor &ge) {
-    if (m_cmd == "pan-east") ge.panEast();
-    if (m_cmd == "pan-west") ge.panWest();
-    if (m_cmd == "pan-north") ge.panNorth();
-    if (m_cmd == "pan-south") ge.panSouth();
+  PanVisitor(string cmd) {
+    m_cmd = cmd;
+  }
+  void
+  visit(Camera &cam) {
+    if (m_cmd == "pan-east")
+      cam.panEast();
+    if (m_cmd == "pan-west")
+      cam.panWest();
+    if (m_cmd == "pan-north")
+      cam.panNorth();
+    if (m_cmd == "pan-south")
+      cam.panSouth();
   }
 };

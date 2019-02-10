@@ -1,7 +1,7 @@
 #include "grid-edit.hh"
 #include "visit.hh"
 
-class PanGridVisitor : public BaseVisitor {
+class PanCameraVisitor : public BaseVisitor {
  private:
   int m_direction;
 
@@ -11,8 +11,11 @@ class PanGridVisitor : public BaseVisitor {
   const int SOUTH = 2;
   const int WEST = 3;
 
-  PanGridVisitor(int direction) { m_direction = direction; }
-  void visit(GridEditor &ge) {
+  PanCameraVisitor(int direction) {
+    m_direction = direction;
+  }
+  void
+  visit(GridEditor &ge) {
     switch (m_direction) {
       case NORTH:
         ge.panNorth();

@@ -19,26 +19,6 @@ GridEditor::accept(std::shared_ptr<Visitor> v) {
 }
 
 void
-GridEditor::panEast() {
-  cout << "[STUB] panning East" << endl;
-}
-
-void
-GridEditor::panWest() {
-  cout << "[STUB] panning West" << endl;
-}
-
-void
-GridEditor::panNorth() {
-  cout << "[STUB] panning North" << endl;
-}
-
-void
-GridEditor::panSouth() {
-  cout << "[STUB] panning South" << endl;
-}
-
-void
 GridEditor::statusText(string msg) {
   m_statusText.setRow(0, msg);
 }
